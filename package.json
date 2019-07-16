@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/loslobos504/3rd-Wheel/issues"
   },
-  "homepage": "https://github.com/loslobos504/3rd-Wheel#readme"
+  "homepage": "https://github.com/loslobos504/3rd-Wheel#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
