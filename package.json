@@ -1,0 +1,19 @@
+{
+  "name": "3rd-wheel",
+  "version": "1.0.0",
+  "description": "A dating app that provides date ideas for you",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loslobos504/3rd-Wheel.git"
+  },
+  "author": "Los Lobos",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/loslobos504/3rd-Wheel/issues"
+  },
+  "homepage": "https://github.com/loslobos504/3rd-Wheel#readme"
+}
