@@ -34,10 +34,18 @@ const activity = sequelize.define('activity', {
     location: Sequelize.STRING
 }, {sequelize, modelName: 'activity' });
 
+const interests = sequelize.define('interests', {
+    id: Sequelize.NUMBER,
+    firstInterest: Sequelize.STRING,
+    secondInterest: Sequelize.STRING,
+    thirdInterest: Sequelize.STRING
+})
+
 const hotSpots = sequelize.define('hotspot', {
     id: Sequelize.NUMBER,
 }, {sequelize, modelName: 'hotspot' });
 
+interests.belongsTo(users);
 hotSpots.belongsTo(users, restaurants, entertainment, activity);
 
 exports.sequelize = sequelize;
@@ -45,4 +53,5 @@ exports.users = users;
 exports.restaurants = restaurants;
 exports.entertainment = entertainment;
 exports.activity = activity;
+exports.interests = interests;
 exports.hotSpots = hotSpots;
