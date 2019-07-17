@@ -1,9 +1,17 @@
 module.exports = (grunt) => {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
+    concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: 'client/dist/bundle.js',
+        dest: 'dist/built.js',
+      },
+    },
   });
-
-
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
