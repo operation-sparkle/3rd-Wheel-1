@@ -1,3 +1,5 @@
+
+
 const {
   user, date, userInterest, couple, category, spot,
 } = require('../sequelize');
