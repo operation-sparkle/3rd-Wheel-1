@@ -18,7 +18,17 @@ module.exports = (grunt) => {
           'dist/built.js': ['dist/built.js'],
         }
       }
-    }
+    },
+
+    eslint: {
+      options: {
+        quiet: true,
+      },
+      target: {
+        ['dist/built.js'],
+      },
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
