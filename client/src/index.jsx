@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Bootstrap from 'bootstrap';
+// import Bootstrap from 'bootstrap';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
@@ -14,15 +14,20 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App" >
-        {/* <h1>3rd Wheel</h1> */}
-        <Navbar fixed="top" expand="true" bg="dark" variant="dark">
-          {/* Link brand to hot dates */}
-          <Navbar.Brand>3rd Wheel</Navbar.Brand>
-          <Navbar.toggle> </Navbar.toggle>
-          <Nav.link> Profile </Nav.link>
-        </Navbar>
-      </div>
+    <div className="App" >
+      <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar.Brand href="#home">3rd-Wheel</Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href="./components/Profile">Profile</Nav.Link>
+            <Nav.Link href="./components/Interests">Interests</Nav.Link>
+            <Nav.Link href="./components/Pending">Pending</Nav.Link>
+            <Nav.Link href="./components/Matches">Matches</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+    </div>
     );
   }
 }

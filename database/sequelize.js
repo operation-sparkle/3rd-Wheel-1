@@ -5,59 +5,54 @@ const sequelize = new Sequelize('3rd-wheel', 'root', '', {
   dialect: 'mysql',
 });
 
-const users = sequelize.define('users', {
+const user = sequelize.define('user', {
   id: Sequelize.NUMBER,
   name: Sequelize.STRING,
+  password: Sequelize.STRING,
+  salt: Sequelize.STRING,
   age: Sequelize.NUMBER,
   interests: Sequelize.STRING,
   bio: Sequelize.STRING,
-  comments: Sequelize.STRING,
-  location: Sequelize.STRING,
-  firstInterest: Sequelize.STRING,
-  secondInterest: Sequelize.STRING,
-  thirdInterest: Sequelize.STRING,
-}, { sequelize, modelName: 'users' });
+  latitude: Sequelize.NUMBER,
+  longitude: Sequelize.NUMBER,
+}, { sequelize, modelName: 'user' });
 
-const topInterests = sequelize.define('topInterests', {
+const date = sequelize.define('date', {
   id: Sequelize.NUMBER,
-}, { sequelize, modelName: 'topInterests' });
+}, { sequelize, modelName: 'date' });
 
-const subCategories = sequelize.define('subCategories', {
+const userInterest = sequelize.define('userInterest', {
   id: Sequelize.NUMBER,
-  name: Sequelize.STRING,
-  type: Sequelize.STRING,
-}, { sequelize, modelName: 'subCategories' });
+}, { sequelize, modelName: 'userInterest' });
 
-const couples = sequelize.define('couples', {
+const couple = sequelize.define('couple', {
   id: Sequelize.NUMBER,
-  user1: Sequelize.NUMBER,
-  user2: Sequelize.NUMBER,
-  datesSpotId: Sequelize.NUMBER,
-}, { sequelize, modelName: 'couples' });
+}, { sequelize, modelName: 'couple' });
 
-const categories = sequelize.define('categories', {
+const category = sequelize.define('category', {
   id: Sequelize.NUMBER,
   name: Sequelize.STRING,
-  api: Sequelize.STRING,
-}, { sequelize, modelName: 'categories' });
+}, { sequelize, modelName: 'category' });
 
-const datespots = sequelize.define('datespots', {
+const spot = sequelize.define('spot', {
   id: Sequelize.NUMBER,
-  usersId: Sequelize.NUMBER,
-  subCategoriesId: Sequelize.NUMBER,
-  spotName: Sequelize.STRING,
-  spotLocation: Sequelize.STRING,
-}, { sequelize, modelName: 'datespots' });
+  name: Sequelize.STRING,
+  latitude: Sequelize.NUMBER,
+  longitude: Sequelize.NUMBER,
+}, { sequelize, modelName: 'spot' });
 
-users.hasMany(couples, datespots, topInterests);
-subCategories.hasMany(datespots, topInterests);
-subCategories.belongsTo(categories);
-couples.belongsTo(datespots);
+category.belongsTo(category, { as: 'children', foreignKey: 'parentId', useJunctionTable: false });
+date.belongsTo(spot);
+date.belongsTo(couple);
+userInterest.belongsTo(category);
+userInterest.belongsTo(user);
+couple.belongsTo(user, { as: 'user1Id' });
+couple.belongsTo(user, { as: 'user2Id' });
 
 exports.sequelize = sequelize;
-exports.users = users;
-exports.topInterests = topInterests;
-exports.subCategories = subCategories;
-exports.couples = couples;
-exports.categories = categories;
-exports.datespots = datespots;
+exports.user = user;
+exports.date = date;
+exports.userInterest = userInterest;
+exports.couple = couple;
+exports.category = category;
+exports.spot = spot;
