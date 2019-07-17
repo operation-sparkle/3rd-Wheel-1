@@ -11,5 +11,13 @@ app.get('/', (req, res) => {
   res.status(200).render('index');
 });
 
+app.get('/login', (req, res) => {
+
+});
+
+app.get('/signup', (req, res) => {
+
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
