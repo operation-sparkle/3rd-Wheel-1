@@ -72,4 +72,8 @@ module.exports = (grunt) => {
     'concat', 'uglify', 'eslint', 'cssmin',
   ]);
 
+  grunt.registerTask('upload', (target) => {
+    grunt.task.run([ 'server-dev' ]);
+  })
+
 };
