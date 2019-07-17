@@ -9,6 +9,12 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(bodyParser.json());
 
+passport.use(new LocalStrategy((username, password, done) => {
+  //  find user
+  //    check for user and valid password
+  //  return done with the user
+}));
+
 app.get('/', (req, res) => {
   res.status(200).render('index');
 });
