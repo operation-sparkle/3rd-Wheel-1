@@ -1,59 +1,63 @@
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize('3rd-wheel', 'root', '', {
-    host: 'localhost',
-    dialect: 'mysql',
-})
+  host: 'localhost',
+  dialect: 'mysql',
+});
 
 const users = sequelize.define('users', {
-    id: Sequelize.NUMBER,
-    name: Sequelize.STRING,
-    age: Sequelize.NUMBER,
-    interests: Sequelize.STRING,
-    bio: Sequelize.STRING,
-    comments: Sequelize.STRING,
-    location: Sequelize.STRING
-}, {sequelize, modelName: 'users' });
+  id: Sequelize.NUMBER,
+  name: Sequelize.STRING,
+  age: Sequelize.NUMBER,
+  interests: Sequelize.STRING,
+  bio: Sequelize.STRING,
+  comments: Sequelize.STRING,
+  location: Sequelize.STRING,
+  firstInterest: Sequelize.STRING,
+  secondInterest: Sequelize.STRING,
+  thirdInterest: Sequelize.STRING,
+}, { sequelize, modelName: 'users' });
 
-const restaurants = sequelize.define('restaurants', {
-    id: Sequelize.NUMBER,
-    name: Sequelize.STRING,
-    type: Sequelize.STRING,
-    location: Sequelize.STRING
-}, {sequelize, modelName: 'restaurants' });
+const topInterests = sequelize.define('topInterests', {
+  id: Sequelize.NUMBER,
+}, { sequelize, modelName: 'topInterests' });
 
-const entertainment = sequelize.define('entertainment', {
-    id: Sequelize.NUMBER,
-    name: Sequelize.STRING,
-    type: Sequelize.STRING,
-    location: Sequelize.STRING
-}, {sequelize, modelName: 'entertainment' });
+const subCategories = sequelize.define('subCategories', {
+  id: Sequelize.NUMBER,
+  name: Sequelize.STRING,
+  type: Sequelize.STRING,
+}, { sequelize, modelName: 'subCategories' });
 
-const activity = sequelize.define('activity', {
-    id: Sequelize.NUMBER,
-    name: Sequelize.STRING,
-    type: Sequelize.STRING,
-    location: Sequelize.STRING
-}, {sequelize, modelName: 'activity' });
+const couples = sequelize.define('couples', {
+  id: Sequelize.NUMBER,
+  user1: Sequelize.NUMBER,
+  user2: Sequelize.NUMBER,
+  datesSpotId: Sequelize.NUMBER,
+}, { sequelize, modelName: 'couples' });
 
-const interests = sequelize.define('interests', {
-    id: Sequelize.NUMBER,
-    firstInterest: Sequelize.STRING,
-    secondInterest: Sequelize.STRING,
-    thirdInterest: Sequelize.STRING
-})
+const categories = sequelize.define('categories', {
+  id: Sequelize.NUMBER,
+  name: Sequelize.STRING,
+  api: Sequelize.STRING,
+}, { sequelize, modelName: 'categories' });
 
-const hotSpots = sequelize.define('hotspot', {
-    id: Sequelize.NUMBER,
-}, {sequelize, modelName: 'hotspot' });
+const datespots = sequelize.define('datespots', {
+  id: Sequelize.NUMBER,
+  usersId: Sequelize.NUMBER,
+  subCategoriesId: Sequelize.NUMBER,
+  spotName: Sequelize.STRING,
+  spotLocation: Sequelize.STRING,
+}, { sequelize, modelName: 'datespots' });
 
-interests.belongsTo(users);
-hotSpots.belongsTo(users, restaurants, entertainment, activity);
+users.hasMany(couples, datespots, topInterests);
+subCategories.hasMany(datespots, topInterests);
+subCategories.belongsTo(categories);
+couples.belongsTo(datespots);
 
 exports.sequelize = sequelize;
 exports.users = users;
-exports.restaurants = restaurants;
-exports.entertainment = entertainment;
-exports.activity = activity;
-exports.interests = interests;
-exports.hotSpots = hotSpots;
+exports.topInterests = topInterests;
+exports.subCategories = subCategories;
+exports.couples = couples;
+exports.categories = categories;
+exports.datespots = datespots;
