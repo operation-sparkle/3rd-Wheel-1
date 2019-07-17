@@ -33,12 +33,19 @@ module.exports = (grunt) => {
       'dist/output.css': ['client/src/App.css'],
     },
 
+    nodemon: {
+      dev: {
+        script: 'server/index.js',
+      },
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-eslint');
+  grunt.loadNpmTasks('grunt-nodemon');
 
   grunt.registerTask('server-dev', (target) => {
     grunt.task.run([ 'nodemon', 'watch' ]);
