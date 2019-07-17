@@ -66,7 +66,7 @@ module.exports = (grunt) => {
         stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
       },
       prod: webpackConfig,
-      dev: Object.assign({ watch: true }, webpackConfig),
+      dev: webpackConfig,
     },
 
   });
@@ -85,7 +85,7 @@ module.exports = (grunt) => {
   });
 
   grunt.registerTask('build', [
-    'concat', 'uglify', 'eslint', 'cssmin',
+    'webpack', 'concat', 'uglify', 'cssmin',
   ]);
 
   grunt.registerTask('upload', () => {
