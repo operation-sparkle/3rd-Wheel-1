@@ -55,6 +55,12 @@ module.exports = (grunt) => {
       },
     },
 
+    shell: {
+      prodServer: {
+        command: 'pm2 start 3rd-Wheel --watch',
+      },
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -63,6 +69,7 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-shell');
 
   grunt.registerTask('server-dev', (target) => {
     grunt.task.run([ 'nodemon', 'watch' ]);
