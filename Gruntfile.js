@@ -39,6 +39,22 @@ module.exports = (grunt) => {
       },
     },
 
+    watch: {
+      scripts: {
+        files: [
+          'client/dist/bundle.js'
+        ],
+        tasks: [
+          'concat',
+          'uglify'
+        ],
+      },
+      css: {
+        files: 'client/src/App.css',
+        tasks: 'cssmin',
+      },
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -46,6 +62,7 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   grunt.registerTask('server-dev', (target) => {
     grunt.task.run([ 'nodemon', 'watch' ]);
