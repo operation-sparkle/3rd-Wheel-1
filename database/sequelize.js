@@ -5,7 +5,7 @@ const sequelize = new Sequelize('3rd-wheel', 'root', '', {
   dialect: 'mysql',
 });
 
-const user = sequelize.define('user', {
+const User = sequelize.define('user', {
   id: Sequelize.NUMBER,
   name: Sequelize.STRING,
   pic: Sequelize.STRING,
@@ -18,42 +18,42 @@ const user = sequelize.define('user', {
   longitude: Sequelize.NUMBER,
 }, { sequelize, modelName: 'user' });
 
-const date = sequelize.define('date', {
+const Date = sequelize.define('date', {
   id: Sequelize.NUMBER,
 }, { sequelize, modelName: 'date' });
 
-const userInterest = sequelize.define('userInterest', {
+const UserInterest = sequelize.define('userInterest', {
   id: Sequelize.NUMBER,
 }, { sequelize, modelName: 'userInterest' });
 
-const couple = sequelize.define('couple', {
+const Couple = sequelize.define('couple', {
   id: Sequelize.NUMBER,
 }, { sequelize, modelName: 'couple' });
 
-const category = sequelize.define('category', {
+const Category = sequelize.define('category', {
   id: Sequelize.NUMBER,
   name: Sequelize.STRING,
 }, { sequelize, modelName: 'category' });
 
-const spot = sequelize.define('spot', {
+const Spot = sequelize.define('spot', {
   id: Sequelize.NUMBER,
   name: Sequelize.STRING,
   latitude: Sequelize.NUMBER,
   longitude: Sequelize.NUMBER,
 }, { sequelize, modelName: 'spot' });
 
-category.belongsTo(category, { as: 'children', foreignKey: 'parentId', useJunctionTable: false });
-date.belongsTo(spot);
-date.belongsTo(couple);
-userInterest.belongsTo(category);
-userInterest.belongsTo(user);
-couple.belongsTo(user, { as: 'user1Id' });
-couple.belongsTo(user, { as: 'user2Id' });
+Category.belongsTo(Category, { as: 'children', foreignKey: 'parentId', useJunctionTable: false });
+Date.belongsTo(Spot);
+Date.belongsTo(Couple);
+UserInterest.belongsTo(Category);
+UserInterest.belongsTo(User);
+Couple.belongsTo(User, { as: 'user1Id' });
+Couple.belongsTo(User, { as: 'user2Id' });
 
 exports.sequelize = sequelize;
-exports.user = user;
-exports.date = date;
-exports.userInterest = userInterest;
-exports.couple = couple;
-exports.category = category;
-exports.spot = spot;
+exports.User = User;
+exports.Date = Date;
+exports.UserInterest = UserInterest;
+exports.Couple = Couple;
+exports.Category = Category;
+exports.Spot = Spot;

@@ -1,63 +1,14 @@
 const {
-  user, date, userInterest, couple, category, spot,
+  User, Date, UserInterest, Couple, Category, Spot,
 } = require('../sequelize');
 
+User.get = User.findAll();
+
 module.exports = {
-  user: {
-    get: () => user.findAll(),
-
-    post: () => {
-
-    },
-  },
-
-  date: {
-    get: () => {
-
-    },
-
-    post: () => {
-
-    },
-  },
-
-  userInterest: {
-    get: () => {
-
-    },
-
-    post: () => {
-
-    },
-  },
-
-  couple: {
-    get: () => {
-
-    },
-
-    post: () => {
-
-    },
-  },
-
-  category: {
-    get: () => {
-
-    },
-
-    post: () => {
-
-    },
-  },
-
-  spot: {
-    get: () => {
-
-    },
-
-    post: () => {
-
-    },
-  },
+  User,
+  Date,
+  UserInterest,
+  Couple,
+  Category,
+  Spot,
 };
