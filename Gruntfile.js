@@ -80,7 +80,11 @@ module.exports = (grunt) => {
   ]);
 
   grunt.registerTask('upload', (target) => {
-    grunt.task.run([ 'server-dev' ]);
+    if (grunt.option('prod')) {
+      grunt.task.run([ 'shell' ]);
+    } else {
+      grunt.task.run([ 'server-dev' ]);
+    }
   });
 
   grunt.registerTask('deploy', [
