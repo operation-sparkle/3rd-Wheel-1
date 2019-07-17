@@ -40,7 +40,12 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-eslint');
 
+  grunt.registerTask('server-dev', (target) => {
+    grunt.task.run([ 'nodemon', 'watch' ]);
+  });
+
   grunt.registerTask('build', [
     'concat', 'uglify', 'eslint', 'cssmin',
   ]);
+
 };
