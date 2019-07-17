@@ -16,17 +16,15 @@ module.exports = (grunt) => {
       my_target: {
         files: {
           'dist/built.js': ['dist/built.js'],
-        }
-      }
+        },
+      },
     },
 
     eslint: {
       options: {
         quiet: true,
       },
-      target: {
-        ['dist/built.js'],
-      },
+      target: ['dist/built.js'],
     },
 
     cssmin: {
@@ -42,11 +40,11 @@ module.exports = (grunt) => {
     watch: {
       scripts: {
         files: [
-          'client/dist/bundle.js'
+          'client/dist/bundle.js',
         ],
         tasks: [
           'concat',
-          'uglify'
+          'uglify',
         ],
       },
       css: {
@@ -71,24 +69,23 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-shell');
 
-  grunt.registerTask('server-dev', (target) => {
-    grunt.task.run([ 'nodemon', 'watch' ]);
+  grunt.registerTask('server-dev', () => {
+    grunt.task.run(['nodemon', 'watch']);
   });
 
   grunt.registerTask('build', [
     'concat', 'uglify', 'eslint', 'cssmin',
   ]);
 
-  grunt.registerTask('upload', (target) => {
+  grunt.registerTask('upload', () => {
     if (grunt.option('prod')) {
-      grunt.task.run([ 'shell' ]);
+      grunt.task.run(['shell']);
     } else {
-      grunt.task.run([ 'server-dev' ]);
+      grunt.task.run(['server-dev']);
     }
   });
 
   grunt.registerTask('deploy', [
     'build', 'upload',
   ]);
-
 };
