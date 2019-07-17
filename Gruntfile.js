@@ -1,3 +1,5 @@
+const webpackConfig = require('./webpack.config');
+
 module.exports = (grunt) => {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -59,6 +61,14 @@ module.exports = (grunt) => {
       },
     },
 
+    webpack: {
+      options: {
+        stats: !process.env.NODE_ENV || process.env.NODE_ENV === 'development',
+      },
+      prod: webpackConfig,
+      dev: Object.assign({ watch: true }, webpackConfig),
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -68,6 +78,7 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-nodemon');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-shell');
+  grunt.loadNpmTasks('grunt-webpack');
 
   grunt.registerTask('server-dev', () => {
     grunt.task.run(['nodemon', 'watch']);
