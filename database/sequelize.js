@@ -8,6 +8,7 @@ const sequelize = new Sequelize('3rd-wheel', 'root', '', {
 const user = sequelize.define('user', {
   id: Sequelize.NUMBER,
   name: Sequelize.STRING,
+  pic: Sequelize.STRING,
   password: Sequelize.STRING,
   salt: Sequelize.STRING,
   age: Sequelize.NUMBER,
