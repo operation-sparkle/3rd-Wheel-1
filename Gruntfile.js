@@ -29,6 +29,10 @@ module.exports = (grunt) => {
       },
     },
 
+    cssmin: {
+      'dist/output.css': ['client/src/App.css'],
+    },
+
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
