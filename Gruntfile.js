@@ -40,5 +40,7 @@ module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-eslint');
 
-  grunt.registerTask();
+  grunt.registerTask('build', [
+    'concat', 'uglify', 'eslint', 'cssmin',
+  ]);
 };
