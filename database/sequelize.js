@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const bcrypt = require('bcrypt');
 
 const sequelize = new Sequelize('3rd-wheel', 'root', '', {
   host: 'localhost',
@@ -16,7 +17,20 @@ const User = sequelize.define('user', {
   bio: Sequelize.STRING,
   latitude: Sequelize.NUMBER,
   longitude: Sequelize.NUMBER,
-}, { sequelize, modelName: 'user' });
+}, {
+  hooks: {
+    beforeCreate: (user) => {
+      const salt = bcrypt.genSaltSync(10);
+      user.password = bcrypt.hashSync(user.password, salt);
+    },
+  },
+  instanceMethods: {
+    validPassword(password) {
+      return bcrypt.compareSync(password, this.password);
+    },
+  },
+},
+{ sequelize, modelName: 'user' });
 
 const Date = sequelize.define('date', {
   id: Sequelize.NUMBER,
@@ -49,6 +63,10 @@ UserInterest.belongsTo(Category);
 UserInterest.belongsTo(User);
 Couple.belongsTo(User, { as: 'user1Id' });
 Couple.belongsTo(User, { as: 'user2Id' });
+
+sequelize.sync()
+  .then(() => console.log('users table has been successfully created, if one doesn\'t exist'))
+  .catch(error => console.log('This error occured', error));
 
 exports.sequelize = sequelize;
 exports.User = User;
