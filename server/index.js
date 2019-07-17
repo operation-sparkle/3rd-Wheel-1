@@ -39,5 +39,13 @@ app.get('/matches/:userId', (req, res) => {
   //  this is to retrieve all of the current matches
 });
 
+app.post('/login', (req, res) => {
+  //  authorize user credentials here
+});
+
+app.post('/signup', (req, res) => {
+  //  create and authenticate new user here
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
