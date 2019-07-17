@@ -1,19 +1,17 @@
 const {
-  users, restaurants, entertainment, activity, interests, hotSpots,
-} = require('../database/sequelize');
+  user, date, userInterest, couple, category, spot,
+} = require('../sequelize');
 
 module.exports = {
-  users: {
-    get: () => {
-        
-    },
+  user: {
+    get: () => user.findAll(),
 
     post: () => {
 
     },
   },
 
-  restaurants: {
+  date: {
     get: () => {
 
     },
@@ -23,7 +21,7 @@ module.exports = {
     },
   },
 
-  entertainment: {
+  userInterest: {
     get: () => {
 
     },
@@ -33,7 +31,7 @@ module.exports = {
     },
   },
 
-  activity: {
+  couple: {
     get: () => {
 
     },
@@ -43,7 +41,7 @@ module.exports = {
     },
   },
 
-  interests: {
+  category: {
     get: () => {
 
     },
@@ -53,7 +51,7 @@ module.exports = {
     },
   },
 
-  hotSpots: {
+  spot: {
     get: () => {
 
     },
