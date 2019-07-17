@@ -11,6 +11,14 @@ module.exports = (grunt) => {
         dest: 'dist/built.js',
       },
     },
+
+    uglify: {
+      my_target: {
+        files: {
+          'dist/built.js': ['dist/built.js'],
+        }
+      }
+    }
   });
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
