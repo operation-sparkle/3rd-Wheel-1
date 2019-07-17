@@ -92,7 +92,7 @@ module.exports = (grunt) => {
     if (grunt.option('prod')) {
       grunt.task.run(['shell']);
     } else {
-      grunt.task.run(['server-dev']);
+      grunt.task.run(['server-dev', 'watch']);
     }
   });
 

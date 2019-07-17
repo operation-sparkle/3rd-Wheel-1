@@ -8,7 +8,7 @@ app.use(express.static(path.join(__dirname, '../client')));
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
-  app.status(200).render('index');
+  res.status(200).render('index');
 });
 
 const PORT = process.env.PORT || 3000;
