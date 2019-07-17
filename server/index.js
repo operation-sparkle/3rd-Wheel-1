@@ -4,5 +4,5 @@ const path = require('path');
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 app.listen(PORT);
