@@ -8,9 +8,11 @@ const sequelize = new Sequelize('3rd-wheel', 'root', '', {
 const users = sequelize.define('users', {
     id: Sequelize.NUMBER,
     name: Sequelize.STRING,
+    age: Sequelize.NUMBER,
     interests: Sequelize.STRING,
     bio: Sequelize.STRING,
-    comments: Sequelize.STRING
+    comments: Sequelize.STRING,
+    location: Sequelize.STRING
 }, {sequelize, modelName: 'users' });
 
 const restaurants = sequelize.define('restaurants', {
