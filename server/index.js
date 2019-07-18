@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const {
-  User, Date, UserInterest, Couple, Category, Spot 
+  User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
 
 const app = express();
@@ -60,6 +60,21 @@ app.get('/signup', (req, res) => {
 
 app.get('/users/:id', (req, res) => {
   //  this is to retrieve a specific user profile
+  const { id } = req.params;
+  User.findByPk(id)
+    .then((user) => {
+      const {
+        name, age, preference, gender, bio, url,
+      } = user;
+      const result = {
+        name, age, preference, gender, bio, url,
+      };
+      res.status(200).send(result);
+    })
+    .catch((err) => {
+      console.error(`Failed to fetch user information: ${err}`);
+      res.status(400).send(err);
+    });
 });
 
 app.get('/interests/:userId', (req, res) => {
