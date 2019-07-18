@@ -39,7 +39,6 @@ const User = sequelize.define('user', {
   modelName: 'user',
 });
 
-
 const Date = sequelize.define('date', {
 }, { sequelize, modelName: 'date' });
 
