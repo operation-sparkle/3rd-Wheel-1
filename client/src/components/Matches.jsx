@@ -4,7 +4,7 @@ import Image from 'react-bootstrap/Image'
 
 const Matches = () => {
   return (
-    
+    <div>My Matches</div>
   );
 }
 
