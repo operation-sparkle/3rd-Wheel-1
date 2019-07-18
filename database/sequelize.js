@@ -32,10 +32,6 @@ const User = sequelize.define('user', {
     },
   },
   instanceMethods: {
-    // generateHash(password) {
-    //   return bcrypt.genSalt(10)
-    //     .then(salt => bcrypt.hash(password, salt));
-    // },
     validPassword(password) {
       return bcrypt.compare(password, this.password);
     },
