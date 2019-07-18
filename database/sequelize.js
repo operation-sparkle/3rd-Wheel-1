@@ -9,6 +9,10 @@ const sequelize = new Sequelize('3rd_wheel', 'root', '', {
 });
 
 const User = sequelize.define('user', {
+  username: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
   name: Sequelize.STRING,
   pic: Sequelize.STRING,
   password: Sequelize.STRING,
