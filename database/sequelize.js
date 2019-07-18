@@ -16,7 +16,6 @@ const User = sequelize.define('user', {
   name: Sequelize.STRING,
   pic: Sequelize.STRING,
   password: Sequelize.STRING,
-  salt: Sequelize.STRING,
   age: Sequelize.INTEGER,
   interests: Sequelize.STRING,
   preference: Sequelize.STRING,
@@ -58,9 +57,8 @@ const Category = sequelize.define('category', {
 }, { sequelize, modelName: 'category' });
 
 const Spot = sequelize.define('spot', {
-  name: Sequelize.STRING,
-  latitude: Sequelize.INTEGER,
-  longitude: Sequelize.INTEGER,
+  apiId: Sequelize.STRING,
+  weigth: Sequelize.INTEGER,
 }, { sequelize, modelName: 'spot' });
 
 Category.belongsTo(Category, { as: 'children', foreignKey: 'parentId', useJunctionTable: false });
