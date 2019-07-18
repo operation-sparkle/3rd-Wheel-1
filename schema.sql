@@ -1,0 +1,5 @@
+DROP DATABASE IF EXISTS 3rd_wheel;
+
+CREATE DATABASE 3rd_wheel;
+
+USE 3rd_wheel;
