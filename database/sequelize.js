@@ -9,8 +9,8 @@ const sequelize = new Sequelize('3rd-wheel', 'root', '', {
 const User = sequelize.define('user', {
   id: {
     type: Sequelize.NUMBER,
-    primaryKey: 'true',
-    autoIncrement: 'true',
+    primaryKey: true,
+    autoIncrement: true,
   },
   name: Sequelize.STRING,
   pic: Sequelize.STRING,
@@ -29,8 +29,12 @@ const User = sequelize.define('user', {
     },
   },
   instanceMethods: {
+    // generateHash(password) {
+    //   return bcrypt.genSalt(10)
+    //     .then(salt => bcrypt.hash(password, salt));
+    // },
     validPassword(password) {
-      return bcrypt.compareSync(password, this.password);
+      return bcrypt.compare(password, this.password);
     },
   },
 },
