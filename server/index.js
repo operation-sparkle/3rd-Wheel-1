@@ -14,7 +14,9 @@ const app = express();
 app.use(express.static(path.join(__dirname, '../client')));
 app.use(cookieParser);
 app.use(bodyParser.json());
-app.user(session({ secret: 'third-wheel' }));
+app.use(session({ secret: 'third-wheel' }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use(new LocalStrategy((username, password, done) => {
   //  find user
