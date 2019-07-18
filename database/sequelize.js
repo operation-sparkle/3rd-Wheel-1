@@ -1,7 +1,8 @@
+const mysql = require('mysql');
 const Sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
 
-const sequelize = new Sequelize('3rd-wheel', 'root', '', {
+const sequelize = new Sequelize('3rd_wheel', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
 });
