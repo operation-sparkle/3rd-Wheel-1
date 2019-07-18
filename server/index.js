@@ -84,7 +84,7 @@ app.post('/signup', async (req, res) => {
     req.login(newUser, () => res.redirect('/'));
   } catch (err) {
     console.error(err);
-    res.status(500).send();
+    res.status(500).send(err);
   }
 });
 
