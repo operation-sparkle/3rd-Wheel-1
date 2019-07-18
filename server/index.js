@@ -62,9 +62,11 @@ app.get('/matches/:userId', (req, res) => {
   //  this is to retrieve all of the current matches
 });
 
-app.post('/login', (req, res) => {
-  //  authorize user credentials here
-});
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/signup',
+  failureFlash: true,
+}));
 
 app.post('/signup', (req, res) => {
   //  create and authenticate new user here
