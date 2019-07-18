@@ -11,7 +11,6 @@ const {
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../client')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(session({ secret: 'third-wheel' }));
@@ -46,17 +45,7 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 }));
 
-app.get('/', (req, res) => {
-  res.status(200).render('index');
-});
-
-app.get('/login', (req, res) => {
-
-});
-
-app.get('/signup', (req, res) => {
-
-});
+app.use(express.static(path.join(__dirname, '../client')));
 
 app.get('/users/:id', (req, res) => {
   //  this is to retrieve a specific user profile
