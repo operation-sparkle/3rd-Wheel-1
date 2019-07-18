@@ -68,8 +68,24 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true,
 }));
 
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
   //  create and authenticate new user here
+  //  check if user already exists
+  //    if exists, redirect to signup
+  //  else create new user
+  //  then utilize passport.login()
+  const { username, password } = req.body;
+  try {
+    const user = await User.findOne({username});
+    if (!user) {
+      res.status(400).redirect('/signup');
+    }
+    const newUser = await User.create({ username, password });
+    req.login(newUser, () => res.redirect('/'));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 });
 
 const PORT = process.env.PORT || 3000;
