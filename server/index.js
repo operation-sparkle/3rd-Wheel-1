@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const {
@@ -10,7 +12,9 @@ const {
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../client')));
+app.use(cookieParser);
 app.use(bodyParser.json());
+app.user(session({ secret: 'third-wheel' }));
 
 passport.use(new LocalStrategy((username, password, done) => {
   //  find user
