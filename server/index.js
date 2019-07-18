@@ -12,7 +12,7 @@ const {
 const app = express();
 
 app.use(express.static(path.join(__dirname, '../client')));
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(session({ secret: 'third-wheel' }));
 app.use(passport.initialize());
