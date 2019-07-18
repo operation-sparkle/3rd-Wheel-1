@@ -16,6 +16,20 @@ passport.use(new LocalStrategy((username, password, done) => {
   //  find user
   //    check for user and valid password
   //  return done with the user
+  User.findOne({ username })
+    .then((user) => {
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
+      return done(null, user);
+    })
+    .catch((err) => {
+      console.error(`Could not authorize user: ${err}`);
+      done(err);
+    });
 }));
 
 app.get('/', (req, res) => {
