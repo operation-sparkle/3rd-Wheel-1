@@ -25,17 +25,17 @@ const User = sequelize.define('user', {
   longitude: Sequelize.INTEGER,
 
 }, {
-  //   hooks: {
-  //     beforeCreate: (user) => {
-  //       const salt = bcrypt.genSaltSync(10);
-  //       user.password = bcrypt.hashSync(user.password, salt);
-  //     },
-  //   },
-  instanceMethods: {
-    generateHash(password) {
-      return bcrypt.genSalt(10)
-        .then(salt => bcrypt.hash(password, salt));
+  hooks: {
+    beforeCreate: (user) => {
+      const salt = bcrypt.genSaltSync(10);
+      user.password = bcrypt.hashSync(user.password, salt);
     },
+  },
+  instanceMethods: {
+    // generateHash(password) {
+    //   return bcrypt.genSalt(10)
+    //     .then(salt => bcrypt.hash(password, salt));
+    // },
     validPassword(password) {
       return bcrypt.compare(password, this.password);
     },
