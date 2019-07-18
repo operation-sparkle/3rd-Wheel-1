@@ -31,14 +31,17 @@ const User = sequelize.define('user', {
       user.password = bcrypt.hashSync(user.password, salt);
     },
   },
-  instanceMethods: {
-    validPassword(password) {
-      return bcrypt.compare(password, this.password);
-    },
-  },
   sequelize,
   modelName: 'user',
 });
+
+User.prototype.validPassword = async function (password) {
+  try {
+    return bcrypt.compare(password, this.password);
+  } catch (err) {
+    return console.error(err);
+  }
+};
 
 const Date = sequelize.define('date', {
 }, { sequelize, modelName: 'date' });
