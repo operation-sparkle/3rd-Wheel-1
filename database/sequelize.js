@@ -1,7 +1,7 @@
 // const mysql = require('mysql');
 const Sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
-const { Model } = Sequelize;
+
 
 const sequelize = new Sequelize('3rd_wheel', 'root', '', {
 //   host: 'localhost',
@@ -15,6 +15,7 @@ const User = sequelize.define('user', {
   salt: Sequelize.STRING,
   age: Sequelize.INTEGER,
   interests: Sequelize.STRING,
+  preference: Sequelize.STRING,
   bio: Sequelize.STRING,
   latitude: Sequelize.INTEGER,
   longitude: Sequelize.INTEGER,
@@ -46,6 +47,7 @@ const UserInterest = sequelize.define('userInterest', {
 }, { sequelize, modelName: 'userInterest' });
 
 const Couple = sequelize.define('couple', {
+  status: Sequelize.STRING,
 }, { sequelize, modelName: 'couple' });
 
 const Category = sequelize.define('category', {
