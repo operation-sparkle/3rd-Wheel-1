@@ -149,6 +149,7 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup/:id', async (req, res) => {
   const { id } = req.params;
   const options = req.body;
+  
   try {
     const user = await User.update({ options }, { where: { id } });
     res.status(201).send(user);
