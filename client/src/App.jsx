@@ -8,7 +8,7 @@ import Interests from './components/Interests';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
-import Signin from './components/Signin';
+import Login from './components/Signin';
 
 class App extends React.Component {
   constructor (props) {
@@ -54,7 +54,7 @@ class App extends React.Component {
       { isLoggedIn ? 
         <Switch>
           <Route path="/profile" component={Profile} />
-          <Route path="/interest" component={Interset} />
+          <Route path="/interest" component={Intersets} />
           <Route path="/pending" component={Pending} />
           <Route path="/matches" component={Matches} />
         </Switch>
