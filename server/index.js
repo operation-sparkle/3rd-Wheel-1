@@ -71,6 +71,18 @@ app.get('/users/:id', loggedIn, (req, res) => {
     });
 });
 
+//  This retrieves the top-level categories ie Restaurants
+app.get('/categories', (req, res) => {
+  return Category.findAll({ where: { parentId: null } })
+    .then((categories) => {
+      res.status(200).send(categories);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+});
+
 app.get('/interests/:userId', loggedIn, (req, res) => {
   //  this is to find new spots around the user
 });
