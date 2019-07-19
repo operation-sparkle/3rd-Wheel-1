@@ -36,32 +36,32 @@ class App extends React.Component {
           <Navbar.Collapse id="responsive-navbar-nav">
         { isLoggedIn ? 
           <Nav className="top-bar">
-              <Link className="nav-link" to="/Profile" >Profile</Link>
-              <Link className="nav-link" to="/Interest" >Interests</Link>
-              <Link className="nav-link" to="/Pending" >Pending</Link>
-              <Link className="nav-link" to="/Matches" >Matches</Link>
-              <Link className="nav-link" to="/Signin" >Sign out</Link>
+              <Link className="nav-link" to="/profile" >Profile</Link>
+              <Link className="nav-link" to="/interest" >Interests</Link>
+              <Link className="nav-link" to="/pending" >Pending</Link>
+              <Link className="nav-link" to="/matches" >Matches</Link>
+              <Link className="nav-link" to="/signout" >Sign out</Link>
 
           </Nav>
           : 
             <Nav className="top-bar">
                 <Link className="nav-link" to="/Signup" >Sign up</Link>
-                <Link className="nav-link" to="/Signin" >Sign in</Link>
+                <Link className="nav-link" to="/login" >Log in</Link>
             </Nav>
         }
           </Navbar.Collapse>
         </Navbar>
       { isLoggedIn ? 
         <Switch>
-          <Route path="/Profile" component={Profile} />
-          <Route path="/Interest" component={Interset} />
-          <Route path="/Pending" component={Pending} />
-          <Route path="/Matches" component={Matches} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/interest" component={Interset} />
+          <Route path="/pending" component={Pending} />
+          <Route path="/matches" component={Matches} />
         </Switch>
       :
         <Switch>
-          <Route path="/Signup" component={Signup} />
-          <Route path="/Signin" component={Signin} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
         </Switch>
       }
       </div>
