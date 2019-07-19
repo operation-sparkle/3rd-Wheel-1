@@ -15,7 +15,7 @@ const populateCategories = async () => {
     const interests = await restCategories();
     interests.forEach((interest) => {
       const interestOptions = {
-        name: interest.title,
+        name: interest.name,
         alias: interest.alias,
         parentId: categoryId,
       };
