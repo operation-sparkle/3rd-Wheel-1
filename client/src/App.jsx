@@ -1,14 +1,17 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
+import Axios from 'axios';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+
 import Profile from './components/Profile';
 import Interests from './components/Interests';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
 import Login from './components/Login';
+
 
 class App extends React.Component {
   constructor (props) {
@@ -53,30 +56,19 @@ class App extends React.Component {
         }
           </Navbar.Collapse>
         </Navbar>
-        { 
-          isLoggedIn ? 
-          <Switch>
-            <Route exact path="/" component={() => (
-              <Redirect to="/profile"/>
-            )} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/interest" component={Interests} />
-            <Route path="/pending" component={Pending} />
-            <Route path="/matches" component={Matches} />
-          </Switch>
-        :
-          <div>
-            <Switch>
-              <Route exact path="/" component={() => (
-                <Redirect to="/signup"/>
-              )} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
-            </Switch>
-          </div>
-        }
-
-       
+      { isLoggedIn ? 
+        <Switch>
+          <Route path="/Profile" component={Profile} />
+          <Route path="/Interests" component={Interests} />
+          <Route path="/Pending" component={Pending} />
+          <Route path="/Matches" component={Matches} />
+        </Switch>
+      :
+        <Switch>
+          <Route path="/Signup" component={Signup} />
+          <Route path="/Login" component={Login} />
+        </Switch>
+      }
       </div>
     )
   }
