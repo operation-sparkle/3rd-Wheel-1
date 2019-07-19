@@ -132,13 +132,15 @@ app.post('/login', passport.authenticate('local', {
 app.post('/signup', async (req, res) => {
   try {
     const { username } = req.body;
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ where: { username } });
     if (user) {
       res.status(400).send(false);
     } else {
       const options = req.body;
       const newUser = await User.create(options);
-      req.login(newUser, () => res.send(newUser.id));
+      req.login(newUser, () => {
+        res.status(201).json(newUser.id);
+      });
     }
   } catch (err) {
     console.error(err);
