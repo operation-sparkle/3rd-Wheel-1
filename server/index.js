@@ -55,7 +55,7 @@ const loggedIn = (req, res, next) => {
   }
 };
 
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', loggedIn, (req, res) => {
   //  this is to retrieve a specific user profile
   const { id } = req.params;
   User.findByPk(id)
@@ -74,11 +74,11 @@ app.get('/users/:id', (req, res) => {
     });
 });
 
-app.get('/interests/:userId', (req, res) => {
+app.get('/interests/:userId', loggedIn, (req, res) => {
   //  this is to find new spots around the user
 });
 
-app.get('/matches/:userId', (req, res) => {
+app.get('/matches/:userId', loggedIn, (req, res) => {
   //  this is to retrieve all of the current matches
 });
 
