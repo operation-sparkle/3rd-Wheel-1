@@ -13,7 +13,9 @@ const restCategories = () => {
           alias: parentAlias.alias,
         }));
     })
-    .catch(err => console.error(`category error: ${err}`));
+    .catch((err) => {
+      console.error(`category error: ${err}`);
+    });
 };
 
 module.exports = {
