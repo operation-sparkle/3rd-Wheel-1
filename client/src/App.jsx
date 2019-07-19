@@ -18,7 +18,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       username: "",
-      isLoggedIn: false,
+      isLoggedIn: true,
     }
     this.transition = this.transition.bind(this);
   }
