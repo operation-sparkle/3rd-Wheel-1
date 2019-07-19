@@ -1,22 +1,24 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
+import Axios from 'axios';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+
 import Profile from './components/Profile';
 import Interests from './components/Interests';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
-import Signin from './components/Signin';
-import Axios from 'axios';
+import Login from './components/Login';
+
 
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       username: "",
-      isLoggedIn: true,
+      isLoggedIn: false,
     }
     this.transition = this.transition.bind(this);
   }
@@ -69,7 +71,7 @@ class App extends React.Component {
       :
         <Switch>
           <Route path="/Signup" component={Signup} />
-          <Route path="/Signin" component={Signin} />
+          <Route path="/Login" component={Login} />
         </Switch>
       }
       </div>
