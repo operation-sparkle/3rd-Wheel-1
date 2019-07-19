@@ -40,11 +40,13 @@ class App extends React.Component {
               <Link className="nav-link" to="/Interest" >Interests</Link>
               <Link className="nav-link" to="/Pending" >Pending</Link>
               <Link className="nav-link" to="/Matches" >Matches</Link>
+              <Link className="nav-link" to="/Signin" >Sign out</Link>
+
           </Nav>
           : 
             <Nav className="top-bar">
-                <Link className="nav-link" to="/Signup" >Signup</Link>
-                <Link className="nav-link" to="/Signin" >Signin</Link>
+                <Link className="nav-link" to="/Signup" >Sign up</Link>
+                <Link className="nav-link" to="/Signin" >Sign in</Link>
             </Nav>
         }
           </Navbar.Collapse>
