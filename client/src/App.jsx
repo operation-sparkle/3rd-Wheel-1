@@ -8,7 +8,7 @@ import Interests from './components/Interests';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
-import Login from './components/Signin';
+import Login from './components/Login';
 
 class App extends React.Component {
   constructor (props) {
