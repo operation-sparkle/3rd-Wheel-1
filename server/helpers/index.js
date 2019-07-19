@@ -1,6 +1,7 @@
 const axios = require('axios');
 const config = require('../../api-config');
 
+
 const getRestaurant = (location, categories) => {
   const options = {
     url: `https://api.yelp.com/v3/businesses/search?location=${location}&categories=${categories}`,
