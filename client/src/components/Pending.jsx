@@ -5,6 +5,7 @@ import Tab from 'react-bootstrap/Tab';
 import Toast from 'react-bootstrap/Toast';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
+import users from '../../../test-data/customers';
 
 const Pending = () => {
   
