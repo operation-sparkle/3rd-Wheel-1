@@ -123,7 +123,7 @@ app.get('/matches/:userId', loggedIn, (req, res) => {
 
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
-  failureRedirect: '/signup',
+  failureRedirect: '/#/signup',
   failureFlash: true,
 }));
 
