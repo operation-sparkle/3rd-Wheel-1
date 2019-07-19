@@ -54,7 +54,7 @@ class App extends React.Component {
       { isLoggedIn ? 
         <Switch>
           <Route path="/profile" component={Profile} />
-          <Route path="/interest" component={Intersets} />
+          <Route path="/interest" component={Interests} />
           <Route path="/pending" component={Pending} />
           <Route path="/matches" component={Matches} />
         </Switch>
