@@ -3,7 +3,7 @@ const axios = require('axios');
 const restCategories = () => {
   const options = {
     url: 'https://api.yelp.com/v3/categories',
-    Authorization: `Bearer ${config.YELP_KEY}`,
+    Authorization: `Bearer ${process.env.YELP_KEY}`,
   };
   axios.get(options.url)
     .then((responce) => {
@@ -13,7 +13,7 @@ const restCategories = () => {
           alias: parentAlias.alias,
         }));
     })
-    .catch(err => console.log(`category error: ${err}`));
+    .catch(err => console.error(`category error: ${err}`));
 };
 
 module.exports = {
