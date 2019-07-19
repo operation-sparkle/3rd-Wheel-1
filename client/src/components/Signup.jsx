@@ -4,7 +4,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Signup = ({}) => {
+const Signup = () => {
   const [ interestBool, allowInterest ] = useState(false);
   const [ username, setUsername ] = useState('');
   const [ name, setName ] = useState('');
