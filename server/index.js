@@ -26,9 +26,6 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new LocalStrategy((username, password, done) => {
-  //  find user
-  //    check for user and valid password
-  //  return done with the user
   User.findOne({ username })
     .then((user) => {
       if (!user) {
@@ -88,20 +85,22 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true,
 }));
 
+//  This first checks if a user alread exists
+//  If this call only checks username, send true aka go-ahead
+//  If call is made with all fields, create the new user
 app.post('/signup', async (req, res) => {
-  //  create and authenticate new user here
-  //  check if user already exists
-  //    if exists, redirect to signup
-  //  else create new user
-  //  then utilize passport.login()
-  const { username, password } = req.body;
   try {
+    const { username } = req.body;
     const user = await User.findOne({ username });
-    if (!user) {
-      res.status(400).redirect('/signup');
+    if (user) {
+      res.status(400).send(false);
     }
-    const newUser = await User.create({ username, password });
-    req.login(newUser, () => res.redirect('/'));
+    if (!req.body.name) {
+      res.status(200).send(true);
+    }
+    const options = req.body;
+    const newUser = await User.create(options);
+    req.login(newUser, () => res.send(newUser.id));
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
