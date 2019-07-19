@@ -63,3 +63,6 @@ typings/
 # compiled js
 client/dist/bundle.js
 dist/
+
+# api keys
+api-config.js
