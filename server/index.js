@@ -42,6 +42,14 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 }));
 
+const loggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/#/login');
+  }
+};
+
 app.use(express.static(path.join(__dirname, '../client')));
 
 //  Define signup and login routes first
@@ -54,13 +62,10 @@ app.get('/#/login', (req, res) => {
   res.redirect('/');
 });
 
-const loggedIn = (req, res, next) => {
-  if (req.user) {
-    next();
-  } else {
-    res.redirect('/login');
-  }
-};
+//  All other get requests to pages should verify login first
+app.get('/#/*', loggedIn, (req, res) => {
+  res.redirect('/');
+});
 
 app.get('/users/:id', loggedIn, (req, res) => {
   //  this is to retrieve a specific user profile
