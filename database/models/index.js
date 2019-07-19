@@ -11,7 +11,8 @@ const populateCategories = async () => {
       name: 'Restaurants',
       alias: 'restaurants',
     };
-    const { id: categoryId } = await Category.findOrCreate({ where: categoryOptions });
+    const categoryArray = await Category.findOrCreate({ where: categoryOptions });
+    const { id: categoryId } = categoryArray[0];
     const interests = await restCategories();
     interests.forEach((interest) => {
       const interestOptions = {
