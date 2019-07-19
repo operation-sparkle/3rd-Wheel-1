@@ -83,6 +83,18 @@ app.get('/categories', (req, res) => {
     });
 });
 
+app.get('/categories/:id', (req, res) => {
+  const { id: parentId } = req.params;
+  return Category.findAll({ where: { parentId } })
+    .then((interests) => {
+      res.status(200).send(interests);
+    })
+    .catch((err) => {
+      console.error(`Failed to retrieve interests: ${err}`)
+      res.status(500).send(err);
+    })
+});
+
 app.get('/interests/:userId', loggedIn, (req, res) => {
   //  this is to find new spots around the user
 });
