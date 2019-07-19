@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
-import Axios from 'axios';
+import axios from 'axios';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
