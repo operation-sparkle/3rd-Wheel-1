@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
-import Axios from 'axios';
+import axios from 'axios';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -47,28 +47,34 @@ class App extends React.Component {
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
-          
           : 
-            <Nav className="top-bar">
-                <Link className="nav-link" to="/signup" >Sign up</Link>
-                <Link className="nav-link" to="/login" >Log in</Link>
-            </Nav>
+          <Nav className="top-bar">
+              <Link className="nav-link" to="/signup" >Sign up</Link>
+              <Link className="nav-link" to="/login" >Log in</Link>
+          </Nav>
         }
           </Navbar.Collapse>
         </Navbar>
-      { isLoggedIn ? 
-        <Switch>
-          <Route path="/Profile" component={Profile} />
-          <Route path="/Interests" component={Interests} />
-          <Route path="/Pending" component={Pending} />
-          <Route path="/Matches" component={Matches} />
-        </Switch>
-      :
-        <Switch>
-          <Route path="/Signup" component={Signup} />
-          <Route path="/Login" component={Login} />
-        </Switch>
-      }
+        { 
+          isLoggedIn ? 
+            <Switch>
+              <Route exact path="/" component={() => {
+                <Redirect to="/profile" />
+              }} />
+              <Route path="/profile" component={Profile} />
+              <Route path="/interests" component={Interests} />
+              <Route path="/pending" component={Pending} />
+              <Route path="/matches" component={Matches} />
+            </Switch>
+          :
+            <Switch>
+              <Route exact path="/" component={() => (
+                <Redirect to="/signup"/>
+              )} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+            </Switch>
+        }
       </div>
     )
   }
