@@ -138,7 +138,10 @@ app.post('/signup', async (req, res) => {
     } else {
       const options = req.body;
       const newUser = await User.create(options);
-      req.login(newUser, () => {
+      req.login(newUser, (err) => {
+        if (err) {
+          res.status(400).json(err);
+        }
         res.status(201).json(newUser.id);
       });
     }
@@ -151,10 +154,14 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup/:id', async (req, res) => {
   const { id } = req.params;
   const options = req.body;
-  
   try {
-    const user = await User.update({ options }, { where: { id } });
-    res.status(201).send(user);
+    const user = await User.findOne({ where: { id } });
+    if (user) {
+      const updatedUser = await user.update(options, { where: { id } });
+      res.status(201).json(updatedUser.id);
+    } else {
+      res.status(400).send();
+    }
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
