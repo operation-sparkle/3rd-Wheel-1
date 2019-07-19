@@ -47,6 +47,14 @@ passport.use(new LocalStrategy((username, password, done) => {
 
 app.use(express.static(path.join(__dirname, '../client')));
 
+const loggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+};
+
 app.get('/users/:id', (req, res) => {
   //  this is to retrieve a specific user profile
   const { id } = req.params;
