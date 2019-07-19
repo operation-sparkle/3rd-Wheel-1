@@ -50,6 +50,10 @@ app.get('/#/signup', (req, res) => {
   res.redirect('/');
 });
 
+app.get('/#/login', (req, res) => {
+  res.redirect('/');
+});
+
 const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
