@@ -7,7 +7,7 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 
 const Pending = () => {
-  let users = [{ name: "Tiny", gender: "male", age: 21, img: "https://i.imgur.com/T7vjtfH.jpg" }, { name: "Tiny", gender: "male", age: 21, img: "https://i.imgur.com/9surkzy.jpg" }, { name: "Tiny", gender: "male", age: 21, img: "https://i.imgur.com/gnuDKcN.jpg"}];
+  
   function lister(userArray) {
     let i = 0;
    return userArray.map((user) => {
