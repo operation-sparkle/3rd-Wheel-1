@@ -6,8 +6,8 @@ const restCategories = () => {
     Authorization: `Bearer ${process.env.YELP_KEY}`,
   };
   return axios.get(options.url)
-    .then((responce) => {
-      return responce.categories.filter(category => category.parent_aliases === 'restaurants')
+    .then((response) => {
+      return response.categories.filter(category => category.parent_aliases === 'restaurants')
         .map(parentAlias => ({
           name: parentAlias.text,
           alias: parentAlias.alias,
