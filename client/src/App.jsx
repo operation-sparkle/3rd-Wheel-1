@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom'
+import { Route, Switch, Link, Redirect } from 'react-router-dom'
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -34,14 +34,17 @@ class App extends React.Component {
           <Navbar.Brand href="#home">3rd-Wheel</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
-        { isLoggedIn ? 
+        { 
+          isLoggedIn ? 
           <Nav className="top-bar">
               <Link className="nav-link" to="/profile" >Profile</Link>
               <Link className="nav-link" to="/interest" >Interests</Link>
               <Link className="nav-link" to="/pending" >Pending</Link>
               <Link className="nav-link" to="/matches" >Matches</Link>
-              <Link className="nav-link" to="/signin" >Sign out</Link>
+            {/*  // Make this sign out user and relocate them to sign in
+              <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
+          
           : 
             <Nav className="top-bar">
                 <Link className="nav-link" to="/signup" >Sign up</Link>
@@ -50,19 +53,30 @@ class App extends React.Component {
         }
           </Navbar.Collapse>
         </Navbar>
-      { isLoggedIn ? 
-        <Switch>
-          <Route path="/profile" component={Profile} />
-          <Route path="/interest" component={Interests} />
-          <Route path="/pending" component={Pending} />
-          <Route path="/matches" component={Matches} />
-        </Switch>
-      :
-        <Switch>
-          <Route path="/signup" component={Signup} />
-          <Route path="/login" component={Login} />
-        </Switch>
-      }
+        { 
+          isLoggedIn ? 
+          <Switch>
+            <Route exact path="/" component={() => (
+              <Redirect to="/profile"/>
+            )} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/interest" component={Interests} />
+            <Route path="/pending" component={Pending} />
+            <Route path="/matches" component={Matches} />
+          </Switch>
+        :
+          <div>
+            <Switch>
+              <Route exact path="/" component={() => (
+                <Redirect to="/signup"/>
+              )} />
+              <Route path="/signup" component={Signup} />
+              <Route path="/login" component={Login} />
+            </Switch>
+          </div>
+        }
+
+       
       </div>
     )
   }
