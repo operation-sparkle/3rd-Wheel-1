@@ -3,26 +3,24 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 
 const Signup = ({}) => {
-  const [ createBool, allowCreate ] = useState(false);
-
-
-
+  const [ interestBool, allowInterest ] = useState(false);
 
   const usernameSubmit = (username, password) => {
     return axios.post('/signup', { username, password })
     .then((obj) => {
+      console.log(obj);
       if (obj.data) {
         // flip val of canCreate
-        allowCreate(true);
+        allowInterest(true);
       }
     })
-    .then(() => axios.get('/interests'))
-    // .then(() => '' // make array of options for form)
+    // .then(() => axios.get('/interests'))
+    // .then(() => 's' // make array of options for form)
     // .catch(err => );
   };
 
   return (
-    createBool ? 
+    interestBool ? 
     <Form>
       <Form.Group controlId="exampleForm.ControlInput1">
         <Form.Label>Tell us what you're interested in!!</Form.Label>
@@ -87,7 +85,6 @@ const Signup = ({}) => {
           This username will not be viewed by other users.
         </Form.Text>
       </Form.Group>
-
       <Form.Group controlId="formPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" />

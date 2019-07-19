@@ -53,10 +53,10 @@ class App extends React.Component {
         </Navbar>
       { isLoggedIn ? 
         <Switch>
-          <Route path="/Profile" />
-          <Route path="/Interest" />
-          <Route path="/Pending" />
-          <Route path="/Matches" />
+          <Route path="/Profile" component={Profile} />
+          <Route path="/Interest" component={Interset} />
+          <Route path="/Pending" component={Pending} />
+          <Route path="/Matches" component={Matches} />
         </Switch>
       :
         <Switch>
