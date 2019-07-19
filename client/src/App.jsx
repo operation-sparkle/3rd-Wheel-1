@@ -58,15 +58,21 @@ class App extends React.Component {
         </Navbar>
       { isLoggedIn ? 
         <Switch>
-          <Route path="/Profile" component={Profile} />
-          <Route path="/Interests" component={Interests} />
-          <Route path="/Pending" component={Pending} />
-          <Route path="/Matches" component={Matches} />
+          <Route exact path="/" component={() => {
+            <Redirect to="/profile" />
+          }} />
+          <Route path="/profile" component={Profile} />
+          <Route path="/interests" component={Interests} />
+          <Route path="/pending" component={Pending} />
+          <Route path="/matches" component={Matches} />
         </Switch>
       :
         <Switch>
-          <Route path="/Signup" component={Signup} />
-          <Route path="/Login" component={Login} />
+          <Route exact path="/" component={() => {
+            <Redirect to="/signup" />
+          }} />
+          <Route path="/signup" component={Signup} />
+          <Route path="/login" component={Login} />
         </Switch>
       }
       </div>
