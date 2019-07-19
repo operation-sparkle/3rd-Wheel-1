@@ -22,11 +22,6 @@ class App extends React.Component {
     }
     this.transition = this.transition.bind(this);
   }
-  backHome() {
-    Axios.get('/', {
-
-    })
-  }
 
   transition(linked) {
     return function() {
