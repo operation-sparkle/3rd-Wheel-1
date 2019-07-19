@@ -38,7 +38,7 @@ const getLocation = () => {
       longitude: position.coords.longitude,
     }));
   } else {
-    console.log('geolocation not supported');
+    console.log('geolocation is not supported');
   }
 };
 module.exports = {
