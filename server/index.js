@@ -26,9 +26,6 @@ passport.deserializeUser((id, done) => {
 });
 
 passport.use(new LocalStrategy((username, password, done) => {
-  //  find user
-  //    check for user and valid password
-  //  return done with the user
   User.findOne({ username })
     .then((user) => {
       if (!user) {
@@ -88,6 +85,9 @@ app.post('/login', passport.authenticate('local', {
   failureFlash: true,
 }));
 
+//  This first checks if a user alread exists
+//  If this call only checks username, send true aka go-ahead
+//  If call is made with all fields, create the new user
 app.post('/signup', async (req, res) => {
   try {
     const { username } = req.body;
