@@ -14,7 +14,7 @@ const Profile = (props) => {
   return (
     <div>
     <Card style={{ width: '24rem' }}>
-      <Card.Img variant="top" src="https://im.indiatimes.in/content/itimes/photo/2016/Oct/5/1475667154-funniest-baby-jokes-ever.jpg" />
+        <Card.Img variant="top" src="https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" />
       <Card.Body>
         <Card.Title>My Name</Card.Title>
       </Card.Body>
