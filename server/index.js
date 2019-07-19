@@ -108,9 +108,9 @@ app.get('/categories/:id', (req, res) => {
       res.status(200).send(interests);
     })
     .catch((err) => {
-      console.error(`Failed to retrieve interests: ${err}`)
+      console.error(`Failed to retrieve interests: ${err}`);
       res.status(500).send(err);
-    })
+    });
 });
 
 app.get('/interests/:userId', loggedIn, (req, res) => {
