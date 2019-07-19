@@ -11,7 +11,6 @@ const {
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '../client')));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(session({ secret: 'third-wheel' }));
@@ -46,19 +45,17 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 }));
 
-app.get('/', (req, res) => {
-  res.status(200).render('index');
-});
+app.use(express.static(path.join(__dirname, '../client')));
 
-app.get('/login', (req, res) => {
+const loggedIn = (req, res, next) => {
+  if (req.user) {
+    next();
+  } else {
+    res.redirect('/login');
+  }
+};
 
-});
-
-app.get('/signup', (req, res) => {
-
-});
-
-app.get('/users/:id', (req, res) => {
+app.get('/users/:id', loggedIn, (req, res) => {
   //  this is to retrieve a specific user profile
   const { id } = req.params;
   User.findByPk(id)
@@ -77,11 +74,11 @@ app.get('/users/:id', (req, res) => {
     });
 });
 
-app.get('/interests/:userId', (req, res) => {
+app.get('/interests/:userId', loggedIn, (req, res) => {
   //  this is to find new spots around the user
 });
 
-app.get('/matches/:userId', (req, res) => {
+app.get('/matches/:userId', loggedIn, (req, res) => {
   //  this is to retrieve all of the current matches
 });
 
