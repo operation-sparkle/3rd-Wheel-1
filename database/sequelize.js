@@ -54,6 +54,7 @@ const Couple = sequelize.define('couple', {
 
 const Category = sequelize.define('category', {
   name: Sequelize.STRING,
+  alias: Sequelize.STRING,
 }, { sequelize, modelName: 'category' });
 
 const Spot = sequelize.define('spot', {
