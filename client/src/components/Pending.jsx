@@ -5,24 +5,26 @@ import Tab from 'react-bootstrap/Tab';
 import Toast from 'react-bootstrap/Toast';
 import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
-import users from '../../../test-data/customers';
+import inbound from '../../../test-data/inbound';
+import outbound from '../../../test-data/outbound';
 
 const Pending = () => {
   
   function lister(userArray) {
     let i = 0;
-   return userArray.map((user) => {
+    return userArray.map((user) => {
       return (
       <ListGroupItem key={(++i).toString()}>
       <Toast>
         <Toast.Header>
-          <img src={user.img} className="avatar"/>
-          <strong className={user.name}>{user.name}</strong>
-          <small>Age: {user.age}</small>
-          <small>Gender: {user.gender}</small>
+              <img src={user.img} height="300px" width="340" className="avatar" alt="https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" />
+          
         </Toast.Header>
         <Toast.Body>
-          Some info.
+              <h4><strong className={user.name}>{user.name}</strong></h4>
+          <p><small>Age: {user.age}</small></p>
+          <p><small>Gender: {user.gender}</small></p>
+          <p>Some info.</p>
         </Toast.Body>
       </Toast>
       </ListGroupItem>
@@ -36,9 +38,13 @@ const Pending = () => {
         <Tabs defaultActiveKey="inbound" id="pendingDates">
           <Tab eventKey="inbound" title="Incoming Requests">
             <ListGroup>
-              {lister(users)}
+              {lister(inbound)}
             </ListGroup>
-
+          </Tab>
+          <Tab eventKey="outbound" title="Outbound Requests">
+            <ListGroup>
+            {lister(outbound)}
+            </ListGroup>
           </Tab>
         </Tabs>
       </Container>
