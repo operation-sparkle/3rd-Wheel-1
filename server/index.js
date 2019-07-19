@@ -88,16 +88,14 @@ app.get('/users/:id', loggedIn, (req, res) => {
 });
 
 //  This retrieves the top-level categories ie Restaurants
-app.get('/categories', (req, res) => {
-  return Category.findAll({ where: { parentId: null } })
-    .then((categories) => {
-      res.status(200).send(categories);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send(err);
-    });
-});
+app.get('/categories', (req, res) => Category.findAll({ where: { parentId: null } })
+  .then((categories) => {
+    res.status(200).send(categories);
+  })
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send(err);
+  }));
 
 //  This retrieves the subcategories aka interests
 //    If we are looking in Restaurants, this retrieves
@@ -137,13 +135,23 @@ app.post('/signup', async (req, res) => {
     const user = await User.findOne({ username });
     if (user) {
       res.status(400).send(false);
+    } else {
+      const options = req.body;
+      const newUser = await User.create(options);
+      req.login(newUser, () => res.send(newUser.id));
     }
-    if (!req.body.name) {
-      res.status(200).send(true);
-    }
-    const options = req.body;
-    const newUser = await User.create(options);
-    req.login(newUser, () => res.send(newUser.id));
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+app.patch('/signup/:id', async (req, res) => {
+  const { id } = req.params;
+  const options = req.body;
+  try {
+    const user = await User.update({ options }, { where: { id } });
+    res.status(201).send(user);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
