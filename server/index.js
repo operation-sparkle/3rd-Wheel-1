@@ -153,7 +153,21 @@ app.post('/signup', async (req, res) => {
 
 app.patch('/signup/:id', async (req, res) => {
   const { id } = req.params;
-  const options = req.body;
+  const {
+    name,
+    pic,
+    age,
+    preference,
+    bio,
+    interests,
+  } = req.body;
+  const options = {
+    name,
+    pic,
+    age,
+    preference,
+    bio,
+  };
   try {
     const user = await User.findOne({ where: { id } });
     if (user) {
