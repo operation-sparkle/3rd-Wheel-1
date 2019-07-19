@@ -10,7 +10,7 @@ const Signup = ({}) => {
     .then((obj) => {
       console.log(obj);
       if (obj.data) {
-        // flip val of canCreate
+        // flip val of canCreate  
         allowInterest(true);
       }
     })
@@ -23,7 +23,7 @@ const Signup = ({}) => {
     interestBool ? 
     <Form>
       <Form.Group controlId="exampleForm.ControlInput1">
-        <Form.Label>Tell us what you're interested in!!</Form.Label>
+        <Form.Label> Tell us what you're interested in!! </Form.Label>
         <Form.Control as="select">
           {/* { 
           <option>1</option>
