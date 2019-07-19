@@ -40,12 +40,11 @@ class App extends React.Component {
               <Link className="nav-link" to="/interest" >Interests</Link>
               <Link className="nav-link" to="/pending" >Pending</Link>
               <Link className="nav-link" to="/matches" >Matches</Link>
-              <Link className="nav-link" to="/signout" >Sign out</Link>
-
+              <Link className="nav-link" to="/signin" >Sign out</Link>
           </Nav>
           : 
             <Nav className="top-bar">
-                <Link className="nav-link" to="/Signup" >Sign up</Link>
+                <Link className="nav-link" to="/signup" >Sign up</Link>
                 <Link className="nav-link" to="/login" >Log in</Link>
             </Nav>
         }
