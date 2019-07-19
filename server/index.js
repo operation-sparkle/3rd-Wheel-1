@@ -44,6 +44,12 @@ passport.use(new LocalStrategy((username, password, done) => {
 
 app.use(express.static(path.join(__dirname, '../client')));
 
+//  Define signup and login routes first
+//  they do not need verification middleware
+app.get('/#/signup', (req, res) => {
+  res.redirect('/');
+});
+
 const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
