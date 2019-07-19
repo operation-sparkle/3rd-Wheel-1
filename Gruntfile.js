@@ -42,7 +42,7 @@ module.exports = (grunt) => {
     watch: {
       scripts: {
         files: [
-          'client/dist/bundle.js',
+          'client/src/',
         ],
         tasks: [
           'concat',

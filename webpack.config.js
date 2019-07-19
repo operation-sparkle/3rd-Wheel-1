@@ -34,5 +34,8 @@ module.exports = {
     hotOnly: true,
     historyApiFallback: true,
   },
+  watchOptions: {
+    poll: 1000
+  },
   plugins: [new webpack.HotModuleReplacementPlugin()],
 };
