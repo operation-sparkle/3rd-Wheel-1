@@ -8,16 +8,22 @@ import Interests from './components/Interests';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
-import Login from './components/Login';
+import Signin from './components/Signin';
+import Axios from 'axios';
 
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       username: "",
-      isLoggedIn: false,
+      isLoggedIn: true,
     }
     this.transition = this.transition.bind(this);
+  }
+  backHome() {
+    Axios.get('/', {
+
+    })
   }
 
   transition(linked) {
@@ -53,30 +59,19 @@ class App extends React.Component {
         }
           </Navbar.Collapse>
         </Navbar>
-        { 
-          isLoggedIn ? 
-          <Switch>
-            <Route exact path="/" component={() => (
-              <Redirect to="/profile"/>
-            )} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/interest" component={Interests} />
-            <Route path="/pending" component={Pending} />
-            <Route path="/matches" component={Matches} />
-          </Switch>
-        :
-          <div>
-            <Switch>
-              <Route exact path="/" component={() => (
-                <Redirect to="/signup"/>
-              )} />
-              <Route path="/signup" component={Signup} />
-              <Route path="/login" component={Login} />
-            </Switch>
-          </div>
-        }
-
-       
+      { isLoggedIn ? 
+        <Switch>
+          <Route path="/Profile" component={Profile} />
+          <Route path="/Interests" component={Interests} />
+          <Route path="/Pending" component={Pending} />
+          <Route path="/Matches" component={Matches} />
+        </Switch>
+      :
+        <Switch>
+          <Route path="/Signup" component={Signup} />
+          <Route path="/Signin" component={Signin} />
+        </Switch>
+      }
       </div>
     )
   }
