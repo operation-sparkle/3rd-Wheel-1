@@ -83,6 +83,9 @@ app.get('/categories', (req, res) => {
     });
 });
 
+//  This retrieves the subcategories aka interests
+//    If we are looking in Restaurants, this retrieves
+//    vietnamese, new american, hot dog, etc
 app.get('/categories/:id', (req, res) => {
   const { id: parentId } = req.params;
   return Category.findAll({ where: { parentId } })
