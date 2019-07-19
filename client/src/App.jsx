@@ -9,15 +9,21 @@ import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
 import Signin from './components/Signin';
+import Axios from 'axios';
 
 class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       username: "",
-      isLoggedIn: false,
+      isLoggedIn: true,
     }
     this.transition = this.transition.bind(this);
+  }
+  backHome() {
+    Axios.get('/', {
+
+    })
   }
 
   transition(linked) {
@@ -51,10 +57,10 @@ class App extends React.Component {
         </Navbar>
       { isLoggedIn ? 
         <Switch>
-          <Route path="/Profile" />
-          <Route path="/Interest" />
-          <Route path="/Pending" />
-          <Route path="/Matches" />
+          <Route path="/Profile" component={Profile} />
+          <Route path="/Interests" component={Interests} />
+          <Route path="/Pending" component={Pending} />
+          <Route path="/Matches" component={Matches} />
         </Switch>
       :
         <Switch>
