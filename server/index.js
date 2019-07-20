@@ -9,7 +9,9 @@ const LocalStrategy = require('passport-local');
 const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
-const { selectMatch } = require('./helpers/index.js');
+const {
+  selectMatch, sanitizeUser,
+} = require('./helpers/index.js');
 
 const app = express();
 
@@ -128,7 +130,7 @@ app.post('/signup', async (req, res) => {
 
 /* Calls to query information */
 
-app.get('/users/', loggedIn, (req, res) => {
+app.get('/users', loggedIn, (req, res) => {
   //  this is to retrieve a specific user profile
   // const { id } = req.params;
   const id = req.session.userId;
@@ -146,6 +148,20 @@ app.get('/users/', loggedIn, (req, res) => {
       console.error(`Failed to fetch user information: ${err}`);
       res.status(400).send(err);
     });
+});
+
+app.patch('/users', async (req, res) => {
+  try {
+    const { userId } = req.session;
+    const options = req.body;
+    const user = await User.findByPk(userId);
+    const updatedUser = await user.update(options);
+    const sanitizedUser = sanitizeUser(updatedUser);
+    res.status(201).json(sanitizedUser);
+  } catch (err) {
+    console.error(`Failed to update user: ${err}`);
+    res.status(500).json(err);
+  }
 });
 
 //  This retrieves the top-level categories ie Restaurants
@@ -202,6 +218,7 @@ app.post('/matches/:userId', async (req, res) => {
     res.status(500).send(err);
   }
 });
+
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
   const { userId, status } = req.body;
