@@ -179,32 +179,24 @@ app.post('/matches/:userId', async (req, res) => {
 });
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
-  const { userId, status } = req.body;
+  const { user1Id, user2Id, status } = req.body;
   if (bound === 'outbound') {
-    return Couple.findAll({
-      include: {
-        model: User,
-        as: 'user1Id',
-      },
-      where: { userId },
-    });
+    return Couple.findAll({ where: { user1Id } })
+      .then(() => Couple.findAll({ where: { status } }))
+      .then(result => res.status(200).json(result));
   }
   if (bound === 'inbound') {
-    return Couple.findAll({
-      include: {
-        model: User,
-        as: 'user2Id',
-      },
-      where: { userId },
-    });
+    return Couple.findAll({ where: { user2Id } })
+      .then(() => Couple.findAll({ where: { status } }))
+      .then(result => res.status(200).json(result));
   }
 
-  return Couple.create(status)
-    .then(responce => res.status(200).json(responce))
-    .catch((err) => {
-      console.log(`error: ${err}`);
-      res.send(500).send(err);
-    });
+  // return Couple.create(status)
+  //   .then(result => res.status(200).json(result))
+  //   .catch((err) => {
+  //     console.log(`error: ${err}`);
+  //     res.send(500).send(err);
+  //   });
 });
 
 //  This updates user information
@@ -230,9 +222,7 @@ app.patch('/signup/:id', async (req, res) => {
     const user = await User.findOne({ where: { id } });
     if (user) {
       const updatedUser = user.update(options, { where: { id } });
-      const updatedInterests = interests.map((interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id })
-      });
+      const updatedInterests = interests.map(interest => UserInterest.create({ userId: id, categoryId: interest.id }));
       Promise.all([updatedUser, updatedInterests])
         .then(() => res.status(201).json(updatedUser.id));
     } else {
