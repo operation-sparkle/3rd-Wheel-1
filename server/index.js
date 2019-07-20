@@ -77,11 +77,23 @@ app.get('/#/*', loggedIn, (req, res) => {
 
 /* Here are the authentication requests */
 
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/#/signup',
-  failureFlash: true,
-}));
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', async (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.redirect('/');
+    }
+    req.logIn(user, (logErr) => {
+      if (logErr) {
+        res.status(400).json(logErr);
+      }
+      req.session.userId = user.id;
+      res.status(201).json(user);
+    });
+  })(req, res, next);
+});
 
 app.get('/logout', loggedIn, (req, res) => {
   req.logout();
@@ -105,7 +117,7 @@ app.post('/signup', async (req, res) => {
           res.status(400).json(err);
         }
         req.session.userId = newUser.id;
-        res.status(201).send();
+        res.status(201).send(newUser);
       });
     }
   } catch (err) {

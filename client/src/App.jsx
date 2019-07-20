@@ -10,7 +10,7 @@ import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
-import Login from './components/Signup';
+import Signup from './components/Signup';
 import Login from './components/Login';
 import Interests from './components/Interests';
 
@@ -35,7 +35,7 @@ class App extends React.Component {
   gateKeeper() {
     this.getUserInfo()
       .then(response => {
-        console.log('test', response.data);
+        // console.log('test', response.data);
         this.setState({
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,

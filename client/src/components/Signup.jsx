@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 
@@ -18,6 +17,8 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
     event.preventDefault();
     return axios.post('/signup', { username, password, name })
       .then(() => {
+        // add data param and remove sensitive data to eliminate need to send get to users
+        // console.log('signup', data);
         gateKeeper();
       })
       .catch(err => console.warn(err));
