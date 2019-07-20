@@ -179,24 +179,27 @@ app.post('/matches/:userId', async (req, res) => {
 });
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
-  const { user1Id, user2Id, status } = req.body;
+  const { userId, status } = req.body;
   if (bound === 'outbound') {
-    return Couple.findAll({ where: { user1Id } })
-      .then(() => Couple.findAll({ where: { status } }))
-      .then(result => res.status(200).json(result));
+    return Couple.findAll({ where: { user1Id: userId, status } })
+      .then(result => res.status(200).send(result))
+      .catch((err) => {
+        console.error(`error: ${err}`);
+        res.send(500).send(err);
+      });
   }
   if (bound === 'inbound') {
-    return Couple.findAll({ where: { user2Id } })
-      .then(() => Couple.findAll({ where: { status } }))
-      .then(result => res.status(200).json(result));
+    return Couple.findAll({ where: { user2Id: userId, status } })
+      .then(result => res.status(200).send(result))
+      .catch((err) => {
+        console.error(`error: ${err}`);
+        res.send(500).send(err);
+      });
   }
 
   // return Couple.create(status)
   //   .then(result => res.status(200).json(result))
-  //   .catch((err) => {
-  //     console.log(`error: ${err}`);
-  //     res.send(500).send(err);
-  //   });
+  //
 });
 
 //  This updates user information
