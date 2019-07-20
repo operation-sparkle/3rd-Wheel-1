@@ -9,7 +9,9 @@ const LocalStrategy = require('passport-local');
 const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
-const { selectMatch } = require('./helpers/index.js');
+const {
+  selectMatch, sanitizeUser,
+} = require('./helpers/index.js');
 
 const app = express();
 
@@ -148,13 +150,14 @@ app.get('/users', loggedIn, (req, res) => {
     });
 });
 
-app.patch('/users', loggedIn, async (req, res) => {
+app.patch('/users', async (req, res) => {
   try {
     const { userId } = req.session;
-    const { longitude, latitude } = req.body;
+    const options = req.body;
     const user = await User.findByPk(userId);
-    const updatedUser = await user.update({ longitude, latitude });
-    res.send(201).json(updatedUser);
+    const updatedUser = await user.update(options);
+    const sanitizedUser = sanitizeUser(updatedUser);
+    res.status(201).json(sanitizedUser);
   } catch (err) {
     console.error(`Failed to update user: ${err}`);
     res.status(500).json(err);
