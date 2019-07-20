@@ -19,8 +19,8 @@ const User = sequelize.define('user', {
   age: Sequelize.INTEGER,
   preference: Sequelize.STRING,
   bio: Sequelize.STRING,
-  latitude: Sequelize.INTEGER,
-  longitude: Sequelize.INTEGER,
+  latitude: Sequelize.FLOAT,
+  longitude: Sequelize.FLOAT,
 
 }, {
   hooks: {

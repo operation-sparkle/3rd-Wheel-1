@@ -30,7 +30,7 @@ const populateCategories = async () => {
 };
 
 //  Feel free to comment this call out after the first run
-// populateCategories();
+populateCategories();
 
 User.prototype.findInterests = async (interests, user) => {
   try {
