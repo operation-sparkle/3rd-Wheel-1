@@ -22,22 +22,22 @@ const restCategories = () => {
     });
 };
 
-const fetchRestraurant = async (category, latitude, longitude) {
+const fetchRestraurant = async (category, latitude, longitude) => {
   const { alias } = category;
   const options = {
     method: 'get',
     url: 'https://api.yelp.com/v3/businesses/search',
     headers: {
-      'Authorization': `Bearer ${process.env.YELP_KEY}` 
+      'Authorization': `Bearer ${process.env.YELP_KEY}`,
       latitude,
       longitude,
       alias,
-    }
-  }
+    },
+  };
   const response = await axios(options);
   const { businesses } = response.data;
   return businesses[0];
-}
+};
 
 //  This function will find the distance between two coordinates
 //  It expects arrays of [longitude, latitude]
@@ -72,11 +72,9 @@ const topInterest = (interests) => {
       interestSums[interest]++;
       return interestSums;
     }, {});
-  const topInterest = Object.keys(orderedInterests)
-    .sort((a, b) => {
-      return orderedInterests[b] - orderedInterests[a];
-    })[0];
-  return topInterest;
+  const topMatch = Object.keys(orderedInterests)
+    .sort((a, b) => orderedInterests[b] - orderedInterests[a])[0];
+  return topMatch;
 };
 
 module.exports = {
