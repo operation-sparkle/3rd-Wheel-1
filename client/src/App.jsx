@@ -41,10 +41,6 @@ class App extends React.Component {
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,
         })
-        // const successCb = position => ({
-        //   latitude: position.coords.latitude,
-        //   longitude: position.coords.longitude,
-        // });
 
         navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:600000});
 
@@ -60,10 +56,6 @@ class App extends React.Component {
         }
 
       })
-      // .then((location) => {
-      //   // axios.patch()
-      //   console.log(location);
-      // })
       .catch(err => { throw err; });
   }
   
