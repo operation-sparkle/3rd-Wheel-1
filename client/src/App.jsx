@@ -26,6 +26,13 @@ class App extends React.Component {
     this.gateKeeper = this.gateKeeper.bind(this);
   }
 
+  componentDidMount() {
+    return axios.get('/user/')
+      .then(response => {
+
+      })
+  }
+
   gateKeeper() {
     this.setState({
       isLoggedIn: !this.state.isLoggedIn,
