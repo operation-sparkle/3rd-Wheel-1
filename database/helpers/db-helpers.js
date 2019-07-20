@@ -29,9 +29,11 @@ const fetchRestraurant = async (category, latitude, longitude) => {
     url: 'https://api.yelp.com/v3/businesses/search',
     headers: {
       'Authorization': `Bearer ${process.env.YELP_KEY}`,
+    },
+    params: {
+      categories: alias,
       latitude,
       longitude,
-      alias,
     },
   };
   const response = await axios(options);
