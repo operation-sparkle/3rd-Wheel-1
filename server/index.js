@@ -266,7 +266,7 @@ app.patch('/matches', async (req, res) => {
       const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
     } else if (status === 'accepted' && oldStatus === null) {
-      const updatedCouple = await couple.update({ 'pending' });
+      const updatedCouple = await couple.update({ status: 'pending' });
       res.status(201).json(updatedCouple);
     } else if (status === 'accepted' && oldStatus === 'pending') {
       const updatedCouple = await couple.update({ status });
