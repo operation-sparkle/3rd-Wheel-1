@@ -1,15 +1,10 @@
-
-const getLocation = () => {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(position => ({
-      latitude: position.coords.latitude,
-      longitude: position.coords.longitude,
-    }));
-  } else {
-    console.log('geolocation is not supported');
-  }
-};
-
-module.exports = {
-  getLocation,
+module.exports.getLocation = () => {
+  // if (navigator.geolocation) {
+  return navigator.geolocation.getCurrentPosition(position => (console.log({
+    latitude: position.coords.latitude,
+    longitude: position.coords.longitude,
+  })));
+  // } else {
+  //   console.log('geolocation is not supported');
+  // }
 };
