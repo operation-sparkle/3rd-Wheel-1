@@ -31,23 +31,31 @@ const populateCategories = async () => {
 // populateCategories();
 
 UserInterest.prototype.findMatches = async (interests, user) => {
-  const { id: userId, longitude: userLon, latitude: userLat } = user;
-  const matchingInterests = await interests.map(({ categoryId }) => {
-    return UserInterest.findAll({ categoryId });
-  });
-  const filteredMatches = matchingInterests.reduce(async (matches, match) => {
-    const { userId: matchId, categoryId } = match;
-    const { longitude: matchLon, latitude: matchLat } = await User.findOne({ matchId });
-    if (matchId === userId || haversineDistance([userLon, userLat], [matchLon, matchLat]) > 10) {
+  try {
+    const { id: userId, longitude: userLon, latitude: userLat } = user;
+    const matchingInterests = await interests.map(({ categoryId }) => {
+      return UserInterest.findAll({ categoryId });
+    });
+    const filteredMatches = matchingInterests.reduce(async (matches, match) => {
+      const { userId: matchId, categoryId } = match;
+      const { longitude: matchLon, latitude: matchLat } = await User.findOne({ matchId });
+      const coupleExists = await Couple.findOne({ where: { user2Id: matchId } });
+      if (matchId === userId
+        || haversineDistance([userLon, userLat], [matchLon, matchLat]) > 10
+        || !coupleExists) {
+        return matches;
+      }
+      if (matches[matchId] === undefined) {
+        matches[matchId] = [];
+      }
+      matches[matchId].push(categoryId);
       return matches;
-    }
-    if (matches[matchId] === undefined) {
-      matches[matchId] = [];
-    }
-    matches[matchId].push(categoryId);
-    return matches;
-  }, {});
-  return filteredMatches;
+    }, {});
+    return filteredMatches;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
 };
 
 module.exports = {
