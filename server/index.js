@@ -237,7 +237,14 @@ app.get('/matches/:bound', (req, res) => {
       });
   }
   if (bound === 'inbound') {
-    return Couple.findAll({ where: { user2Id: userId, status } })
+    return Couple.findAll({
+      where: {
+        user2Id: userId,
+        status: {
+          [Op.or]: [status, null]
+        },
+      },
+    })
       .then(result => res.status(200).send(result))
       .catch((err) => {
         console.error(`error: ${err}`);
