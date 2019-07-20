@@ -190,6 +190,26 @@ app.post('/matches/:userId', async (req, res) => {
     res.status(500).send(err);
   }
 });
+app.get('/matches/:bound', (req, res) => {
+  const { bound } = req.params;
+  const { userId, status } = req.body;
+  if (bound === 'outbound') {
+    return Couple.findAll({ where: { user1Id: userId, status } })
+      .then(result => res.status(200).send(result))
+      .catch((err) => {
+        console.error(`error: ${err}`);
+        res.send(500).send(err);
+      });
+  }
+  if (bound === 'inbound') {
+    return Couple.findAll({ where: { user2Id: userId, status } })
+      .then(result => res.status(200).send(result))
+      .catch((err) => {
+        console.error(`error: ${err}`);
+        res.send(500).send(err);
+      });
+  }
+});
 
 //  This updates user information
 //  Note that interests are split off to be used in a join table
@@ -214,9 +234,7 @@ app.patch('/signup/:id', async (req, res) => {
     const user = await User.findOne({ where: { id } });
     if (user) {
       const updatedUser = user.update(options, { where: { id } });
-      const updatedInterests = interests.map((interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id })
-      });
+      const updatedInterests = interests.map(interest => UserInterest.create({ userId: id, categoryId: interest.id }));
       Promise.all([updatedUser, updatedInterests])
         .then(() => res.status(201).json(updatedUser.id));
     } else {
