@@ -58,6 +58,15 @@ UserInterest.prototype.findMatches = async (interests, user) => {
   }
 };
 
+Spot.prototype.findMatch = async (coupleId) => {
+  try {
+
+  } catch (err) {
+    console.error(`Failed to find new match: ${err}`);
+    return err;
+  }
+};
+
 module.exports = {
   User,
   Date,
