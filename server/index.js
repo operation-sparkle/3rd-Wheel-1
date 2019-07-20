@@ -184,14 +184,6 @@ app.get('/categories/:id', (req, res) => {
     });
 });
 
-app.get('/interests/:userId', loggedIn, (req, res) => {
-  //  this is to find new spots around the user
-});
-
-app.get('/matches/:userId', loggedIn, (req, res) => {
-  //  this is to retrieve all of the current matches
-});
-
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
 //  We set the default status to null
@@ -308,6 +300,18 @@ app.patch('/signup/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
+  }
+});
+
+//  This function will find 5 potential date spots
+//  This only uses api calls and does not need to store in the database
+//  If the user clicks one of them, we will find them a date there!
+app.get('/hotspots/:userId' async (req, res) => {
+  try {
+
+  } catch (err) {
+    console.error(`Failed to find hotspots: ${err}`);
+    res.status(500).json(err);
   }
 });
 
