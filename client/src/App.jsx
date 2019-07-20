@@ -35,7 +35,7 @@ class App extends React.Component {
   gateKeeper() {
     this.getUserInfo()
       .then(response => {
-        console.log('test', response.data);
+        // console.log('test', response.data);
         this.setState({
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,
@@ -99,10 +99,10 @@ class App extends React.Component {
           // !loggedIn routes
             <Switch>
               <Route exact path="/" render={() => (
-                <Redirect to="/signup"/>
+                <Redirect to="/login"/>
               )} />
               <Route path="/signup" render={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
-              <Route path="/login" component={Login} />
+              <Route path="/login" render={(props) => <Login {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
             </Switch>
         }
       </div>
