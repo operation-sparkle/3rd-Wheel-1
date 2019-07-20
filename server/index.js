@@ -9,6 +9,9 @@ const LocalStrategy = require('passport-local');
 const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
+const {
+  haversineDistance,
+} = require('./helpers/index.js');
 
 const app = express();
 
