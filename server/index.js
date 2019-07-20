@@ -179,8 +179,8 @@ app.post('/matches/:userId', async (req, res) => {
     const matches = await user.findInterests(interests, user);
     const matchId = selectMatch(matches);
     const coupleValues = {
-      user1Id: userId,
-      user2Id: matchId,
+      user1IdId: userId,
+      user2IdId: matchId,
       status: 'pending',
     };
     const couple = await Couple.create(coupleValues);
