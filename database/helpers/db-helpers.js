@@ -22,7 +22,7 @@ const restCategories = () => {
     });
 };
 
-const fetchRestraurant = async (category, latitude, longitude) => {
+const fetchRestaurant = async (category, latitude, longitude) => {
   const { alias } = category;
   const options = {
     method: 'get',
@@ -81,7 +81,7 @@ const topInterest = (interests) => {
 
 module.exports = {
   restCategories,
-  fetchRestraurant,
+  fetchRestaurant,
   haversineDistance,
   topInterest,
 };
