@@ -22,4 +22,5 @@ const selectMatch = (matches) => {
 
 module.exports = {
   getRestaurant,
+  selectMatch,
 };
