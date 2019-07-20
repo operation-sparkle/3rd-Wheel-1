@@ -27,9 +27,9 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    return axios.get('/user/')
+    return axios.get('/users')
       .then(response => {
-
+        console.log('test', response);
       })
   }
 

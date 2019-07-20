@@ -14,7 +14,6 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
   const usernameSubmit = (username, password) => {
     return axios.post('/signup', { username, password, name })
       .then(() => {
-        console.log('test');
         gateKeeper();
       })
       // .then(() => axios.get('/interests'))

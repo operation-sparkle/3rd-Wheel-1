@@ -73,9 +73,10 @@ app.get('/#/*', loggedIn, (req, res) => {
   res.redirect('/');
 });
 
-app.get('/users/:id', loggedIn, (req, res) => {
+app.get('/users/', loggedIn, (req, res) => {
   //  this is to retrieve a specific user profile
-  const { id } = req.params;
+  // const { id } = req.params;
+  const id = req.session.userId;
   User.findByPk(id)
     .then((user) => {
       const {
@@ -147,8 +148,8 @@ app.post('/signup', async (req, res) => {
         if (err) {
           res.status(400).json(err);
         }
-        req.session.username = username;
-        res.status(201).json(newUser.id);
+        req.session.userId = newUser.id;
+        res.status(201).redirect('/#/profile');
       });
     }
   } catch (err) {
