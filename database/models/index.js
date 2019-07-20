@@ -1,7 +1,9 @@
 const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../sequelize');
-const { restCategories, haversineDistance } = require('../helpers/db-helpers.js');
+const { 
+  restCategories, fetchRestaurant, haversineDistance, topInterest,
+} = require('../helpers/db-helpers.js');
 
 //  Use this function to populate the restaurant sub-categories.
 //  This only needs to be done on database init
@@ -54,6 +56,27 @@ UserInterest.prototype.findMatches = async (interests, user) => {
     return filteredMatches;
   } catch (err) {
     console.error(err);
+    return err;
+  }
+};
+
+Couple.prototype.findSpot = async (couple) => {
+  try {
+    const { user1Id, user2Id, id: coupleId } = couple;
+    const interestsRows = await UserInterest.findAll({
+      where: {
+        userId: {
+          [Op.or]: [user1Id, user2Id],
+        },
+      },
+    });
+    const matchedInterestId = topInterest(interestsRows);
+    const matchedInterest = await Category.findByPk(matchedInterestId);
+    const { longitude, latitude } = await User.findByPk(user1Id);
+    const newSpot = fetchRestaurant(matchedInterest, longitude, latitude);
+    return newSpot;
+  } catch (err) {
+    console.error(`Failed to find new match: ${err}`);
     return err;
   }
 };

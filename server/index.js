@@ -211,6 +211,29 @@ app.get('/matches/:bound', (req, res) => {
   }
 });
 
+//  this updates a couple status
+//  probably only from pending to accepted or rejected
+//  if accepted we need to create a new date!
+app.patch('/matches', async (req, res) => {
+  try {
+    const { status, coupleId } = req.body;
+    const couple = await Couple.findByPK(coupleId);
+    const updatedCouple = await couple.update({ status });
+    if (status === 'rejected') {
+      res.status(201).json(updatedCouple);
+    } else {
+      const spot = await updatedCouple.findSpot(updatedCouple);
+      const { id: apiId } = spot;
+      const { id: spotId } = await Spot.create({ apiId });
+      const { id: dateId } = await Date.create({ coupleId, spotId });
+      res.status(201).json(dateId);
+    }
+  } catch (err) {
+    console.error(`Failed to update couple: ${err}`);
+    res.status(500).json(err);
+  }
+});
+
 //  This updates user information
 //  Note that interests are split off to be used in a join table
 app.patch('/signup/:id', async (req, res) => {
