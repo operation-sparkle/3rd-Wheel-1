@@ -15,7 +15,7 @@ const getRestaurant = (location, categories) => {
 
 const selectMatch = (matches) => {
   const orderedMatches = Object.keys(matches).sort((a, b) => {
-    return matches[a].length - matches[b].length;
+    return matches[b].length - matches[a].length;
   });
   return orderedMatches[0];
 };
