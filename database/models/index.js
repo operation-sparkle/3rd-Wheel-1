@@ -34,17 +34,23 @@ const populateCategories = async () => {
 
 User.prototype.findInterests = async (interests, user) => {
   try {
-    const { id: userId, longitude: userLon, latitude: userLat } = user;
+    const {
+      id: userId, longitude: userLon, latitude: userLat, gender: userGen, preference: userPref,
+    } = user;
     const matchingInterests = await interests.map(({ categoryId }) => {
       return UserInterest.findAll({ categoryId });
     });
     const filteredMatches = matchingInterests.reduce(async (matches, match) => {
       const { userId: matchId, categoryId } = match;
-      const { longitude: matchLon, latitude: matchLat } = await User.findOne({ matchId });
+      const {
+        longitude: matchLon, latitude: matchLat, gender: matchGen, preference: matchPref,
+      } = await User.findOne({ matchId });
       const coupleExists = await Couple.findOne({ where: { user2Id: matchId } });
       if (matchId === userId
+        || !!coupleExists
         || haversineDistance([userLon, userLat], [matchLon, matchLat]) > 10
-        || !coupleExists) {
+        || userPref !== matchGen
+        || matchPref !== userGen) {
         return matches;
       }
       if (matches[matchId] === undefined) {
