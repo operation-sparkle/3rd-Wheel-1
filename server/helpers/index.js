@@ -15,6 +15,8 @@ const getRestaurant = (location, categories) => {
     .catch(err => console.log(err, 'axios error'));
 };
 
+//  This function will find the distance between two coordinates
+//  It expects arrays of [longitude, latitude]
 const haversineDistance = (coords1, coords2) => {
   const toRadians = (x) => {
     return x * Math.PI / 180;
