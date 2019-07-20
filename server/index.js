@@ -10,7 +10,7 @@ const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
 const {
-  selectMatch, sanitizeUser,
+  fetchRestaurants, selectMatch, sanitizeUser,
 } = require('./helpers/index.js');
 
 const app = express();
@@ -308,7 +308,12 @@ app.patch('/signup/:id', async (req, res) => {
 //  If the user clicks one of them, we will find them a date there!
 app.get('/hotspots/:userId' async (req, res) => {
   try {
-
+    const { userId } = req.params;
+    const { latitude, longitude } = await User.findByPk(userId);
+    const interests = await UserInterest.findAll({ userId });
+    const categories = interests.map(interest => interest.alias);
+    const hotspots = await fetchRestaurants(categories, latitude, longitude);
+    res.status(200).json(hotspots);
   } catch (err) {
     console.error(`Failed to find hotspots: ${err}`);
     res.status(500).json(err);
