@@ -193,6 +193,9 @@ app.get('/matches/:userId', loggedIn, (req, res) => {
 
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
+//  We set the default status to null
+//    If one person accepts, it becomes pending
+//    If both accept we find a date!
 app.post('/matches/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
@@ -203,7 +206,7 @@ app.post('/matches/:userId', async (req, res) => {
     const coupleValues = {
       user1Id: userId,
       user2Id: matchId,
-      status: 'pending',
+      status: null,
     };
     const couplePromise = Couple.create(coupleValues);
     const matchedUserPromise = User.findByPk(matchId);
@@ -222,7 +225,14 @@ app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
   const { userId, status } = req.body;
   if (bound === 'outbound') {
-    return Couple.findAll({ where: { user1Id: userId, status } })
+    return Couple.findAll({
+      where: {
+        user1Id: userId,
+        status: {
+          [Op.or]: [status, null]
+        },
+      },
+    })
       .then(result => res.status(200).send(result))
       .catch((err) => {
         console.error(`error: ${err}`);
@@ -230,7 +240,12 @@ app.get('/matches/:bound', (req, res) => {
       });
   }
   if (bound === 'inbound') {
-    return Couple.findAll({ where: { user2Id: userId, status } })
+    return Couple.findAll({
+      where: {
+        user2Id: userId,
+        status,
+      },
+    })
       .then(result => res.status(200).send(result))
       .catch((err) => {
         console.error(`error: ${err}`);
@@ -246,13 +261,18 @@ app.patch('/matches', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
     const couple = await Couple.findByPk(coupleId);
-    const updatedCouple = await couple.update({ status });
+    const { status: oldStatus } = couple;
     if (status === 'rejected') {
+      const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
-    } else {
+    } else if (status === 'accepted' && oldStatus === null) {
+      const updatedCouple = await couple.update({ status: 'pending' });
+      res.status(201).json(updatedCouple);
+    } else if (status === 'accepted' && oldStatus === 'pending') {
+      const updatedCouple = await couple.update({ status });
       const spot = await updatedCouple.findSpot(updatedCouple);
       const { id: apiId } = spot;
-      const { id: spotId } = await Spot.create({ apiId });
+      const { id: spotId } = await Spot.findOrCreate({ apiId });
       const { id: dateId } = await Date.create({ coupleId, spotId });
       res.status(201).json(dateId);
     }
