@@ -7,11 +7,14 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const Signup = ({ gateKeeper, isLoggedIn }) => {
+  // hooks for input values
   const [ username, setUsername ] = useState('');
   const [ name, setName ] = useState('');
   const [ password, setPassword ] = useState('');
 
+  // post user info to signup
   const usernameSubmit = (username, password) => {
+    // dont allow re-render until complete!
     event.preventDefault();
     return axios.post('/signup', { username, password, name })
       .then(() => {
@@ -20,18 +23,21 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
       .catch(err => console.warn(err));
   };
 
+  // sets state (w/ hooks) to match user input fields
   const handleChange = (event, func) => {
     func(event.target.value);
   };
 
   return (
     isLoggedIn ?
+      // if !!loggedIn === true, redirect to index (swapping to restricted view)
       <Switch>
         <Route path="/signup" component={() => {
           <Redirect to="/" />
         }} />
       </Switch>
       :
+      // if !!loggedIn === false, redirect to index (swapping to restricted view)
       <Form>
         <Form.Group controlId="form-username">
           <Form.Label>Username</Form.Label>

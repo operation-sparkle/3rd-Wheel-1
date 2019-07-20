@@ -25,15 +25,16 @@ class App extends React.Component {
     
     this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
-  
+    
+    // attempt to get user data initially.
+    // if no cookie, middleware redirects.
     this.getUserInfo();
   }
   
+  // function to flip bool and get user info when signup succeeds
   gateKeeper() {
     this.getUserInfo()
       .then(response => {
-        // const { id, name, age, preference, gender, bio, url } = response.data;
-        
         console.log('test', response.data);
         this.setState({
           isLoggedIn: !this.state.isLoggedIn,
@@ -60,6 +61,7 @@ class App extends React.Component {
           <Navbar.Collapse id="responsive-navbar-nav">
         { 
           isLoggedIn ? 
+          // logged in nav
           <Nav className="top-bar">
             <NavDropdown title="Your Card" id="basic-nav-dropdown">
               <Link className="dropdown-item" to="/profile" >Profile</Link>
@@ -72,6 +74,7 @@ class App extends React.Component {
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
           : 
+          // not logged in nav
           <Nav className="top-bar">
             <Link className="nav-link" to="/signup" >Sign up</Link>
             <Link className="nav-link" to="/login" >Log in</Link>
@@ -81,6 +84,7 @@ class App extends React.Component {
         </Navbar>
         { 
           isLoggedIn ? 
+          // !loggedIn routes
             <Switch>
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
@@ -92,6 +96,7 @@ class App extends React.Component {
               <Route path="/profile" component={Profile} />
             </Switch>
           :
+          // !loggedIn routes
             <Switch>
               <Route exact path="/" render={() => (
                 <Redirect to="/signup"/>
