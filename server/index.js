@@ -243,9 +243,7 @@ app.get('/matches/:bound', (req, res) => {
     return Couple.findAll({
       where: {
         user2Id: userId,
-        status: {
-          [Op.or]: [status, null]
-        },
+        status,
       },
     })
       .then(result => res.status(200).send(result))
