@@ -33,14 +33,6 @@ const User = sequelize.define('user', {
   modelName: 'user',
 });
 
-User.prototype.validPassword = async function (password) {
-  try {
-    return bcrypt.compare(password, this.password);
-  } catch (err) {
-    return console.error(err);
-  }
-};
-
 const Date = sequelize.define('date', {
 }, { sequelize, modelName: 'date' });
 

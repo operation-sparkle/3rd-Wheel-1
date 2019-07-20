@@ -32,6 +32,14 @@ const populateCategories = async () => {
 //  Feel free to comment this call out after the first run
 populateCategories();
 
+User.prototype.validPassword = async (password) => {
+  try {
+    return bcrypt.compare(password, this.password);
+  } catch (err) {
+    return console.error(err);
+  }
+};
+
 User.prototype.findInterests = async (interests, user) => {
   try {
     const {
