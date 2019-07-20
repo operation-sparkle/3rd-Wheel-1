@@ -218,11 +218,15 @@ app.patch('/matches/', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
     const couple = await Couple.findByPK(coupleId);
+    const updatedCouple = await couple.update({ status });
     if (status === 'rejected') {
-      const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
     } else {
-
+      const spot = await updatedCouple.findSpot(updatedCouple);
+      const { id: apiId } = spot;
+      const { id: spotId } = await Spot.create({ apiId });
+      const { id: dateId } = await Date.create({ coupleId, spotId });
+      res.status(201).json(dateId);
     }
   } catch (err) {
     console.error(`Failed to update couple: ${err}`);
