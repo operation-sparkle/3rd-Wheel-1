@@ -166,7 +166,13 @@ app.post('/matches/:userId', async (req, res) => {
     const matches = await UserInterest.findMatches(interests, user);
     const matchId = selectMatch(matches);
     const match = await User.findByPk(matchId);
-    res.status(201).send(match);
+    const coupleValues = {
+      user1Id: userId,
+      user2Id: matchId,
+      status: 'pending',
+    };
+    const couple = await Couple.create(coupleValues);
+    res.status(201).send(couple);
   } catch (err) {
     console.error(`Failed to find a match: ${err}`);
     res.status(500).send(err);
