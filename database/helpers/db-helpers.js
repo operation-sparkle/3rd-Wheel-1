@@ -31,7 +31,7 @@ const fetchRestraurant = async (category, latitude, longitude) => {
       'Authorization': `Bearer ${process.env.YELP_KEY}`,
       latitude,
       longitude,
-      alias,
+      categories: alias,
     },
   };
   const response = await axios(options);
