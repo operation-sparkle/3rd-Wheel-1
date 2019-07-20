@@ -28,40 +28,42 @@ class App extends React.Component {
     this.showAuthFail = this.showAuthFail.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
+    this.openGate = this.openGate.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
-    this.getUserInfo();
+    
+    this.gateKeeper();
   }
-  
+
   // function to flip bool and get user info when signup succeeds
   gateKeeper() {
-    this.getUserInfo()
-      .then(response => {
-        // console.log('test', response.data);
-        this.setState({
-          isLoggedIn: !this.state.isLoggedIn,
-          user: response.data,
-        })
-      })
-      .then(() => {
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 });
-
-        function successCallback(position) {
+    return this.getUserInfo()
+    .then(response => {
+      // console.log('test', response);
+      if (typeof response.data === 'object'){
+        
+        const successCallback = (position) => {
           // By using the 'maximumAge' option above, the position
           // object is guaranteed to be at most 10 minutes old.
           // could send timestamp too!
           const { longitude, latitude } = position.coords;
           axios.patch('/users', { longitude, latitude })
+            .then(this.openGate)              
+            .catch(err => console.warn(err));
         }
-
-        function errorCallback() {
+        
+        const errorCallback = () => {
           // Update a div element with error.message.
           this.showAuthFail();
         }
-      })
-      .catch(err => { 
-        this.showAuthFail();
-      });
+
+        return navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 })
+      }
+    })
+    .catch(err => { 
+      console.warn(err);
+      this.showAuthFail();
+    });
   }
   
   getUserInfo() {
@@ -75,11 +77,16 @@ class App extends React.Component {
     })
   }
 
+  openGate(response) {
+    this.setState({
+      isLoggedIn: !this.state.isLoggedIn,
+      user: response.data,
+    })
+  }
+
   render() {
     const { isLoggedIn, failedLogin } = this.state;
-    
-    this.getUserInfo()
-    
+
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">

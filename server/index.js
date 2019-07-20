@@ -92,7 +92,8 @@ app.post('/login', (req, res, next) => {
         res.status(400).redirect('/');
       }
       req.session.userId = user.id;
-      return res.status(201).send();
+      const sanitizedUser = sanitizeUser(user);
+      return res.status(201).json(sanitizedUser);
     });
   })(req, res, next);
 });
@@ -140,7 +141,7 @@ app.get('/users', loggedIn, async (req, res) => {
     res.status(200).json(sanitizedUser);
   } catch (err) {
     console.error(`Failed to fetch user information: ${err}`);
-    res.status(400).send(err);
+    res.status(400).send();
   }
 });
 
