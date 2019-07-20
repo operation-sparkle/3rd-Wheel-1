@@ -1,21 +1,28 @@
 const axios = require('axios');
 
 const fetchRestaurants = async (categoriesArray, latitude, longitude) => {
-  const categories = categoriesArray.join(',');
-  const options = {
-    method: 'get',
-    url: 'https://api.yelp.com/v3/businesses/search',
-    headers: {
-      'Authorization': `Bearer ${process.env.YELP_KEY}`,
-      limit: 5,
-      categories,
-      latitude,
-      longitude,
-    },
-  };
-  const response = await axios(options);
-  const { businesses } = response.data;
-  return businesses;
+  try {
+    const categories = categoriesArray.join(',');
+    const options = {
+      method: 'get',
+      url: 'https://api.yelp.com/v3/businesses/search',
+      headers: {
+        'Authorization': `Bearer ${process.env.YELP_KEY}`,
+      },
+      params: {
+        limit: '5',
+        categories,
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
+      },
+    };
+    const response = await axios(options);
+    const { businesses } = response.data;
+    return businesses;
+  } catch (err) {
+    console.error(`Failed to fetch from Yelp: ${err}`);
+    return err;
+  }
 };
 
 const selectMatch = (matches) => {
