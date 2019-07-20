@@ -60,7 +60,7 @@ UserInterest.prototype.findMatches = async (interests, user) => {
   }
 };
 
-Couple.prototype.findMatch = async (couple) => {
+Couple.prototype.findSpot = async (couple) => {
   try {
     const { user1Id, user2Id, id: coupleId } = couple;
     const interestsRows = await UserInterest.findAll({
