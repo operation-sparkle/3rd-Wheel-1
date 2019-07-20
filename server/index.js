@@ -211,6 +211,13 @@ app.get('/matches/:bound', (req, res) => {
   }
 });
 
+//  this updates a couple status
+//  probably only from pending to accepted or rejected
+//  if accepted we need to create a new date!
+app.patch('/matches/:status', (req, res) => {
+
+});
+
 //  This updates user information
 //  Note that interests are split off to be used in a join table
 app.patch('/signup/:id', async (req, res) => {
