@@ -306,7 +306,7 @@ app.patch('/signup/:id', async (req, res) => {
 //  This function will find 5 potential date spots
 //  This only uses api calls and does not need to store in the database
 //  If the user clicks one of them, we will find them a date there!
-app.get('/hotspots/:userId' async (req, res) => {
+app.get('/hotspots/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const { latitude, longitude } = await User.findByPk(userId);
