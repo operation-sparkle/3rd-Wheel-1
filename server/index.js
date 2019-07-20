@@ -257,7 +257,9 @@ app.patch('/signup/:id', async (req, res) => {
     const user = await User.findOne({ where: { id } });
     if (user) {
       const updatedUser = user.update(options, { where: { id } });
-      const updatedInterests = interests.map(interest => UserInterest.create({ userId: id, categoryId: interest.id }));
+      const updatedInterests = interests.map((interest) => {
+        return UserInterest.create({ userId: id, categoryId: interest.id });
+      });
       Promise.all([updatedUser, updatedInterests])
         .then(() => res.status(201).json(updatedUser.id));
     } else {

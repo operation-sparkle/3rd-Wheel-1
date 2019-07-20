@@ -1,7 +1,7 @@
 const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../sequelize');
-const { 
+const {
   restCategories, fetchRestaurant, haversineDistance, topInterest,
 } = require('../helpers/db-helpers.js');
 
@@ -62,7 +62,7 @@ UserInterest.prototype.findMatches = async (interests, user) => {
 
 Couple.prototype.findSpot = async (couple) => {
   try {
-    const { user1Id, user2Id, id: coupleId } = couple;
+    const { user1Id, user2Id } = couple;
     const interestsRows = await UserInterest.findAll({
       where: {
         userId: {
