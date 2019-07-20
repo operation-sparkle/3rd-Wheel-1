@@ -214,8 +214,19 @@ app.get('/matches/:bound', (req, res) => {
 //  this updates a couple status
 //  probably only from pending to accepted or rejected
 //  if accepted we need to create a new date!
-app.patch('/matches/:status', (req, res) => {
-
+app.patch('/matches/', (req, res) => {
+  const { status, coupleId } = req.body;
+  const { status } = req.params;
+  if (status === 'rejected') {
+    Couple.findByPk(coupleId)
+      .then((couple) => {
+        couple.update({ status });
+      })
+      .then(() => res.status(201).send())
+      .catch((err) => {
+        console.error(`Could not reject couple: ${err}`);
+      });
+  }
 });
 
 //  This updates user information
