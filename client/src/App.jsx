@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
+import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -40,7 +41,12 @@ class App extends React.Component {
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,
         })
-      });
+        return getLocation();
+      })
+      .then((location) => {
+        axios.patch()
+      })
+      .catch(err => { throw err; });
   }
   
   getUserInfo() {
