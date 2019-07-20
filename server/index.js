@@ -214,7 +214,7 @@ app.get('/matches/:bound', (req, res) => {
 //  this updates a couple status
 //  probably only from pending to accepted or rejected
 //  if accepted we need to create a new date!
-app.patch('/matches/', async (req, res) => {
+app.patch('/matches', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
     const couple = await Couple.findByPK(coupleId);
