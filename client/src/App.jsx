@@ -44,7 +44,8 @@ class App extends React.Component {
         return getLocation();
       })
       .then((location) => {
-        axios.patch()
+        // axios.patch()
+        const local = location;
       })
       .catch(err => { throw err; });
   }
