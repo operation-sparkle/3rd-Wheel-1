@@ -92,7 +92,7 @@ app.post('/login', (req, res, next) => {
         res.status(400).redirect('/');
       }
       req.session.userId = user.id;
-      return res.status(201).json(user);
+      return res.status(201).send();
     });
   })(req, res, next);
 });
@@ -119,7 +119,7 @@ app.post('/signup', async (req, res) => {
           res.status(400).redirect('/');
         }
         req.session.userId = newUser.id;
-        res.status(201).send(newUser);
+        res.status(201).send();
       });
     }
   } catch (err) {
