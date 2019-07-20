@@ -26,12 +26,14 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
 
   return (
     isLoggedIn ?
+      // if !!loggedIn === true, redirect to index (swapping to restricted view)
       <Switch>
         <Route path="/signup" component={() => {
           <Redirect to="/" />
         }} />
       </Switch>
       :
+      // if !!loggedIn === false, redirect to index (swapping to restricted view)
       <Form>
         <Form.Group controlId="form-username">
           <Form.Label>Username</Form.Label>
