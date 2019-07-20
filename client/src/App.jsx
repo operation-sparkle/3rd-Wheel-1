@@ -22,16 +22,21 @@ class App extends React.Component {
       username: "",
       isLoggedIn: false,
     }
+    
+    axios.get('/users/')
+      .then(response => {
+        console.log('test', response);
+      })
 
     this.gateKeeper = this.gateKeeper.bind(this);
   }
 
-  componentDidMount() {
-    return axios.get('/users')
-      .then(response => {
-        console.log('test', response);
-      })
-  }
+  // componentDidMount() {
+  //   return axios.get('/users/')
+  //     .then(response => {
+  //       console.log('test', response);
+  //     })
+  // }
 
   gateKeeper() {
     this.setState({

@@ -149,7 +149,7 @@ app.post('/signup', async (req, res) => {
           res.status(400).json(err);
         }
         req.session.userId = newUser.id;
-        res.status(201).redirect('/#/profile');
+        res.status(201).redirect('/profile');
       });
     }
   } catch (err) {

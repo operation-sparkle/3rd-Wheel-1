@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ReactDOM from 'react-dom';
+// import ReactDOM from 'react-dom';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 
@@ -16,8 +16,6 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
       .then(() => {
         gateKeeper();
       })
-      // .then(() => axios.get('/interests'))
-      // .then(() => 's' // make array of options for form)
       .catch(err => console.warn(err));
   };
 
@@ -54,7 +52,7 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
         </Form.Group>
         {/* run on enter button too!!!! */}
         <Button variant="primary" type="submit" onClick={() => usernameSubmit(username, password)}>
-        Submit
+          Submit
         </Button>
       </Form>
   );  
