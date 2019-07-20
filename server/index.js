@@ -262,19 +262,9 @@ app.patch('/matches', async (req, res) => {
 app.patch('/signup/:id', async (req, res) => {
   const { id } = req.params;
   const {
-    name,
-    pic,
-    age,
-    preference,
-    bio,
-    interests,
+    name, pic, age, preference, bio, interests,
   } = req.body;
-  const options = {
-    name,
-    pic,
-    age,
-    preference,
-    bio,
+  const options = { name, pic, age, preference, bio,
   };
   try {
     const user = await User.findOne({ where: { id } });
@@ -283,8 +273,9 @@ app.patch('/signup/:id', async (req, res) => {
       const updatedInterests = interests.map((interest) => {
         return UserInterest.create({ userId: id, categoryId: interest.id });
       });
+      const sanitizedUser = sanitizeUser(updatedUser);
       Promise.all([updatedUser, updatedInterests])
-        .then(() => res.status(201).json(updatedUser.id));
+        .then(() => res.status(201).json(sanitizedUser));
     } else {
       res.status(400).send();
     }
