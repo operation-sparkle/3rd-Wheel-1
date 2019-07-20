@@ -1,10 +1,9 @@
 const axios = require('axios');
-const config = require('../../api-config');
 
 const getRestaurant = (location, categories) => {
   const options = {
     url: `https://api.yelp.com/v3/businesses/search?location=${location}&categories=${categories}`,
-    Authorization: `Bearer ${config.YELP_KEY}`,
+    Authorization: `Bearer ${process.env.YELP_KEY}`,
   };
   axios.get(options.url)
     .then((response) => {
