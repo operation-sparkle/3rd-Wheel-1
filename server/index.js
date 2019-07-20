@@ -245,7 +245,7 @@ app.get('/matches/:bound', (req, res) => {
 app.patch('/matches', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
-    const couple = await Couple.findByPK(coupleId);
+    const couple = await Couple.findByPk(coupleId);
     const updatedCouple = await couple.update({ status });
     if (status === 'rejected') {
       res.status(201).json(updatedCouple);
