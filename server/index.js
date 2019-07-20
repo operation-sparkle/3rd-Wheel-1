@@ -222,7 +222,14 @@ app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
   const { userId, status } = req.body;
   if (bound === 'outbound') {
-    return Couple.findAll({ where: { user1Id: userId, status } })
+    return Couple.findAll({
+      where: {
+        user1Id: userId,
+        status: {
+          [Op.or]: [status, null]
+        },
+      },
+    })
       .then(result => res.status(200).send(result))
       .catch((err) => {
         console.error(`error: ${err}`);
