@@ -205,8 +205,13 @@ app.post('/matches/:userId', async (req, res) => {
       user2Id: matchId,
       status: 'pending',
     };
-    const couple = await Couple.create(coupleValues);
-    res.status(201).send(couple);
+    const couplePromise = Couple.create(coupleValues);
+    const matchedUserPromise = User.findByPk(matchId);
+    Promise.all([couplePromise, matchedUserPromise])
+      .then(([couple, matchedUser]) => {
+        const sanitizedMatch = sanitizeUser(matchedUser);
+        res.status(201).send(sanitizedMatch);
+      });
   } catch (err) {
     console.error(`Failed to find a match: ${err}`);
     res.status(500).send(err);
