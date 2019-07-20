@@ -165,7 +165,6 @@ app.post('/matches/:userId', async (req, res) => {
     const interests = await UserInterest.findAll({ userId });
     const matches = await UserInterest.findMatches(interests, user);
     const matchId = selectMatch(matches);
-    const match = await User.findByPk(matchId);
     const coupleValues = {
       user1Id: userId,
       user2Id: matchId,
