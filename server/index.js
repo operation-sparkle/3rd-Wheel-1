@@ -14,7 +14,11 @@ const app = express();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(session({ secret: 'third-wheel' }));
+app.use(session({
+  secret: 'third-wheel',
+  resave: false,
+  saveUninitialized: false,
+}));
 app.use(passport.initialize());
 app.use(passport.session());
 
