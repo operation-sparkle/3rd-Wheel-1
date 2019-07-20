@@ -214,18 +214,19 @@ app.get('/matches/:bound', (req, res) => {
 //  this updates a couple status
 //  probably only from pending to accepted or rejected
 //  if accepted we need to create a new date!
-app.patch('/matches/', (req, res) => {
-  const { status, coupleId } = req.body;
-  const { status } = req.params;
-  if (status === 'rejected') {
-    Couple.findByPk(coupleId)
-      .then((couple) => {
-        couple.update({ status });
-      })
-      .then(() => res.status(201).send())
-      .catch((err) => {
-        console.error(`Could not reject couple: ${err}`);
-      });
+app.patch('/matches/', async (req, res) => {
+  try {
+    const { status, coupleId } = req.body;
+    const couple = await Couple.findByPK(coupleId);
+    if (status === 'rejected') {
+      const updatedCouple = await couple.update({ status });
+      res.status(201).json(updatedCouple);
+    } else {
+
+    }
+  } catch (err) {
+    console.error(`Failed to update couple: ${err}`);
+    res.status(500).json(err);
   }
 });
 
