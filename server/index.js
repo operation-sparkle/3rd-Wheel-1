@@ -9,9 +9,7 @@ const LocalStrategy = require('passport-local');
 const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
-const {
-  haversineDistance,
-} = require('./helpers/index.js');
+const { selectMatch } = require('./helpers/index.js');
 
 const app = express();
 
@@ -154,6 +152,23 @@ app.post('/signup', async (req, res) => {
     }
   } catch (err) {
     console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+//  This finds a matching user and posts to Couple
+//  It finds matching interests within a certain radius
+app.post('/matches/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findByPk(userId);
+    const interests = await UserInterest.findAll({ userId });
+    const matches = await UserInterest.findMatches(interests, user);
+    const matchId = selectMatch(matches);
+    const match = await User.findByPk(matchId);
+    res.status(201).send(match);
+  } catch (err) {
+    console.error(`Failed to find a match: ${err}`);
     res.status(500).send(err);
   }
 });
