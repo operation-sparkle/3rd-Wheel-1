@@ -177,6 +177,35 @@ app.post('/matches/:userId', async (req, res) => {
     res.status(500).send(err);
   }
 });
+app.get('/matches/:bound', (req, res) => {
+  const { bound } = req.params;
+  const { userId, status } = req.body;
+  if (bound === 'outbound') {
+    return Couple.findAll({
+      include: {
+        model: User,
+        as: 'user1Id',
+      },
+      where: { userId },
+    });
+  }
+  if (bound === 'inbound') {
+    return Couple.findAll({
+      include: {
+        model: User,
+        as: 'user2Id',
+      },
+      where: { userId },
+    });
+  }
+
+  return Couple.create(status)
+    .then(responce => res.status(200).json(responce))
+    .catch((err) => {
+      console.log(`error: ${err}`);
+      res.send(500).send(err);
+    });
+});
 
 //  This updates user information
 //  Note that interests are split off to be used in a join table
