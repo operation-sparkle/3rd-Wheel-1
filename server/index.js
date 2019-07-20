@@ -151,14 +151,34 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+//  This updates user information
+//  Note that interests are split off to be used in a join table
 app.patch('/signup/:id', async (req, res) => {
   const { id } = req.params;
-  const options = req.body;
+  const {
+    name,
+    pic,
+    age,
+    preference,
+    bio,
+    interests,
+  } = req.body;
+  const options = {
+    name,
+    pic,
+    age,
+    preference,
+    bio,
+  };
   try {
     const user = await User.findOne({ where: { id } });
     if (user) {
-      const updatedUser = await user.update(options, { where: { id } });
-      res.status(201).json(updatedUser.id);
+      const updatedUser = user.update(options, { where: { id } });
+      const updatedInterests = interests.map((interest) => {
+        return UserInterest.create({ userId: id, categoryId: interest.id })
+      });
+      Promise.all([updatedUser, updatedInterests])
+        .then(() => res.status(201).json(updatedUser.id));
     } else {
       res.status(400).send();
     }
