@@ -105,7 +105,7 @@ app.post('/signup', async (req, res) => {
           res.status(400).json(err);
         }
         req.session.userId = newUser.id;
-        res.status(201).redirect('/profile');
+        res.status(201).send();
       });
     }
   } catch (err) {
@@ -126,7 +126,7 @@ app.get('/users/', loggedIn, (req, res) => {
         name, age, preference, gender, bio, url,
       } = user;
       const result = {
-        name, age, preference, gender, bio, url,
+        id, name, age, preference, gender, bio, url,
       };
       res.status(200).send(result);
     })

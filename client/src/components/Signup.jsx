@@ -12,6 +12,7 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
   const [ password, setPassword ] = useState('');
 
   const usernameSubmit = (username, password) => {
+    event.preventDefault();
     return axios.post('/signup', { username, password, name })
       .then(() => {
         gateKeeper();

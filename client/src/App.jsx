@@ -23,29 +23,35 @@ class App extends React.Component {
       isLoggedIn: false,
     }
     
-    axios.get('/users/')
-      .then(response => {
-        console.log('test', response);
-      })
-
+    this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
+  
+    this.getUserInfo();
   }
-
-  // componentDidMount() {
-  //   return axios.get('/users/')
-  //     .then(response => {
-  //       console.log('test', response);
-  //     })
-  // }
-
+  
   gateKeeper() {
-    this.setState({
-      isLoggedIn: !this.state.isLoggedIn,
-    })
+    this.getUserInfo()
+      .then(response => {
+        // const { id, name, age, preference, gender, bio, url } = response.data;
+        
+        console.log('test', response.data);
+        this.setState({
+          isLoggedIn: !this.state.isLoggedIn,
+          user: response.data,
+        })
+      });
   }
+  
+  getUserInfo() {
+    return axios.get('/users/');
+  }
+
 
   render() {
     const { isLoggedIn } = this.state;
+    
+    this.getUserInfo()
+    
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -76,7 +82,7 @@ class App extends React.Component {
         { 
           isLoggedIn ? 
             <Switch>
-              <Route exact path="/" render={() => {
+              <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
               <Route path="/matches" component={Matches} />
@@ -90,7 +96,7 @@ class App extends React.Component {
               <Route exact path="/" render={() => (
                 <Redirect to="/signup"/>
               )} />
-              <Route path="/signup" component={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/signup" render={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
               <Route path="/login" component={Login} />
             </Switch>
         }
