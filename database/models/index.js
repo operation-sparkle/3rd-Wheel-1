@@ -30,6 +30,12 @@ const populateCategories = async () => {
 //  Feel free to comment this call out after the first run
 // populateCategories();
 
+UserInterest.prototype.findMatches = async (interests) => {
+  const matchingInterests = await interests.map(({categoryId}) => {
+    return UserInterest.findAll({ categoryId });
+  });
+};
+
 module.exports = {
   User,
   Date,
