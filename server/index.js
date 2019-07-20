@@ -147,6 +147,7 @@ app.post('/signup', async (req, res) => {
         if (err) {
           res.status(400).json(err);
         }
+        req.session.username = username;
         res.status(201).json(newUser.id);
       });
     }
