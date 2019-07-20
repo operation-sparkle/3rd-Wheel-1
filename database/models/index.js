@@ -32,7 +32,7 @@ const populateCategories = async () => {
 //  Feel free to comment this call out after the first run
 // populateCategories();
 
-UserInterest.prototype.findMatches = async (interests, user) => {
+User.prototype.findInterests = async (interests, user) => {
   try {
     const { id: userId, longitude: userLon, latitude: userLat } = user;
     const matchingInterests = await interests.map(({ categoryId }) => {

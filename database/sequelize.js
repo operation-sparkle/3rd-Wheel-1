@@ -66,8 +66,8 @@ Date.belongsTo(Spot);
 Date.belongsTo(Couple);
 UserInterest.belongsTo(Category);
 UserInterest.belongsTo(User);
-Couple.belongsTo(User, { as: 'user1Id' });
-Couple.belongsTo(User, { as: 'user2Id' });
+Couple.belongsTo(User, { as: 'user1' });
+Couple.belongsTo(User, { as: 'user2' });
 
 sequelize.sync({ force: false })
   .then(() => console.log('users table has been successfully created, if one doesn\'t exist'))
