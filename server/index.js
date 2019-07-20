@@ -209,10 +209,6 @@ app.get('/matches/:bound', (req, res) => {
         res.send(500).send(err);
       });
   }
-
-  // return Couple.create(status)
-  //   .then(result => res.status(200).json(result))
-  //
 });
 
 //  This updates user information
