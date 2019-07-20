@@ -130,24 +130,18 @@ app.post('/signup', async (req, res) => {
 
 /* Calls to query information */
 
-app.get('/users', loggedIn, (req, res) => {
+app.get('/users', loggedIn, async (req, res) => {
   //  this is to retrieve a specific user profile
   // const { id } = req.params;
-  const id = req.session.userId;
-  User.findByPk(id)
-    .then((user) => {
-      const {
-        name, age, preference, gender, bio, url,
-      } = user;
-      const result = {
-        id, name, age, preference, gender, bio, url,
-      };
-      res.status(200).send(result);
-    })
-    .catch((err) => {
-      console.error(`Failed to fetch user information: ${err}`);
-      res.status(400).send(err);
-    });
+  try {
+    const id = req.session.userId;
+    const user = await User.findByPk(id);
+    const sanitizedUser = sanitizeUser(user);
+    res.status(200).json(sanitizedUser);
+  } catch (err) {
+    console.error(`Failed to fetch user information: ${err}`);
+    res.status(400).send(err);
+  }
 });
 
 app.patch('/users', async (req, res) => {
