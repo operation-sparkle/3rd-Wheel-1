@@ -56,6 +56,8 @@ const loggedIn = (req, res, next) => {
   }
 };
 
+/* Define paths */
+
 app.use(express.static(path.join(__dirname, '../client')));
 
 //  Define signup and login routes first
@@ -73,9 +75,51 @@ app.get('/#/*', loggedIn, (req, res) => {
   res.redirect('/');
 });
 
-app.get('/users/:id', loggedIn, (req, res) => {
+/* Here are the authentication requests */
+
+app.post('/login', passport.authenticate('local', {
+  successRedirect: '/',
+  failureRedirect: '/#/signup',
+  failureFlash: true,
+}));
+
+app.get('/logout', loggedIn, (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
+
+//  This first checks if a user alread exists
+//  If this call only checks username, send true aka go-ahead
+//  If call is made with all fields, create the new user
+app.post('/signup', async (req, res) => {
+  try {
+    const { username } = req.body;
+    const user = await User.findOne({ where: { username } });
+    if (user) {
+      res.status(400).send(false);
+    } else {
+      const options = req.body;
+      const newUser = await User.create(options);
+      req.login(newUser, (err) => {
+        if (err) {
+          res.status(400).json(err);
+        }
+        req.session.userId = newUser.id;
+        res.status(201).redirect('/profile');
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+/* Calls to query information */
+
+app.get('/users/', loggedIn, (req, res) => {
   //  this is to retrieve a specific user profile
-  const { id } = req.params;
+  // const { id } = req.params;
+  const id = req.session.userId;
   User.findByPk(id)
     .then((user) => {
       const {
@@ -123,37 +167,6 @@ app.get('/interests/:userId', loggedIn, (req, res) => {
 
 app.get('/matches/:userId', loggedIn, (req, res) => {
   //  this is to retrieve all of the current matches
-});
-
-app.post('/login', passport.authenticate('local', {
-  successRedirect: '/',
-  failureRedirect: '/#/signup',
-  failureFlash: true,
-}));
-
-//  This first checks if a user alread exists
-//  If this call only checks username, send true aka go-ahead
-//  If call is made with all fields, create the new user
-app.post('/signup', async (req, res) => {
-  try {
-    const { username } = req.body;
-    const user = await User.findOne({ where: { username } });
-    if (user) {
-      res.status(400).send(false);
-    } else {
-      const options = req.body;
-      const newUser = await User.create(options);
-      req.login(newUser, (err) => {
-        if (err) {
-          res.status(400).json(err);
-        }
-        res.status(201).json(newUser.id);
-      });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }
 });
 
 //  This finds a matching user and posts to Couple
