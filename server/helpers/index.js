@@ -1,16 +1,21 @@
 const axios = require('axios');
 
-const getRestaurant = (location, categories) => {
+const fetchRestaurants = async (categoriesArray, latitude, longitude) => {
+  const categories = categoriesArray.join(',');
   const options = {
-    url: `https://api.yelp.com/v3/businesses/search?location=${location}&categories=${categories}`,
-    Authorization: `Bearer ${process.env.YELP_KEY}`,
+    method: 'get',
+    url: 'https://api.yelp.com/v3/businesses/search',
+    headers: {
+      'Authorization': `Bearer ${process.env.YELP_KEY}`,
+      limit: 5,
+      categories,
+      latitude,
+      longitude,
+    },
   };
-  axios.get(options.url)
-    .then((response) => {
-    //   console.log(response);
-      response.businesses.filter(business => business.rating >= 4);
-    })
-    .catch(err => console.log(err, 'axios error'));
+  const response = await axios(options);
+  const { businesses } = response.data;
+  return businesses;
 };
 
 const selectMatch = (matches) => {
@@ -31,7 +36,7 @@ const sanitizeUser = (user) => {
 }
 
 module.exports = {
-  getRestaurant,
+  fetchRestaurants,
   selectMatch,
   sanitizeUser,
 };
