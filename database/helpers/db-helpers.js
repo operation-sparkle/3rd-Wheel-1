@@ -45,7 +45,25 @@ const haversineDistance = (coords1, coords2) => {
   return distance;
 };
 
+const topInterest = (interests) => {
+  const orderedInterests = interests
+    .map(interest => interest.categoryId)
+    .reduce((interestSums, interest) => {
+      if (interestSums[interest] === undefined) {
+        interestSums[interest] = 0;
+      }
+      interestSums[interest]++;
+      return interestSums;
+    }, {});
+  const topInterest = Object.keys(orderedInterests)
+    .sort((a, b) => {
+      return orderedInterests[b] - orderedInterests[a];
+    })[0];
+  return topInterest;
+};
+
 module.exports = {
   restCategories,
   haversineDistance,
+  topInterest,
 };
