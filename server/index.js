@@ -252,7 +252,7 @@ app.patch('/matches', async (req, res) => {
     } else {
       const spot = await updatedCouple.findSpot(updatedCouple);
       const { id: apiId } = spot;
-      const { id: spotId } = await Spot.create({ apiId });
+      const { id: spotId } = await Spot.findOrCreate({ apiId });
       const { id: dateId } = await Date.create({ coupleId, spotId });
       res.status(201).json(dateId);
     }
