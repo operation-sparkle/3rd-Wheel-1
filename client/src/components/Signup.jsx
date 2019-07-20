@@ -52,6 +52,7 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" placeholder="Password" onChange={(e) => handleChange(e, setPassword) } />
         </Form.Group>
+        {/* run on enter button too!!!! */}
         <Button variant="primary" type="submit" onClick={() => usernameSubmit(username, password)}>
         Submit
         </Button>
