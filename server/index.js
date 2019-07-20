@@ -193,6 +193,9 @@ app.get('/matches/:userId', loggedIn, (req, res) => {
 
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
+//  We set the default status to null
+//    If one person accepts, it becomes pending
+//    If both accept we find a date!
 app.post('/matches/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
