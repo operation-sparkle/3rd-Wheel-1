@@ -126,11 +126,18 @@ app.get('/matches/:userId', loggedIn, (req, res) => {
   //  this is to retrieve all of the current matches
 });
 
+/* Here are the authentication requests */
+
 app.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/#/signup',
   failureFlash: true,
 }));
+
+app.get('/logout', loggedIn, (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
 
 //  This first checks if a user alread exists
 //  If this call only checks username, send true aka go-ahead
