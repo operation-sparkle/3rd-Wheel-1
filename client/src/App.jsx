@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
-import getLocation from '../helpers/index';
+// import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -41,12 +41,29 @@ class App extends React.Component {
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,
         })
-        return getLocation();
+        // const successCb = position => ({
+        //   latitude: position.coords.latitude,
+        //   longitude: position.coords.longitude,
+        // });
+
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:600000});
+
+        function successCallback(position) {
+          // By using the 'maximumAge' option above, the position
+          // object is guaranteed to be at most 10 minutes old.
+          console.log(position);
+        }
+
+        function errorCallback(error) {
+          // Update a div element with error.message.
+          console.log(error);
+        }
+
       })
-      .then((location) => {
-        // axios.patch()
-        const local = location;
-      })
+      // .then((location) => {
+      //   // axios.patch()
+      //   console.log(location);
+      // })
       .catch(err => { throw err; });
   }
   
