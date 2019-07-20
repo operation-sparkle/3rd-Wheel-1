@@ -10,7 +10,7 @@ import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
-import Signup from './components/Signup';
+import Login from './components/Signup';
 import Login from './components/Login';
 import Interests from './components/Interests';
 
@@ -99,10 +99,10 @@ class App extends React.Component {
           // !loggedIn routes
             <Switch>
               <Route exact path="/" render={() => (
-                <Redirect to="/signup"/>
+                <Redirect to="/login"/>
               )} />
               <Route path="/signup" render={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
-              <Route path="/login" component={Login} />
+              <Route path="/login" render={(props) => <Login {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
             </Switch>
         }
       </div>
