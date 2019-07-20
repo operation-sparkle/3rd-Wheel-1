@@ -203,7 +203,7 @@ app.post('/matches/:userId', async (req, res) => {
     const coupleValues = {
       user1Id: userId,
       user2Id: matchId,
-      status: 'pending',
+      status: null,
     };
     const couplePromise = Couple.create(coupleValues);
     const matchedUserPromise = User.findByPk(matchId);
@@ -246,10 +246,15 @@ app.patch('/matches', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
     const couple = await Couple.findByPk(coupleId);
-    const updatedCouple = await couple.update({ status });
+    const { status: oldStatus } = couple;
     if (status === 'rejected') {
+      const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
-    } else {
+    } else if (status === 'accepted' && oldStatus === null) {
+      const updatedCouple = await couple.update({ 'pending' });
+      res.status(201).json(updatedCouple);
+    } else if (status === 'accepted' && oldStatus === 'pending') {
+      const updatedCouple = await couple.update({ status });
       const spot = await updatedCouple.findSpot(updatedCouple);
       const { id: apiId } = spot;
       const { id: spotId } = await Spot.findOrCreate({ apiId });
