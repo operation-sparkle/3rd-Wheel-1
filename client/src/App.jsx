@@ -83,7 +83,7 @@ class App extends React.Component {
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-          <Navbar.Brand href="#home">3rd-Wheel</Navbar.Brand>
+          <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
         { 
