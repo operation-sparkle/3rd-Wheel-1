@@ -5,7 +5,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Signup = ({ gateKeeper, isLoggedIn }) => {
+const Signup = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
   // hooks for input values
   const [ username, setUsername ] = useState('');
   const [ name, setName ] = useState('');
@@ -21,7 +21,10 @@ const Signup = ({ gateKeeper, isLoggedIn }) => {
         // console.log('signup', data);
         gateKeeper();
       })
-      .catch(err => console.warn(err));
+      .catch(err => {
+        console.warn(err);
+        showAuthFail();
+      });
   };
 
   // sets state (w/ hooks) to match user input fields

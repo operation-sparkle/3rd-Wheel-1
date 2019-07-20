@@ -22,11 +22,12 @@ class App extends React.Component {
     this.state = {
       username: "",
       isLoggedIn: false,
+      failedLogin: false,
     }
     
+    this.showAuthFail = this.showAuthFail.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
-    
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     this.getUserInfo();
@@ -41,31 +42,41 @@ class App extends React.Component {
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,
         })
-
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, {maximumAge:600000});
+      })
+      .then(() => {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 });
 
         function successCallback(position) {
           // By using the 'maximumAge' option above, the position
           // object is guaranteed to be at most 10 minutes old.
-          console.log(position);
+          // could send timestamp too!
+          const { longitude, latitude } = position.coords;
+          axios.patch('/users', { longitude, latitude })
         }
 
-        function errorCallback(error) {
+        function errorCallback() {
           // Update a div element with error.message.
-          console.log(error);
+          this.showAuthFail();
         }
-
       })
-      .catch(err => { throw err; });
+      .catch(err => { 
+        this.showAuthFail();
+      });
   }
   
   getUserInfo() {
+    // no auto login happening. send get to login instead?
     return axios.get('/users/');
   }
 
+  showAuthFail() {
+    this.setState({
+      failedLogin: true,
+    })
+  }
 
   render() {
-    const { isLoggedIn } = this.state;
+    const { isLoggedIn, failedLogin } = this.state;
     
     this.getUserInfo()
     
@@ -117,10 +128,11 @@ class App extends React.Component {
               <Route exact path="/" render={() => (
                 <Redirect to="/login"/>
               )} />
-              <Route path="/signup" render={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
-              <Route path="/login" render={(props) => <Login {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/signup" render={(props) => <Signup {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/login" render={(props) => <Login {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
             </Switch>
         }
+        { failedLogin ? <p>Please try again</p> : <div/> }
       </div>
     )
   }
