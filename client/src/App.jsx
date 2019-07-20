@@ -4,13 +4,15 @@ import axios from 'axios';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
+import NavDropdown from 'react-bootstrap/NavDropdown';
 
 import Profile from './components/Profile';
-import Interests from './components/Interests';
+import HotSpots from './components/HotSpots';
 import Pending from './components/Pending';
 import Matches from './components/Matches';
 import Signup from './components/Signup';
 import Login from './components/Login';
+import Interests from './components/Interests';
 
 
 class App extends React.Component {
@@ -20,13 +22,14 @@ class App extends React.Component {
       username: "",
       isLoggedIn: false,
     }
-    this.transition = this.transition.bind(this);
+
+    this.gateKeeper = this.gateKeeper.bind(this);
   }
 
-  transition(linked) {
-    return function() {
-      ReactDOM.render(linked(), document.getElementById("body"));
-    }
+  gateKeeper() {
+    this.setState({
+      isLoggedIn: !this.state.isLoggedIn,
+    })
   }
 
   render() {
@@ -40,17 +43,20 @@ class App extends React.Component {
         { 
           isLoggedIn ? 
           <Nav className="top-bar">
-              <Link className="nav-link" to="/profile" >Profile</Link>
-              <Link className="nav-link" to="/interest" >Interests</Link>
-              <Link className="nav-link" to="/pending" >Pending</Link>
-              <Link className="nav-link" to="/matches" >Matches</Link>
+            <NavDropdown title="Your Card" id="basic-nav-dropdown">
+              <Link className="dropdown-item" to="/profile" >Profile</Link>
+              <Link className="dropdown-item" to="/interests" >Interests</Link>
+            </NavDropdown>
+            <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
+            <Link className="nav-link" to="/matches" >Matches</Link>
+            <Link className="nav-link" to="/pending" >Pending</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
           : 
           <Nav className="top-bar">
-              <Link className="nav-link" to="/signup" >Sign up</Link>
-              <Link className="nav-link" to="/login" >Log in</Link>
+            <Link className="nav-link" to="/signup" >Sign up</Link>
+            <Link className="nav-link" to="/login" >Log in</Link>
           </Nav>
         }
           </Navbar.Collapse>
@@ -58,20 +64,21 @@ class App extends React.Component {
         { 
           isLoggedIn ? 
             <Switch>
-              <Route exact path="/" component={() => {
+              <Route exact path="/" render={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/profile" component={Profile} />
-              <Route path="/interests" component={Interests} />
-              <Route path="/pending" component={Pending} />
               <Route path="/matches" component={Matches} />
+              <Route path="/interests" component={Interests} />
+              <Route path="/hotspots" component={HotSpots} />
+              <Route path="/pending" component={Pending} />
+              <Route path="/profile" component={Profile} />
             </Switch>
           :
             <Switch>
-              <Route exact path="/" component={() => (
+              <Route exact path="/" render={() => (
                 <Redirect to="/signup"/>
               )} />
-              <Route path="/signup" component={Signup} />
+              <Route path="/signup" component={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
               <Route path="/login" component={Login} />
             </Switch>
         }
