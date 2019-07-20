@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
+// import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
@@ -21,11 +22,12 @@ class App extends React.Component {
     this.state = {
       username: "",
       isLoggedIn: false,
+      failedLogin: false,
     }
     
+    this.showAuthFail = this.showAuthFail.bind(this);
     this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
-    
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     this.getUserInfo();
@@ -40,23 +42,48 @@ class App extends React.Component {
           isLoggedIn: !this.state.isLoggedIn,
           user: response.data,
         })
+      })
+      .then(() => {
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 });
+
+        function successCallback(position) {
+          // By using the 'maximumAge' option above, the position
+          // object is guaranteed to be at most 10 minutes old.
+          // could send timestamp too!
+          const { longitude, latitude } = position.coords;
+          axios.patch('/users', { longitude, latitude })
+        }
+
+        function errorCallback() {
+          // Update a div element with error.message.
+          this.showAuthFail();
+        }
+      })
+      .catch(err => { 
+        this.showAuthFail();
       });
   }
   
   getUserInfo() {
+    // no auto login happening. send get to login instead?
     return axios.get('/users/');
   }
 
+  showAuthFail() {
+    this.setState({
+      failedLogin: true,
+    })
+  }
 
   render() {
-    const { isLoggedIn } = this.state;
+    const { isLoggedIn, failedLogin } = this.state;
     
     this.getUserInfo()
     
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-          <Navbar.Brand href="#home">3rd-Wheel</Navbar.Brand>
+          <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
         { 
@@ -101,10 +128,11 @@ class App extends React.Component {
               <Route exact path="/" render={() => (
                 <Redirect to="/login"/>
               )} />
-              <Route path="/signup" render={(props) => <Signup {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
-              <Route path="/login" render={(props) => <Login {...props} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/signup" render={(props) => <Signup {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/login" render={(props) => <Login {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
             </Switch>
         }
+        { failedLogin ? <p>Please try again</p> : <div/> }
       </div>
     )
   }

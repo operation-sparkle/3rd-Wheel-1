@@ -89,10 +89,10 @@ app.post('/login', (req, res, next) => {
     }
     req.logIn(user, (logErr) => {
       if (logErr) {
-        res.status(400).json(logErr);
+        res.status(400).redirect('/');
       }
       req.session.userId = user.id;
-      res.status(201).json(user);
+      return res.status(201).send();
     });
   })(req, res, next);
 });
@@ -110,16 +110,16 @@ app.post('/signup', async (req, res) => {
     const { username } = req.body;
     const user = await User.findOne({ where: { username } });
     if (user) {
-      res.status(400).send(false);
+      res.status(400).redirect('/');
     } else {
       const options = req.body;
       const newUser = await User.create(options);
       req.login(newUser, (err) => {
         if (err) {
-          res.status(400).json(err);
+          res.status(400).redirect('/');
         }
         req.session.userId = newUser.id;
-        res.status(201).send(newUser);
+        res.status(201).send();
       });
     }
   } catch (err) {
