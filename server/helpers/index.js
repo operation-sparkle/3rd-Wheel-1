@@ -20,7 +20,18 @@ const selectMatch = (matches) => {
   return orderedMatches[0];
 };
 
+const sanitizeUser = (user) => {
+  const {
+    username, name, pic, age, preference, bio, latitude, longitude,
+  } = user;
+  const sanitizedUser = {
+    username, name, pic, age, preference, bio, latitude, longitude,
+  }
+  return sanitizedUser;
+}
+
 module.exports = {
   getRestaurant,
   selectMatch,
+  sanitizeUser,
 };
