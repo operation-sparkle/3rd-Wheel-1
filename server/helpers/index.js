@@ -14,6 +14,13 @@ const getRestaurant = (location, categories) => {
     .catch(err => console.log(err, 'axios error'));
 };
 
+const selectMatch = (matches) {
+  const orderedMatches = Object.keys(matches).sort((a, b) => {
+    return matches[a].length - matches[b].length;
+  });
+  return orderedMatches[0];
+}
+
 module.exports = {
   getRestaurant,
 };
