@@ -223,7 +223,13 @@ app.patch('/users', async (req, res) => {
 //  This edits the user picture
 app.patch('/users/pic', upload.single('pic'), async (req, res) => {
   try {
-
+    const { pic } = req.file;
+    const { userId } = req.session;
+    const user = await User.findByPk(userId);
+    //  Here we use a custom method that uploads to imgur and updates the user
+    const updatedUser = await user.processPic(user, pic);
+    const sanitizedUser = sanitizeUser(updatedUser);
+    res.status(201).json(sanitizedUser);
   } catch (err) {
     console.error(`Failed to patch user pic: ${err}`);
     res.send(500).json(err);
