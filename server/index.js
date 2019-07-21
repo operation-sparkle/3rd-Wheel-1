@@ -11,7 +11,7 @@ const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
 const {
-  fetchRestaurants, fetchSpot, selectMatch, sanitizeUser,
+  fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
 } = require('./helpers/index.js');
 
 const app = express();
@@ -269,7 +269,8 @@ app.get('/categories/:id', (req, res) => {
 app.post('/matches/:userId', async (req, res) => {
   try {
     //  First we get the user information
-    const { userId } = req.params;
+    let { userId } = req.params;
+    userId = Number(paramSplitter(userId)[1]);
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
     const interestsIds = interests.map(interest => interest.categoryId);
