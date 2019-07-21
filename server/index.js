@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -14,6 +15,7 @@ const {
 } = require('./helpers/index.js');
 
 const app = express();
+const upload = multer();
 
 /*  Here is the authentication
  *  We're using passport which requires cookies and sessions
@@ -218,7 +220,8 @@ app.patch('/users', async (req, res) => {
   }
 });
 
-app.patch('/users/pic/:picId', async (req, res) => {
+//  This edits the user picture
+app.patch('/users/pic', upload.single('pic'), async (req, res) => {
   try {
 
   } catch (err) {
