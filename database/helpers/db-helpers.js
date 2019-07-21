@@ -79,9 +79,30 @@ const topInterest = (interests) => {
   return topMatch;
 };
 
+const postPic = async (pic) => {
+  try {
+    const options = {
+      method: 'post',
+      url: 'https://api.imgur.com/3/image',
+      headers: { 'Authorization': `Client-ID ${process.env.ACCESS_TOKEN}`},
+      body: {
+        image: pic,
+      },
+    };
+    const response = await axios(options);
+    const { picId } = response.data;
+    return picId;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+
+
 module.exports = {
   restCategories,
   fetchRestaurant,
   haversineDistance,
   topInterest,
+  postPic,
 };
