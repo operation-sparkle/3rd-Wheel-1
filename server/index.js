@@ -217,10 +217,12 @@ app.get('/categories/:id', (req, res) => {
 //    If both accept we find a date!
 app.post('/matches/:userId', async (req, res) => {
   try {
+    //  First we get the user information
     const { userId } = req.params;
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
     const interestsIds = interests.map(interest => interest.categoryId);
+    //  Here we use a custom method to find suitable matches
     const matches = await user.findMatches(interestsIds, user);
     const matchId = selectMatch(matches);
     const coupleValues = {
@@ -228,6 +230,7 @@ app.post('/matches/:userId', async (req, res) => {
       user2Id: matchId,
       status: null,
     };
+    //  We create the couple and send back the matched user information
     const couplePromise = Couple.create(coupleValues);
     const matchedUserPromise = User.findByPk(matchId);
     Promise.all([couplePromise, matchedUserPromise])
@@ -241,10 +244,13 @@ app.post('/matches/:userId', async (req, res) => {
   }
 });
 
+//  This retrieves outgoing and incoming requests
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
   const { userId, status } = req.body;
   if (bound === 'outbound') {
+    //  Semantically, user1 requested the date
+    //  a null status means that no one has acted on it
     return Couple.findAll({
       where: {
         user1Id: userId,
@@ -260,6 +266,9 @@ app.get('/matches/:bound', (req, res) => {
       });
   }
   if (bound === 'inbound') {
+    //  user2 was requested a date
+    //  they cannot see requests they weren't offered
+    //    ie no access to a null status
     return Couple.findAll({
       where: {
         user2Id: userId,
@@ -275,23 +284,28 @@ app.get('/matches/:bound', (req, res) => {
 });
 
 //  this updates a couple status
-//  probably only from pending to accepted or rejected
 //  if accepted we need to create a new date!
 app.patch('/matches', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
     const couple = await Couple.findByPk(coupleId);
     const { status: oldStatus } = couple;
+    //  if the status is rejected then the match is forever hidden
     if (status === 'rejected') {
       const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
+      //  If the oldStatus was null, then only one person has now accepted
+      //  This is what we may think of as requesting a date
     } else if (status === 'accepted' && oldStatus === null) {
       const updatedCouple = await couple.update({ status: 'pending' });
       res.status(201).json(updatedCouple);
+      //  If the oldStatus was pending, we have a date!
     } else if (status === 'accepted' && oldStatus === 'pending') {
       const updatedCouple = await couple.update({ status });
+      //  This is a custom function to find a suitable date spot
       const spot = await updatedCouple.findSpot(updatedCouple);
       const { id: apiId } = spot;
+      //  Only create a new spot in the database if it is new
       const { id: spotId } = await Spot.findOrCreate({ apiId });
       const { id: dateId } = await Date.create({ coupleId, spotId });
       res.status(201).json(dateId);
