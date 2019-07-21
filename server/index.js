@@ -387,17 +387,18 @@ app.get('/dates', async (req, res) => {
     //  We need the restaurant info and the partner
     const datesInfo = await dates.map(async (date) => {
       const dateInfo = {};
-      const { spotId, coupleId } = date;
+      const { id: dateId, spotId, coupleId } = date;
       const { apiId } = await Spot.findOne({ id: spotId });
-      dateInfo.spot = fetchSpot(apiId);
-      couples.forEach((couple) => {
+      dateInfo.dateId = dateId;
+      dateInfo.spot = await fetchSpot(apiId);
+      couples.forEach(async (couple) => {
         const { id, user1Id, user2Id } = couple;
         if (id === coupleId) {
           if (user1Id !== userId) {
-            const partner = User.findByPk(user1Id);
+            const partner = await User.findByPk(user1Id);
             dateInfo.parner = sanitizeUser(partner);
           } else {
-            const partner = User.findByPk(user2Id);
+            const partner = await User.findByPk(user2Id);
             dateInfo.parner = sanitizeUser(partner);
           }
         }
@@ -409,6 +410,18 @@ app.get('/dates', async (req, res) => {
     res.status(200).json(datesInfo);
   } catch (err) {
     console.error(`Failed to get dates: ${err}`);
+    res.status(500).json(err);
+  }
+});
+
+//  This removes a date from the records
+app.delete('/dates/:dateId', async (req, res) => {
+  try {
+    const { dateId } = req.params;
+    const result = await Date.destroy({ id: dateId });
+    res.status(201).json(result);
+  } catch (err) {
+    console.error(`Failed to delete date: ${dateId}`);
     res.status(500).json(err);
   }
 });
