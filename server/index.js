@@ -15,6 +15,10 @@ const {
 
 const app = express();
 
+/*  Here is the authentication
+ *  We're using passport which requires cookies and sessions
+ */
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(session({
@@ -25,6 +29,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+/*  I don't entirely understand what (de)serializing a user does
+ *  (ignore complexity, am I right?)
+ */
+
 passport.serializeUser((user, done) => done(null, user.id));
 
 passport.deserializeUser((id, done) => {
@@ -32,6 +40,10 @@ passport.deserializeUser((id, done) => {
     .then(user => done(null, user))
     .catch(err => done(err));
 });
+
+/*  this is where we define the local strategy
+ *  We're using simple username / password authentication
+ */
 
 passport.use(new LocalStrategy((username, password, done) => {
   User.findOne({ username })
@@ -50,6 +62,11 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 }));
 
+/*  This is middleware to verify login
+ *  It is used on any render except signup / login
+ *  We will probably also use it on data requests after testing is done
+ */
+
 const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -58,7 +75,7 @@ const loggedIn = (req, res, next) => {
   }
 };
 
-/* Define paths */
+/* DEFINE PATHS */
 
 app.use(express.static(path.join(__dirname, '../client')));
 
@@ -77,7 +94,7 @@ app.get('/#/*', loggedIn, (req, res) => {
   res.redirect('/');
 });
 
-/* Here are the authentication requests */
+/* AUTHENTICATION REQUESTS */
 
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', async (err, user, info) => {
