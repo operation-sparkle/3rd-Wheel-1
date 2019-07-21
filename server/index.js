@@ -356,8 +356,11 @@ app.get('/hotspots/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const { latitude, longitude } = await User.findByPk(userId);
-    const interests = await UserInterest.findAll({ userId });
-    const categories = interests.map(interest => interest.alias);
+    const categories = await UserInterest.findAll({
+      where: { userId },
+      attributes: ['alias'],
+    });
+    //  This helper does the dirty work
     const hotspots = await fetchRestaurants(categories, latitude, longitude);
     res.status(200).json(hotspots);
   } catch (err) {
@@ -366,30 +369,37 @@ app.get('/hotspots/:userId', async (req, res) => {
   }
 });
 
-//  This sets a new spot and finds a date to go there
+//  This inserts a new spot and finds a date to go there
 app.post('/hotspots', async (req, res) => {
   try {
+    //  Here we need to find matching categories between the spot and user
     const { apiId } = req.body;
     const { userId } = req.session;
     const { spotId } = await Spot.findOrCreate({ apiId });
-    const interests = await UserInterest.findAll({ userId });
-    const categories = await interests.map(interest => interest.categoryId);
+    //  This gets the users interests
+    const categories = await UserInterest.findAll({
+      where: { userId },
+      attributes: ['categoryId'],
+    });
+    //  this gets the spot categories
     const { categories: spotCategories } = await fetchSpot(apiId);
     const spotCategoryIds = await spotCategories.map(async (category) => {
       const { alias } = category;
       const { categoryId } = await Category.findOne({ alias });
       return categoryId;
     });
+    //  Here we isolate only the ones that both arrays contain
     const matchedCategories = categories.reduce((matches, categoryId) => {
       if (spotCategoryIds.includes(categoryId)) {
         matches.push(categoryId);
       }
       return matches;
     }, []);
+    //  Now we use a custom method to find a partner
     const user = await User.findByPk(userId);
     const matches = await user.findMatches(matchedCategories, user);
     const matchId = selectMatch(matches);
-
+    //  Set the couple AND the date, since the spot is prearranged
     const coupleOptions = {
       user1: userId,
       user2: matchId,
