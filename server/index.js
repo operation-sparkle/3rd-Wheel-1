@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -14,6 +15,7 @@ const {
 } = require('./helpers/index.js');
 
 const app = express();
+const upload = multer();
 
 /*  Here is the authentication
  *  We're using passport which requires cookies and sessions
@@ -215,6 +217,22 @@ app.patch('/users', async (req, res) => {
   } catch (err) {
     console.error(`Failed to update user: ${err}`);
     res.status(500).json(err);
+  }
+});
+
+//  This edits the user picture
+app.patch('/users/pic', upload.single('pic'), async (req, res) => {
+  try {
+    const { pic } = req.file;
+    const { userId } = req.session;
+    const user = await User.findByPk(userId);
+    //  Here we use a custom method that uploads to imgur and updates the user
+    const updatedUser = await user.processPic(user, pic);
+    const sanitizedUser = sanitizeUser(updatedUser);
+    res.status(201).json(sanitizedUser);
+  } catch (err) {
+    console.error(`Failed to patch user pic: ${err}`);
+    res.send(500).json(err);
   }
 });
 
