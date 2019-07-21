@@ -223,7 +223,7 @@ app.get('/matches/:bound', (req, res) => {
       where: {
         user1Id: userId,
         status: {
-          [Op.or]: [status, null]
+          [Op.or]: [status, null],
         },
       },
     })
@@ -283,7 +283,8 @@ app.patch('/signup/:id', async (req, res) => {
   const {
     name, pic, age, preference, bio, interests,
   } = req.body;
-  const options = { name, pic, age, preference, bio,
+  const options = {
+    name, pic, age, preference, bio,
   };
   try {
     const user = await User.findOne({ where: { id } });
@@ -328,13 +329,13 @@ app.post('/hotspots', async (req, res) => {
     const { userId } = req.session;
     const { spotId } = await Spot.findOrCreate({ apiId });
     const interests = await UserInterest.findAll({ userId });
-    const categories = await interests.map((interest) => interest.categoryId);
+    const categories = await interests.map(interest => interest.categoryId);
     const { categories: spotCategories } = await fetchSpot(apiId);
-    const spotCategoryIds = await spotCategories.map((category) => {
+    const spotCategoryIds = await spotCategories.map(async (category) => {
       const { alias } = category;
       const { categoryId } = await Category.findOne({ alias });
       return categoryId;
-    })
+    });
     const matchedCategories = categories.reduce((matches, categoryId) => {
       if (spotCategoryIds.includes(categoryId)) {
         matches.push(categoryId);

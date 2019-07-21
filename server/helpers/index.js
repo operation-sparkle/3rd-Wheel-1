@@ -41,7 +41,6 @@ const fetchSpot = async (apiId) => {
     console.error(`Failed to fetch spot: ${err}`);
     return err;
   }
-
 };
 
 const selectMatch = (matches) => {
@@ -57,9 +56,9 @@ const sanitizeUser = (user) => {
   } = user;
   const sanitizedUser = {
     username, name, pic, age, preference, bio, latitude, longitude, id,
-  }
+  };
   return sanitizedUser;
-}
+};
 
 module.exports = {
   fetchRestaurants,
