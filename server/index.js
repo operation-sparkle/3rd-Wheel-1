@@ -155,6 +155,39 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+//  This updates user information from the profile page
+app.patch('/signup/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    name, pic, age, preference, bio, interests,
+  } = req.body;
+  //  Note that interests are split off to be used in a join table
+  const options = {
+    name, pic, age, preference, bio,
+  };
+  try {
+    const user = await User.findOne({ where: { id } });
+    //  make sure the user exists!
+    if (user) {
+      const updatedUser = await user.update(options, { where: { id } });
+      const updatedInterests = await interests.map(async (interest) => {
+        return UserInterest.create({ userId: id, categoryId: interest.id });
+      });
+      //  Just to be sure there are no errors before we return!
+      Promise.all([updatedUser, updatedInterests])
+        .then(() => {
+          const sanitizedUser = sanitizeUser(updatedUser);
+          res.status(201).json(sanitizedUser);
+        });
+    } else {
+      res.status(400).send();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
 /* Calls to query information */
 
 //  this is to retrieve a specific user profile
@@ -313,35 +346,6 @@ app.patch('/matches', async (req, res) => {
   } catch (err) {
     console.error(`Failed to update couple: ${err}`);
     res.status(500).json(err);
-  }
-});
-
-//  This updates user information
-//  Note that interests are split off to be used in a join table
-app.patch('/signup/:id', async (req, res) => {
-  const { id } = req.params;
-  const {
-    name, pic, age, preference, bio, interests,
-  } = req.body;
-  const options = {
-    name, pic, age, preference, bio,
-  };
-  try {
-    const user = await User.findOne({ where: { id } });
-    if (user) {
-      const updatedUser = user.update(options, { where: { id } });
-      const updatedInterests = interests.map((interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id });
-      });
-      const sanitizedUser = sanitizeUser(updatedUser);
-      Promise.all([updatedUser, updatedInterests])
-        .then(() => res.status(201).json(sanitizedUser));
-    } else {
-      res.status(400).send();
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
   }
 });
 
