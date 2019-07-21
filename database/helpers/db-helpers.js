@@ -84,7 +84,7 @@ const postPic = async (pic) => {
     const options = {
       method: 'post',
       url: 'https://api.imgur.com/3/image',
-      headers: { 'Authorization': `${process.env.ACCESS_TOKEN}`},
+      headers: { 'Authorization': `Client-ID ${process.env.ACCESS_TOKEN}`},
       body: {
         image: pic,
       },
