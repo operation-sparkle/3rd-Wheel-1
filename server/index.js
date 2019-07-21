@@ -10,7 +10,7 @@ const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
 const {
-  fetchRestaurants, selectMatch, sanitizeUser,
+  fetchRestaurants, fetchSpot, selectMatch, sanitizeUser,
 } = require('./helpers/index.js');
 
 const app = express();
@@ -194,7 +194,8 @@ app.post('/matches/:userId', async (req, res) => {
     const { userId } = req.params;
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
-    const matches = await user.findInterests(interests, user);
+    const interestsIds = interests.map(interest => interest.categoryId);
+    const matches = await user.findMatches(interestsIds, user);
     const matchId = selectMatch(matches);
     const coupleValues = {
       user1Id: userId,
@@ -316,6 +317,44 @@ app.get('/hotspots/:userId', async (req, res) => {
     res.status(200).json(hotspots);
   } catch (err) {
     console.error(`Failed to find hotspots: ${err}`);
+    res.status(500).json(err);
+  }
+});
+
+//  This sets a new spot and finds a date to go there
+app.post('/hotspots', async (req, res) => {
+  try {
+    const { apiId } = req.body;
+    const { userId } = req.session;
+    const { spotId } = await Spot.findOrCreate({ apiId });
+    const interests = await UserInterest.findAll({ userId });
+    const categories = await interests.map((interest) => interest.categoryId);
+    const { categories: spotCategories } = await fetchSpot(apiId);
+    const spotCategoryIds = await spotCategories.map((category) => {
+      const { alias } = category;
+      const { categoryId } = await Category.findOne({ alias });
+      return categoryId;
+    })
+    const matchedCategories = categories.reduce((matches, categoryId) => {
+      if (spotCategoryIds.includes(categoryId)) {
+        matches.push(categoryId);
+      }
+      return matches;
+    }, []);
+    const user = await User.findByPk(userId);
+    const matches = await user.findMatches(matchedCategories, user);
+    const matchId = selectMatch(matches);
+
+    const coupleOptions = {
+      user1: userId,
+      user2: matchId,
+      status: 'pending',
+    };
+    const { coupleId } = await Couple.create(coupleOptions);
+    const date = await Date.create({ coupleId, spotId });
+    res.status(201).json(date);
+  } catch (err) {
+    console.error(`Failed to insert new spot: ${err}`);
     res.status(500).json(err);
   }
 });
