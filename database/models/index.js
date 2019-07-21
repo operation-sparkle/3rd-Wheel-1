@@ -40,12 +40,12 @@ User.prototype.validPassword = async (password) => {
   }
 };
 
-User.prototype.findInterests = async (interests, user) => {
+User.prototype.findMatches = async (interests, user) => {
   try {
     const {
       id: userId, longitude: userLon, latitude: userLat, gender: userGen, preference: userPref,
     } = user;
-    const matchingInterests = await interests.map(({ categoryId }) => {
+    const matchingInterests = await interests.map((categoryId) => {
       return UserInterest.findAll({ categoryId });
     });
     const filteredMatches = matchingInterests.reduce(async (matches, match) => {
