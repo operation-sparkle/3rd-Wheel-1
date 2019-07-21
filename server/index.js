@@ -157,9 +157,8 @@ app.post('/signup', async (req, res) => {
 
 /* Calls to query information */
 
+//  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
-  //  this is to retrieve a specific user profile
-  // const { id } = req.params;
   try {
     const id = req.session.userId;
     const user = await User.findByPk(id);
@@ -171,6 +170,7 @@ app.get('/users', loggedIn, async (req, res) => {
   }
 });
 
+//  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
     const { userId } = req.session;
