@@ -20,7 +20,7 @@ class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      username: "",
+      user: {},
       isLoggedIn: false,
       failedLogin: false,
     }
@@ -85,7 +85,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { isLoggedIn, failedLogin } = this.state;
+    const { isLoggedIn, failedLogin, user } = this.state;
 
     return (
       <div className="App" >
@@ -123,11 +123,11 @@ class App extends React.Component {
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/matches" component={Matches} />
-              <Route path="/interests" component={Interests} />
-              <Route path="/hotspots" component={HotSpots} />
-              <Route path="/pending" component={Pending} />
-              <Route path="/profile" component={Profile} />
+              <Route path="/matches" render={(props) => <Matches {...props} user={user} />}  />
+              <Route path="/interests" render={(props) => <Interests {...props} user={user} />} />
+              <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
+              <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
+              <Route path="/profile" render={(props) => <Profile {...props} user={user} />} />
             </Switch>
           :
           // !loggedIn routes
