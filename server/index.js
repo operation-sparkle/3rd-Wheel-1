@@ -449,6 +449,7 @@ app.get('/dates', async (req, res) => {
       const { apiId } = await Spot.findOne({ id: spotId });
       dateInfo.dateId = dateId;
       dateInfo.spot = await fetchSpot(apiId);
+      //  This is awful time complexity, should be improved
       couples.forEach(async (couple) => {
         const { id, user1Id, user2Id } = couple;
         if (id === coupleId) {
