@@ -25,6 +25,24 @@ const fetchRestaurants = async (categoriesArray, latitude, longitude) => {
   }
 };
 
+const fetchSpot = async (apiId) => {
+  try {
+    const options = {
+      method: 'get',
+      url: `https://api.yelp.com/v3/businesses/${apiId}`,
+      headers: {
+        'Authorization': `Bearer ${process.env.YELP_KEY}`,
+      },
+    };
+    const response = await axios(options);
+    const { business } = response.data;
+    return business;
+  } catch (err) {
+    console.error(`Failed to fetch spot: ${err}`);
+    return err;
+  }
+};
+
 const selectMatch = (matches) => {
   const orderedMatches = Object.keys(matches).sort((a, b) => {
     return matches[b].length - matches[a].length;
@@ -38,12 +56,13 @@ const sanitizeUser = (user) => {
   } = user;
   const sanitizedUser = {
     username, name, pic, age, preference, bio, latitude, longitude, id,
-  }
+  };
   return sanitizedUser;
-}
+};
 
 module.exports = {
   fetchRestaurants,
+  fetchSpot,
   selectMatch,
   sanitizeUser,
 };
