@@ -40,6 +40,16 @@ User.prototype.validPassword = async (password) => {
   }
 };
 
+//  This method will post the picture to imgur and return a urlId
+User.prototype.processPic = async (pic) => {
+  try {
+
+  } catch (err) {
+    console.error(`Failed to process pic: ${err}`);
+    return (err);
+  }
+};
+
 User.prototype.findMatches = async (interests, user) => {
   try {
     const {
