@@ -79,8 +79,9 @@ const loggedIn = (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '../client')));
 
-//  Define signup and login routes first
-//  they do not need verification middleware
+/*  Define signup and login routes first
+ *  they do not need verification middleware
+ */
 app.get('/#/signup', (req, res) => {
   res.redirect('/');
 });
@@ -120,18 +121,26 @@ app.get('/logout', loggedIn, (req, res) => {
   res.redirect('/');
 });
 
-//  This first checks if a user alread exists
-//  If this call only checks username, send true aka go-ahead
-//  If call is made with all fields, create the new user
+/* DATA REQUESTS */
+
+/*  This first checks if a user alread exists
+ *  If this call only checks username, send true aka go-ahead
+ *  If call is made with all fields, create the new user
+ */
 app.post('/signup', async (req, res) => {
   try {
     const { username } = req.body;
+
+    //  First see if a user already exists with that username
     const user = await User.findOne({ where: { username } });
     if (user) {
       res.status(400).redirect('/');
     } else {
+      //  Next get all the info we need and create a new user
       const options = req.body;
       const newUser = await User.create(options);
+
+      //  This is a passport function that creates a session
       req.login(newUser, (err) => {
         if (err) {
           res.status(400).redirect('/');
