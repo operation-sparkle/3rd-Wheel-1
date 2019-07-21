@@ -3,8 +3,6 @@ import Image from 'react-bootstrap/Image';
 import Carousel from 'react-bootstrap/Carousel';
 import CarouselItem from 'react-bootstrap/CarouselItem'
 import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
 import Card from 'react-bootstrap/Card';
 import CardImg from 'react-bootstrap/CardImg';
 import Axios from 'axios';
@@ -13,13 +11,15 @@ import Axios from 'axios';
 
 const Matches = (props) => {
   const [index, changeIndex] = useState(0);
-
+  const {user} = props;
 
   function handleChange() {
     changeIndex(index++);
     setDirection(index++);
   }
-
+  function test() {
+    console.log(props, 'Ok');
+  }
 
   function newMatch(users) {
    return users.map((user) => {
@@ -38,7 +38,8 @@ const Matches = (props) => {
     })
   }
   function getNewMatch() {
-    Axios.get(`/matches/userId=${props.userId}`)
+    console.log('clicked');
+    Axios.post(`/matches/userId=${user.id}`)
     .then((user) => {
       console.log(user);
     }).catch((err) => {
@@ -60,10 +61,9 @@ const Matches = (props) => {
             </Card.Text>
           </Card>
         </CarouselItem>
-      {}
     </Carousel>
-      <Button variant="success" size="lg" block>Accept</Button>
-      <Button onClick={getNewMatch} variant="warning" size="lg" block>Skip</Button>
+      <Button onClick={test} variant="success" size="lg" block>Accept</Button>
+      <Button onClick={getNewMatch} variant="primary" size="lg" block>Skip</Button>
       <Button variant="danger" size="lg" block>Reject</Button>
     </div>
 

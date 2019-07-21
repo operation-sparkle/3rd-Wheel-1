@@ -60,10 +60,31 @@ const sanitizeUser = (user) => {
   return sanitizedUser;
 };
 
+const getPic = async (pic) => {
+  try {
+    const options = {
+      method: 'get',
+      url: `https://i.imgur.com/${pic}.jpg`,
+    };
+    const response = await axios(options);
+    const { picture } = response.data;
+    return picture;
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
+};
+function paramSplitter(endPoint) {
+  const result = endPoint.split('=');
+  return result;
+}
+
 
 module.exports = {
   fetchRestaurants,
   fetchSpot,
   selectMatch,
   sanitizeUser,
+  getPic,
+  paramSplitter,
 };
