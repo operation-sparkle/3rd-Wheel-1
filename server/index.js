@@ -15,6 +15,10 @@ const {
 
 const app = express();
 
+/*  Here is the authentication
+ *  We're using passport which requires cookies and sessions
+ */
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(session({
@@ -25,6 +29,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+/*  I don't entirely understand what (de)serializing a user does
+ *  (ignore complexity, am I right?)
+ */
+
 passport.serializeUser((user, done) => done(null, user.id));
 
 passport.deserializeUser((id, done) => {
@@ -32,6 +40,10 @@ passport.deserializeUser((id, done) => {
     .then(user => done(null, user))
     .catch(err => done(err));
 });
+
+/*  this is where we define the local strategy
+ *  We're using simple username / password authentication
+ */
 
 passport.use(new LocalStrategy((username, password, done) => {
   User.findOne({ username })
@@ -50,6 +62,11 @@ passport.use(new LocalStrategy((username, password, done) => {
     });
 }));
 
+/*  This is middleware to verify login
+ *  It is used on any render except signup / login
+ *  We will probably also use it on data requests after testing is done
+ */
+
 const loggedIn = (req, res, next) => {
   if (req.user) {
     next();
@@ -58,12 +75,13 @@ const loggedIn = (req, res, next) => {
   }
 };
 
-/* Define paths */
+/* DEFINE PATHS */
 
 app.use(express.static(path.join(__dirname, '../client')));
 
-//  Define signup and login routes first
-//  they do not need verification middleware
+/*  Define signup and login routes first
+ *  they do not need verification middleware
+ */
 app.get('/#/signup', (req, res) => {
   res.redirect('/');
 });
@@ -77,7 +95,7 @@ app.get('/#/*', loggedIn, (req, res) => {
   res.redirect('/');
 });
 
-/* Here are the authentication requests */
+/* AUTHENTICATION REQUESTS */
 
 app.post('/login', (req, res, next) => {
   passport.authenticate('local', async (err, user, info) => {
@@ -103,18 +121,26 @@ app.get('/logout', loggedIn, (req, res) => {
   res.redirect('/');
 });
 
-//  This first checks if a user alread exists
-//  If this call only checks username, send true aka go-ahead
-//  If call is made with all fields, create the new user
+/* DATA REQUESTS */
+
+/*  This first checks if a user alread exists
+ *  If this call only checks username, send true aka go-ahead
+ *  If call is made with all fields, create the new user
+ */
 app.post('/signup', async (req, res) => {
   try {
     const { username } = req.body;
+
+    //  First see if a user already exists with that username
     const user = await User.findOne({ where: { username } });
     if (user) {
       res.status(400).redirect('/');
     } else {
+      //  Next get all the info we need and create a new user
       const options = req.body;
       const newUser = await User.create(options);
+
+      //  This is a passport function that creates a session
       req.login(newUser, (err) => {
         if (err) {
           res.status(400).redirect('/');
@@ -129,11 +155,43 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+//  This updates user information from the profile page
+app.patch('/signup/:id', async (req, res) => {
+  const { id } = req.params;
+  const {
+    name, pic, age, preference, bio, interests,
+  } = req.body;
+  //  Note that interests are split off to be used in a join table
+  const options = {
+    name, pic, age, preference, bio,
+  };
+  try {
+    const user = await User.findOne({ where: { id } });
+    //  make sure the user exists!
+    if (user) {
+      const updatedUser = await user.update(options, { where: { id } });
+      const updatedInterests = await interests.map(async (interest) => {
+        return UserInterest.create({ userId: id, categoryId: interest.id });
+      });
+      //  Just to be sure there are no errors before we return!
+      Promise.all([updatedUser, updatedInterests])
+        .then(() => {
+          const sanitizedUser = sanitizeUser(updatedUser);
+          res.status(201).json(sanitizedUser);
+        });
+    } else {
+      res.status(400).send();
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
 /* Calls to query information */
 
+//  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
-  //  this is to retrieve a specific user profile
-  // const { id } = req.params;
   try {
     const id = req.session.userId;
     const user = await User.findByPk(id);
@@ -145,6 +203,7 @@ app.get('/users', loggedIn, async (req, res) => {
   }
 });
 
+//  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
     const { userId } = req.session;
@@ -191,10 +250,12 @@ app.get('/categories/:id', (req, res) => {
 //    If both accept we find a date!
 app.post('/matches/:userId', async (req, res) => {
   try {
+    //  First we get the user information
     const { userId } = req.params;
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
     const interestsIds = interests.map(interest => interest.categoryId);
+    //  Here we use a custom method to find suitable matches
     const matches = await user.findMatches(interestsIds, user);
     const matchId = selectMatch(matches);
     const coupleValues = {
@@ -202,6 +263,7 @@ app.post('/matches/:userId', async (req, res) => {
       user2Id: matchId,
       status: null,
     };
+    //  We create the couple and send back the matched user information
     const couplePromise = Couple.create(coupleValues);
     const matchedUserPromise = User.findByPk(matchId);
     Promise.all([couplePromise, matchedUserPromise])
@@ -215,10 +277,13 @@ app.post('/matches/:userId', async (req, res) => {
   }
 });
 
+//  This retrieves outgoing and incoming requests
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
   const { userId, status } = req.body;
   if (bound === 'outbound') {
+    //  Semantically, user1 requested the date
+    //  a null status means that no one has acted on it
     return Couple.findAll({
       where: {
         user1Id: userId,
@@ -234,6 +299,9 @@ app.get('/matches/:bound', (req, res) => {
       });
   }
   if (bound === 'inbound') {
+    //  user2 was requested a date
+    //  they cannot see requests they weren't offered
+    //    ie no access to a null status
     return Couple.findAll({
       where: {
         user2Id: userId,
@@ -249,23 +317,28 @@ app.get('/matches/:bound', (req, res) => {
 });
 
 //  this updates a couple status
-//  probably only from pending to accepted or rejected
 //  if accepted we need to create a new date!
 app.patch('/matches', async (req, res) => {
   try {
     const { status, coupleId } = req.body;
     const couple = await Couple.findByPk(coupleId);
     const { status: oldStatus } = couple;
+    //  if the status is rejected then the match is forever hidden
     if (status === 'rejected') {
       const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
+      //  If the oldStatus was null, then only one person has now accepted
+      //  This is what we may think of as requesting a date
     } else if (status === 'accepted' && oldStatus === null) {
       const updatedCouple = await couple.update({ status: 'pending' });
       res.status(201).json(updatedCouple);
+      //  If the oldStatus was pending, we have a date!
     } else if (status === 'accepted' && oldStatus === 'pending') {
       const updatedCouple = await couple.update({ status });
+      //  This is a custom function to find a suitable date spot
       const spot = await updatedCouple.findSpot(updatedCouple);
       const { id: apiId } = spot;
+      //  Only create a new spot in the database if it is new
       const { id: spotId } = await Spot.findOrCreate({ apiId });
       const { id: dateId } = await Date.create({ coupleId, spotId });
       res.status(201).json(dateId);
@@ -276,35 +349,6 @@ app.patch('/matches', async (req, res) => {
   }
 });
 
-//  This updates user information
-//  Note that interests are split off to be used in a join table
-app.patch('/signup/:id', async (req, res) => {
-  const { id } = req.params;
-  const {
-    name, pic, age, preference, bio, interests,
-  } = req.body;
-  const options = {
-    name, pic, age, preference, bio,
-  };
-  try {
-    const user = await User.findOne({ where: { id } });
-    if (user) {
-      const updatedUser = user.update(options, { where: { id } });
-      const updatedInterests = interests.map((interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id });
-      });
-      const sanitizedUser = sanitizeUser(updatedUser);
-      Promise.all([updatedUser, updatedInterests])
-        .then(() => res.status(201).json(sanitizedUser));
-    } else {
-      res.status(400).send();
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).send(err);
-  }
-});
-
 //  This function will find 5 potential date spots
 //  This only uses api calls and does not need to store in the database
 //  If the user clicks one of them, we will find them a date there!
@@ -312,8 +356,11 @@ app.get('/hotspots/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
     const { latitude, longitude } = await User.findByPk(userId);
-    const interests = await UserInterest.findAll({ userId });
-    const categories = interests.map(interest => interest.alias);
+    const categories = await UserInterest.findAll({
+      where: { userId },
+      attributes: ['alias'],
+    });
+    //  This helper does the dirty work
     const hotspots = await fetchRestaurants(categories, latitude, longitude);
     res.status(200).json(hotspots);
   } catch (err) {
@@ -322,30 +369,41 @@ app.get('/hotspots/:userId', async (req, res) => {
   }
 });
 
-//  This sets a new spot and finds a date to go there
+//  This inserts a new spot and finds a date to go there
 app.post('/hotspots', async (req, res) => {
   try {
+    //  Here we need to find matching categories between the spot and user
     const { apiId } = req.body;
     const { userId } = req.session;
     const { spotId } = await Spot.findOrCreate({ apiId });
-    const interests = await UserInterest.findAll({ userId });
-    const categories = await interests.map(interest => interest.categoryId);
-    const { categories: spotCategories } = await fetchSpot(apiId);
-    const spotCategoryIds = await spotCategories.map(async (category) => {
-      const { alias } = category;
-      const { categoryId } = await Category.findOne({ alias });
-      return categoryId;
+    //  This gets the users interests
+    const categories = await UserInterest.findAll({
+      where: { userId },
+      attributes: ['categoryId'],
     });
+    //  this gets the spot categories using the aliases and isolates ids
+    const { categories: spotCategories } = await fetchSpot(apiId);
+    const spotAliases = spotCategories.map(category => category.alias);
+    const spotCategoryIds = await Category.findAll({
+      where: {
+        alias: {
+          [Op.or]: spotAliases,
+        },
+      },
+      attributes: ['categoryId'],
+    });
+    //  Here we isolate only the ones that both arrays contain
     const matchedCategories = categories.reduce((matches, categoryId) => {
       if (spotCategoryIds.includes(categoryId)) {
         matches.push(categoryId);
       }
       return matches;
     }, []);
+    //  Now we use a custom method to find a partner
     const user = await User.findByPk(userId);
     const matches = await user.findMatches(matchedCategories, user);
     const matchId = selectMatch(matches);
-
+    //  Set the couple AND the date, since the spot is prearranged
     const coupleOptions = {
       user1: userId,
       user2: matchId,
@@ -391,6 +449,7 @@ app.get('/dates', async (req, res) => {
       const { apiId } = await Spot.findOne({ id: spotId });
       dateInfo.dateId = dateId;
       dateInfo.spot = await fetchSpot(apiId);
+      //  This is awful time complexity, should be improved
       couples.forEach(async (couple) => {
         const { id, user1Id, user2Id } = couple;
         if (id === coupleId) {
