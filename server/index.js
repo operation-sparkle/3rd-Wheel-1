@@ -218,6 +218,15 @@ app.patch('/users', async (req, res) => {
   }
 });
 
+app.patch('/users/pic/:picId', async (req, res) => {
+  try {
+
+  } catch (err) {
+    console.error(`Failed to patch user pic: ${err}`);
+    res.send(500).json(err);
+  }
+});
+
 //  This retrieves the top-level categories ie Restaurants
 app.get('/categories', (req, res) => Category.findAll({ where: { parentId: null } })
   .then((categories) => {
