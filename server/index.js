@@ -360,5 +360,15 @@ app.post('/hotspots', async (req, res) => {
   }
 });
 
+//  This will fetch all dates associated with a user
+app.get('/date', async (req, res) => {
+  try {
+
+  } catch (err) {
+    console.error(`Failed to get dates: ${err}`);
+    res.status(500).json(err);
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
