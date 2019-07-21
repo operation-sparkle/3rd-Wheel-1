@@ -360,5 +360,58 @@ app.post('/hotspots', async (req, res) => {
   }
 });
 
+//  This will fetch all dates associated with a user
+app.get('/dates', async (req, res) => {
+  try {
+    const { userId } = req.session;
+
+    //  First find all couple ids with status 'accepted'
+    const couples = await Couple.findAll({
+      where: {
+        status: 'accepted',
+        [Op.or]: [{ user1Id: userId }, { user2Id: userId }],
+      },
+    });
+
+    //  Next we find all dates with those coupleIds
+    const coupleIds = couples.map(couple => couple.coupleId);
+    const dates = await Date.findAll({
+      where: {
+        coupleId: {
+          [Op.or]: coupleIds,
+        },
+      },
+    });
+
+    //  Next we need to get info to return!
+    //  We need the restaurant info and the partner
+    const datesInfo = await dates.map(async (date) => {
+      const dateInfo = {};
+      const { spotId, coupleId } = date;
+      const { apiId } = await Spot.findOne({ id: spotId });
+      dateInfo.spot = fetchSpot(apiId);
+      couples.forEach((couple) => {
+        const { id, user1Id, user2Id } = couple;
+        if (id === coupleId) {
+          if (user1Id !== userId) {
+            const partner = User.findByPk(user1Id);
+            dateInfo.parner = sanitizeUser(partner);
+          } else {
+            const partner = User.findByPk(user2Id);
+            dateInfo.parner = sanitizeUser(partner);
+          }
+        }
+      });
+      return dateInfo;
+    });
+
+    //  Now we can send it off
+    res.status(200).json(datesInfo);
+  } catch (err) {
+    console.error(`Failed to get dates: ${err}`);
+    res.status(500).json(err);
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
