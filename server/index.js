@@ -414,5 +414,17 @@ app.get('/dates', async (req, res) => {
   }
 });
 
+//  This removes a date from the records
+app.delete('/dates/:dateId', async (req, res) => {
+  try {
+    const { dateId } = req.params;
+    const result = await Date.destroy({ id: dateId });
+    res.status(201).json(result);
+  } catch (err) {
+    console.error(`Failed to delete date: ${dateId}`);
+    res.status(500).json(err);
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
