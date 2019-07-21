@@ -381,12 +381,16 @@ app.post('/hotspots', async (req, res) => {
       where: { userId },
       attributes: ['categoryId'],
     });
-    //  this gets the spot categories
+    //  this gets the spot categories using the aliases and isolates ids
     const { categories: spotCategories } = await fetchSpot(apiId);
-    const spotCategoryIds = await spotCategories.map(async (category) => {
-      const { alias } = category;
-      const { categoryId } = await Category.findOne({ alias });
-      return categoryId;
+    const spotAliases = spotCategories.map(category => category.alias);
+    const spotCategoryIds = await Category.findAll({
+      where: {
+        alias: {
+          [Op.or]: spotAliases,
+        },
+      },
+      attributes: ['categoryId'],
     });
     //  Here we isolate only the ones that both arrays contain
     const matchedCategories = categories.reduce((matches, categoryId) => {
