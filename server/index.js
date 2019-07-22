@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const multer = require('multer');
+const imgur = require('imgur');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -16,6 +17,7 @@ const {
 
 const app = express();
 const upload = multer();
+imgur.setClientId(process.env.ACCESS_TOKEN);
 
 /*  Here is the authentication
  *  We're using passport which requires cookies and sessions
@@ -23,6 +25,7 @@ const upload = multer();
 
 app.use(cookieParser());
 app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(session({
   secret: 'third-wheel',
   resave: false,
@@ -221,10 +224,11 @@ app.patch('/users', async (req, res) => {
 });
 
 //  This edits the user picture
-app.patch('/users/pic', upload.single('pic'), async (req, res) => {
+app.patch('/users/pic/:userId', upload.single('pic'), async (req, res) => {
   try {
-    const { pic } = req.file;
-    const { userId } = req.session;
+    const { buffer } = req.file;
+    const pic = buffer.toString('base64');
+    const { userId } = req.params;
     const user = await User.findByPk(userId);
     //  Here we use a custom method that uploads to imgur and updates the user
     const updatedUser = await user.processPic(user, pic);
