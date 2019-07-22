@@ -176,7 +176,6 @@ app.post('/signup', async (req, res) => {
 //  This updates user information from the profile page
 app.patch('/signup', async (req, res) => {
   const { userId: id } = req.session;
-  console.log(req.body);
   const {
     age, gender, preference, bio, interests,
   } = req.body;
@@ -231,6 +230,8 @@ app.patch('/users', async (req, res) => {
   try {
     const { userId } = req.session;
 
+    console.log(req.body);
+    
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
