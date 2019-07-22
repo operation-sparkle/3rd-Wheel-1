@@ -74,10 +74,8 @@ const Matches = (props) => {
           <Card>
             <CardImg width="70%" height="60%" src={"https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg"} />
             <Card.Title>{"Find a Match"}</Card.Title>
-            <Card.Text>
-              <div>Age: {"???"}</div>
-              <div>Interest: {"???"}</div>
-            </Card.Text>
+            <Card.Text>Age: {"???"}</Card.Text>
+            <Card.Text>Interest: {"???"}</Card.Text>
           </Card>
         </CarouselItem>
     </Carousel>
