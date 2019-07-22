@@ -288,7 +288,7 @@ app.get('/categories', (req, res) => {
 //    If we are looking in Restaurants, this retrieves
 //    vietnamese, new american, hot dog, etc
 app.get('/categories/:id', (req, res) => {
-  const parentId = Number(paramSplitter(req.params.id)[1]);
+  const parentId = Number(req.params.id);
   return Category.findAll({
     where: {
       parentId,
