@@ -173,21 +173,18 @@ app.patch('/signup', async (req, res) => {
   };
   try {
     const user = await User.findOne({ where: { id } });
-    //  make sure the user exists!
-    if (user) {
-      const updatedUser = await user.update(options, { where: { id } });
-      const updatedInterests = await interests.map(async (interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id });
-      });
-      //  Just to be sure there are no errors before we return!
-      Promise.all([updatedUser, updatedInterests])
-        .then(() => {
-          const sanitizedUser = sanitizeUser(updatedUser);
-          res.status(201).json(sanitizedUser);
+    const updatedUser = await user.update(options, { where: { id } });
+    const sanitizedUser = sanitizeUser(updatedUser);
+    if (interests) {
+      interests.map(async (interest) => {
+        return UserInterest.findOrCreate({
+          where: {
+            userId: id, categoryId: interest.id,
+          },
         });
-    } else {
-      res.status(400).send();
+      });
     }
+    res.status(201).json(sanitizedUser);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -213,6 +210,7 @@ app.get('/users', loggedIn, async (req, res) => {
 app.patch('/users', async (req, res) => {
   try {
     const { userId } = req.session;
+
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -307,7 +305,8 @@ app.post('/matches', async (req, res) => {
 //  This retrieves outgoing and incoming requests
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
-  const { userId, status } = req.body;
+  const { status } = req.body;
+  const userId = Number(paramSplitter(req.session.userId)[1]);
   if (bound === 'outbound') {
     //  Semantically, user1 requested the date
     //  a null status means that no one has acted on it
@@ -402,9 +401,8 @@ app.post('/hotspots', async (req, res) => {
   try {
     //  Here we need to find matching categories between the spot and user
     const { apiId } = req.body;
-    let { userId } = req.session;
-    userId = Number(paramSplitter(userId)[1]);
     const { spotId } = await Spot.findOrCreate({ apiId });
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     //  This gets the users interests
     const categories = await UserInterest.findAll({
       where: { userId },
@@ -450,9 +448,7 @@ app.post('/hotspots', async (req, res) => {
 //  This will fetch all dates associated with a user
 app.get('/dates', async (req, res) => {
   try {
-    let { userId } = req.session;
-    userId = Number(paramSplitter(userId)[1]);
-
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     //  First find all couple ids with status 'accepted'
     const couples = await Couple.findAll({
       where: {
