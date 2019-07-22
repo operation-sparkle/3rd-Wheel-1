@@ -162,9 +162,8 @@ app.post('/signup', async (req, res) => {
 });
 
 //  This updates user information from the profile page
-app.patch('/signup/:id', async (req, res) => {
-  // const id = Number(paramSplitter(req.session.userId)[1]);
-  const { id } = req.params;
+app.patch('/signup', async (req, res) => {
+  const id = Number(paramSplitter(req.session.userId)[1]);
   const {
     name, pic, age, preference, bio, interests,
   } = req.body;
