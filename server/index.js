@@ -152,9 +152,7 @@ app.get('/logout', loggedIn, (req, res) => {
  */
 app.post('/signup', async (req, res) => {
   try {
-    const {
-      username,
-    } = req.body;
+    const { username } = req.body;
 
     //  First see if a user already exists with that username
     const user = await User.findOne({
@@ -186,7 +184,7 @@ app.post('/signup', async (req, res) => {
 
 //  This updates user information from the profile page
 app.patch('/signup', async (req, res) => {
-  const id = Number(paramSplitter(req.session.userId)[1]);
+  const { userId: id } = req.session;
   const {
     age, preference, bio, interests,
   } = req.body;
@@ -207,12 +205,12 @@ app.patch('/signup', async (req, res) => {
     });
     const sanitizedUser = sanitizeUser(updatedUser);
     if (interests) {
-      interests.map(async (interest) => UserInterest.findOrCreate({
-          where: {
-            userId: id,
-            categoryId: interest.id,
-          },
-        }));
+      interests.map(async interest => UserInterest.findOrCreate({
+        where: {
+          userId: id,
+          categoryId: interest.id,
+        },
+      }));
     }
     res.status(201).json(sanitizedUser);
   } catch (err) {
@@ -226,7 +224,7 @@ app.patch('/signup', async (req, res) => {
 //  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
   try {
-    const id = req.session.userId;
+    const { userId: id } = req.session;
     const user = await User.findByPk(id);
     const sanitizedUser = sanitizeUser(user);
     res.status(200).json(sanitizedUser);
@@ -239,9 +237,7 @@ app.get('/users', loggedIn, async (req, res) => {
 //  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
-    const {
-      userId,
-    } = req.session;
+    const { userId } = req.session;
 
     const options = req.body;
     const user = await User.findByPk(userId);
@@ -258,9 +254,7 @@ app.patch('/users', async (req, res) => {
 app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
   try {
     //  First get the buffered image from the req object
-    const {
-      buffer,
-    } = req.file;
+    const { buffer } = req.file;
     const pic = buffer.toString('base64');
     //  Upload the base64 encoded image and receive a data object
     const imgurData = await imgur.uploadBase64(pic);
@@ -282,26 +276,26 @@ app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
 });
 
 //  This retrieves the top-level categories ie Restaurants
-app.get('/categories', (req, res) => Category.findAll({
-  where: {
-    parentId: null,
-  },
-})
-  .then((categories) => {
-    res.status(200).send(categories);
+app.get('/categories', (req, res) => {
+  return Category.findAll({
+    where: {
+      parentId: null,
+    },
   })
-  .catch((err) => {
-    console.error(err);
-    res.status(500).send(err);
-  }));
+    .then((categories) => {
+      res.status(200).send(categories);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(err);
+    });
+});
 
 //  This retrieves the subcategories aka interests
 //    If we are looking in Restaurants, this retrieves
 //    vietnamese, new american, hot dog, etc
 app.get('/categories/:id', (req, res) => {
-  const {
-    id: parentId,
-  } = req.params;
+  const { id: parentId } = req.params;
   return Category.findAll({
     where: {
       parentId,
@@ -359,12 +353,8 @@ app.post('/matches', async (req, res) => {
 //  This retrieves outgoing and incoming requests
 app.get('/matches/:bound', async (req, res) => {
   try {
-    const {
-      bound,
-    } = req.params;
-    const {
-      status,
-    } = req.body;
+    const { bound } = req.params;
+    const { status } = req.body;
     const userId = Number(paramSplitter(req.session.userId)[1]);
     if (bound === 'outbound') {
       //  Semantically, user1 requested the date
@@ -404,19 +394,12 @@ app.get('/matches/:bound', async (req, res) => {
 //  if accepted we need to create a new date!
 app.patch('/matches', async (req, res) => {
   try {
-    const {
-      status,
-      coupleId,
-    } = req.body;
+    const { status, coupleId } = req.body;
     const couple = await Couple.findByPk(coupleId);
-    const {
-      status: oldStatus,
-    } = couple;
+    const { status: oldStatus } = couple;
     //  if the status is rejected then the match is forever hidden
     if (status === 'rejected') {
-      const updatedCouple = await couple.update({
-        status,
-      });
+      const updatedCouple = await couple.update({ status });
       res.status(201).json(updatedCouple);
       //  If the oldStatus was null, then only one person has now accepted
       //  This is what we may think of as requesting a date
@@ -432,18 +415,10 @@ app.patch('/matches', async (req, res) => {
       });
       //  This is a custom function to find a suitable date spot
       const spot = await updatedCouple.findSpot(updatedCouple);
-      const {
-        id: apiId,
-      } = spot;
+      const { id: apiId } = spot;
       //  Only create a new spot in the database if it is new
-      const {
-        id: spotId,
-      } = await Spot.findOrCreate({
-        apiId,
-      });
-      const {
-        id: dateId,
-      } = await Date.create({
+      const { id: spotId } = await Spot.findOrCreate({ apiId });
+      const { id: dateId } = await Date.create({
         coupleId,
         spotId,
       });
@@ -460,11 +435,8 @@ app.patch('/matches', async (req, res) => {
 //  If the user clicks one of them, we will find them a date there!
 app.get('/hotspots', async (req, res) => {
   try {
-    const userId = Number(paramSplitter(req.session.userId)[1]);
-    const {
-      latitude,
-      longitude,
-    } = await User.findByPk(userId);
+    const { userId } = req.session;
+    const { latitude, longitude } = await User.findByPk(userId);
     const categories = await UserInterest.findAll({
       where: {
         userId,
@@ -484,14 +456,8 @@ app.get('/hotspots', async (req, res) => {
 app.post('/hotspots', async (req, res) => {
   try {
     //  Here we need to find matching categories between the spot and user
-    const {
-      apiId,
-    } = req.body;
-    const {
-      spotId,
-    } = await Spot.findOrCreate({
-      apiId,
-    });
+    const { apiId } = req.body;
+    const { spotId } = await Spot.findOrCreate({ apiId });
     const userId = Number(paramSplitter(req.session.userId)[1]);
     //  This gets the users interests
     const categories = await UserInterest.findAll({
@@ -530,9 +496,7 @@ app.post('/hotspots', async (req, res) => {
       user2: matchId,
       status: 'pending',
     };
-    const {
-      coupleId,
-    } = await Couple.create(coupleOptions);
+    const { coupleId } = await Couple.create(coupleOptions);
     const date = await Date.create({
       coupleId,
       spotId,
@@ -547,7 +511,7 @@ app.post('/hotspots', async (req, res) => {
 //  This will fetch all dates associated with a user
 app.get('/dates', async (req, res) => {
   try {
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     //  First find all couple ids with status 'accepted'
     const couples = await Couple.findAll({
       where: {
@@ -579,9 +543,7 @@ app.get('/dates', async (req, res) => {
         spotId,
         coupleId,
       } = date;
-      const {
-        apiId,
-      } = await Spot.findOne({
+      const { apiId,} = await Spot.findOne({
         id: spotId,
       });
       dateInfo.dateId = dateId;
@@ -589,9 +551,7 @@ app.get('/dates', async (req, res) => {
       //  This is awful time complexity, should be improved
       couples.forEach(async (couple) => {
         const {
-          id,
-          user1Id,
-          user2Id,
+          id, user1Id, user2Id,
         } = couple;
         if (id === coupleId) {
           if (user1Id !== userId) {
@@ -617,9 +577,7 @@ app.get('/dates', async (req, res) => {
 //  This removes a date from the records
 app.delete('/dates/:dateId', async (req, res) => {
   try {
-    const {
-      dateId,
-    } = req.params;
+    const { dateId } = req.params;
     const result = await Date.destroy({
       id: dateId,
     });
