@@ -18,6 +18,7 @@ const User = sequelize.define('user', {
   password: Sequelize.STRING,
   age: Sequelize.INTEGER,
   preference: Sequelize.STRING,
+  gender: Sequelize.STRING,
   bio: Sequelize.STRING,
   latitude: Sequelize.FLOAT,
   longitude: Sequelize.FLOAT,
