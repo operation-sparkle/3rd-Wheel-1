@@ -9,19 +9,10 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const {
-  User,
-  Date,
-  UserInterest,
-  Couple,
-  Category,
-  Spot,
+  User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
 const {
-  fetchRestaurants,
-  fetchSpot,
-  selectMatch,
-  sanitizeUser,
-  paramSplitter,
+  fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
 } = require('./helpers/index.js');
 
 const app = express();
@@ -261,7 +252,7 @@ app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
     const {
       id: picId,
     } = imgurData.data;
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     const user = await User.findByPk(userId);
     //  Update the user with the new url shortcode
     const updatedUser = await user.update({
@@ -295,7 +286,7 @@ app.get('/categories', (req, res) => {
 //    If we are looking in Restaurants, this retrieves
 //    vietnamese, new american, hot dog, etc
 app.get('/categories/:id', (req, res) => {
-  const { id: parentId } = req.params;
+  const parentId = Number(paramSplitter(req.params.id)[1]);
   return Category.findAll({
     where: {
       parentId,
@@ -318,7 +309,7 @@ app.get('/categories/:id', (req, res) => {
 app.post('/matches', async (req, res) => {
   try {
     //  First we get the user information
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({
       userId,
@@ -353,9 +344,9 @@ app.post('/matches', async (req, res) => {
 //  This retrieves outgoing and incoming requests
 app.get('/matches/:bound', async (req, res) => {
   try {
-    const { bound } = req.params;
+    const bound = paramSplitter(req.params.bound)[1];
     const { status } = req.body;
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     if (bound === 'outbound') {
       //  Semantically, user1 requested the date
       //  a null status means that no one has acted on it
@@ -458,7 +449,7 @@ app.post('/hotspots', async (req, res) => {
     //  Here we need to find matching categories between the spot and user
     const { apiId } = req.body;
     const { spotId } = await Spot.findOrCreate({ apiId });
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     //  This gets the users interests
     const categories = await UserInterest.findAll({
       where: {
@@ -577,7 +568,7 @@ app.get('/dates', async (req, res) => {
 //  This removes a date from the records
 app.delete('/dates/:dateId', async (req, res) => {
   try {
-    const { dateId } = req.params;
+    const dateId = Number(paramSplitter(req.params.dateId)[1]);
     const result = await Date.destroy({
       id: dateId,
     });
