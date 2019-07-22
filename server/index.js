@@ -311,35 +311,29 @@ app.get('/matches/:bound', async (req, res) => {
     if (bound === 'outbound') {
       //  Semantically, user1 requested the date
       //  a null status means that no one has acted on it
-      return Couple.findAll({
+      const couples = await Couple.findAll({
         where: {
           user1Id: userId,
           status: {
             [Op.or]: [status, null],
           },
         },
-      })
-        .then(result => res.status(200).send(result))
-        .catch((err) => {
-          console.error(`error: ${err}`);
-          res.send(500).send(err);
-        });
+        attributes: ['id', 'user2Id'],
+      });
+      res.status(200).json(couples);
     }
     if (bound === 'inbound') {
       //  user2 was requested a date
       //  they cannot see requests they weren't offered
       //    ie no access to a null status
-      return Couple.findAll({
+      const couples = await Couple.findAll({
         where: {
           user2Id: userId,
           status,
         },
-      })
-        .then(result => res.status(200).send(result))
-        .catch((err) => {
-          console.error(`error: ${err}`);
-          res.send(500).send(err);
-        });
+        attributes: ['id', 'user1Id'],
+      });
+      res.status(200).json(couples);
     }
   } catch (err) {
     console.error(`Failed to get matches: ${err}`);
