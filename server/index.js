@@ -285,19 +285,23 @@ app.post('/matches/', async (req, res) => {
     //  Here we use a custom method to find suitable matches
     const matches = await user.findMatches(interestsIds, user);
     const matchId = selectMatch(matches);
-    const coupleValues = {
-      user1Id: userId,
-      user2Id: matchId,
-      status: null,
-    };
-    //  We create the couple and send back the matched user information
-    const couplePromise = Couple.create(coupleValues);
-    const matchedUserPromise = User.findByPk(matchId);
-    Promise.all([couplePromise, matchedUserPromise])
-      .then(([couple, matchedUser]) => {
-        const sanitizedMatch = sanitizeUser(matchedUser);
-        res.status(201).send(sanitizedMatch);
-      });
+    if (matchId) {
+      const coupleValues = {
+        user1Id: userId,
+        user2Id: matchId,
+        status: null,
+      };
+      //  We create the couple and send back the matched user information
+      const couplePromise = Couple.create(coupleValues);
+      const matchedUserPromise = User.findByPk(matchId);
+      Promise.all([couplePromise, matchedUserPromise])
+        .then(([couple, matchedUser]) => {
+          const sanitizedMatch = sanitizeUser(matchedUser);
+          res.status(201).send(sanitizedMatch);
+        });
+    } else {
+      res.status(400).send({});
+    }
   } catch (err) {
     console.error(`Failed to find a match: ${err}`);
     res.status(500).send(err);
