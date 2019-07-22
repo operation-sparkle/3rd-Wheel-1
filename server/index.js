@@ -276,7 +276,7 @@ app.get('/categories/:id', (req, res) => {
 //  We set the default status to null
 //    If one person accepts, it becomes pending
 //    If both accept we find a date!
-app.post('/matches/:userId', async (req, res) => {
+app.post('/matches', async (req, res) => {
   try {
     //  First we get the user information
     const userId = Number(paramSplitter(req.session.userId)[1]);
