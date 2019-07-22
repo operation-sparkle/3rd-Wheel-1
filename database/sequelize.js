@@ -8,6 +8,8 @@ const sequelize = new Sequelize('3rd_wheel', 'root', '', {
   dialect: 'mysql',
 });
 
+const { Op } = Sequelize;
+
 const User = sequelize.define('user', {
   username: {
     type: Sequelize.STRING,
@@ -67,6 +69,7 @@ sequelize.sync({ force: false })
   .catch(error => console.log('This error occured', error));
 
 exports.sequelize = sequelize;
+exports.Op = Op;
 exports.User = User;
 exports.Date = Date;
 exports.UserInterest = UserInterest;

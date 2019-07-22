@@ -1,5 +1,5 @@
 const {
-  User, Date, UserInterest, Couple, Category, Spot,
+  User, Date, UserInterest, Couple, Category, Spot, Op,
 } = require('../sequelize');
 const {
   restCategories, fetchRestaurant, haversineDistance, topInterest,
@@ -51,8 +51,15 @@ User.prototype.findMatches = async (interests, user) => {
     const {
       id: userId, longitude: userLon, latitude: userLat, gender: userGen, preference: userPref,
     } = user;
-    const matchingInterests = await interests.map((categoryId) => {
-      return UserInterest.findAll({ categoryId });
+    // const matchingInterests = await interests.map((categoryId) => {
+    //   return UserInterest.findAll({ categoryId });
+    // });
+    const matchingInterests = await UserInterest.findAll({
+      where: {
+        categoryId: {
+          [Op.or]: interests,
+        },
+      },
     });
     const filteredMatches = matchingInterests.reduce(async (matches, match) => {
       const { userId: matchId, categoryId } = match;
@@ -108,4 +115,5 @@ module.exports = {
   Couple,
   Category,
   Spot,
+  Op,
 };
