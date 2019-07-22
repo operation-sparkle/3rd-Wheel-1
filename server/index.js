@@ -477,8 +477,8 @@ app.post('/hotspots', async (req, res) => {
     });
     const categories = userInterests.map(userInt => userInt.categoryId);
     //  this gets the spot categories using the aliases and isolates ids
-    const { categories: spotCategories } = await fetchSpot(apiId);
-    const spotAliases = spotCategories.map(category => category.alias);
+    const { categories: apiCategories } = await fetchSpot(apiId);
+    const spotAliases = apiCategories.map(category => category.alias);
     const spotCategories = await Category.findAll({
       where: {
         alias: {
