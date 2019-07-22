@@ -300,7 +300,7 @@ app.post('/matches/', async (req, res) => {
           res.status(201).send(sanitizedMatch);
         });
     } else {
-      res.status(400).send({});
+      res.status(404).send({});
     }
   } catch (err) {
     console.error(`Failed to find a match: ${err}`);
