@@ -429,14 +429,22 @@ app.get('/hotspots', async (req, res) => {
   try {
     const { userId } = req.session;
     const { latitude, longitude } = await User.findByPk(userId);
-    const categories = await UserInterest.findAll({
+    const userInterests = await UserInterest.findAll({
       where: {
         userId,
       },
-      attributes: ['alias'],
     });
+    const categoryIds = userInterests.map(userInt => userInt.categoryId);
+    const categories = await Category.findAll({
+      where: {
+        id: {
+          [Op.or]: categoryIds,
+        },
+      },
+    });
+    const categoryAliases = categories.map(category => category.alias);
     //  This helper does the dirty work
-    const hotspots = await fetchRestaurants(categories, latitude, longitude);
+    const hotspots = await fetchRestaurants(categoryAliases, latitude, longitude);
     res.status(200).json(hotspots);
   } catch (err) {
     console.error(`Failed to find hotspots: ${err}`);

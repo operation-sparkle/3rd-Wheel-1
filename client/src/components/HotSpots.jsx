@@ -14,8 +14,10 @@ const HotSpots = (props) => {
   
   useEffect(() => {
     async function fetch () {
-      const spots = await Axios.get('/hotspots');
       try {
+        const result = await Axios.get('/hotspots');
+        const spots = result.data;
+        console.log(spots);
         assignSpots(spots);
       } catch (err) {
         console.error(err);
