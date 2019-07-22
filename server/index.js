@@ -173,21 +173,18 @@ app.patch('/signup', async (req, res) => {
   };
   try {
     const user = await User.findOne({ where: { id } });
-    //  make sure the user exists!
-    if (user) {
-      const updatedUser = await user.update(options, { where: { id } });
-      const updatedInterests = await interests.map(async (interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id });
-      });
-      //  Just to be sure there are no errors before we return!
-      Promise.all([updatedUser, updatedInterests])
-        .then(() => {
-          const sanitizedUser = sanitizeUser(updatedUser);
-          res.status(201).json(sanitizedUser);
+    const updatedUser = await user.update(options, { where: { id } });
+    const sanitizedUser = sanitizeUser(updatedUser);
+    if (interests) {
+      interests.map(async (interest) => {
+        return UserInterest.findOrCreate({
+          where: {
+            userId: id, categoryId: interest.id,
+          },
         });
-    } else {
-      res.status(400).send();
+      });
     }
+    res.status(201).json(sanitizedUser);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
