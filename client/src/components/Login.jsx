@@ -5,7 +5,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Login = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
+const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin }) => {
   // hooks for input values
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
@@ -59,6 +59,7 @@ const Login = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
         <Button variant="primary" type="submit" onClick={() => loginUser(username, password)}>
           Login
         </Button>
+        { failedLogin ? <p>Please try again</p> : <div/> }
       </Form>   
   );  
 }

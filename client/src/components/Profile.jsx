@@ -6,8 +6,8 @@ import ListGroup from 'react-bootstrap/ListGroup';
 import ListGroupItem from 'react-bootstrap/ListGroupItem';
 
 
-const Profile = (props) => {
-  const [user, changeUser] = useState(props.user)
+const Profile = ({ user }) => {
+  // const [user, changeUser] = useState(props.user)
 
   return (
     <div>
