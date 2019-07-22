@@ -163,7 +163,7 @@ app.post('/signup', async (req, res) => {
 
 //  This updates user information from the profile page
 app.patch('/signup', async (req, res) => {
-  const id = paramSplitter(req.session.userId);
+  const id = Number(paramSplitter(req.session.userId)[1]);
   const {
     name, pic, age, preference, bio, interests,
   } = req.body;
@@ -233,7 +233,7 @@ app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
     //  Upload the base64 encoded image and receive a data object
     const imgurData = await imgur.uploadBase64(pic);
     const { id: picId } = imgurData.data;
-    const userId = paramSplitter(req.session.userId)[1];
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(userId);
     //  Update the user with the new url shortcode
     const updatedUser = await user.update({ pic: picId });
@@ -278,8 +278,7 @@ app.get('/categories/:id', (req, res) => {
 app.post('/matches/:userId', async (req, res) => {
   try {
     //  First we get the user information
-    let userId = paramSplitter(req.session.userId)[1];
-    userId = Number(paramSplitter(userId)[1]);
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
     const interestsIds = interests.map(interest => interest.categoryId);
@@ -382,7 +381,7 @@ app.patch('/matches', async (req, res) => {
 //  If the user clicks one of them, we will find them a date there!
 app.get('/hotspots', async (req, res) => {
   try {
-    const userId = paramSplitter(req.secure.userId)[1];
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const { latitude, longitude } = await User.findByPk(userId);
     const categories = await UserInterest.findAll({
       where: { userId },
