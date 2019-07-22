@@ -188,20 +188,11 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup', async (req, res) => {
   const id = Number(paramSplitter(req.session.userId)[1]);
   const {
-    name,
-    pic,
-    age,
-    preference,
-    bio,
-    interests,
+    age, preference, bio, interests,
   } = req.body;
   //  Note that interests are split off to be used in a join table
   const options = {
-    name,
-    pic,
-    age,
-    preference,
-    bio,
+    age, preference, bio,
   };
   try {
     const user = await User.findOne({
