@@ -10,48 +10,42 @@ import FigureImage from 'react-bootstrap/FigureImage';
 
 
 const HotSpots = (props) => {
-
-  function getLocation() {
-    Axios.get(`/hotspots/userId=${props.userId}`)
-    .then((locations) => {
-      locations.map((locale) => {
-        console.log(locale.data);
-      })
-    }).catch((err) => {
-      console.error(err);
-    })
-
-    return (
-      <Container>
-        <Figure>
-
-          <Figure.Image 
-          width="540px"
-          height="400px"
-          src={props.image}
-          alt="540x400"
-          />
-
-          <Figure.Caption>
-            {props.info}
-          </Figure.Caption>
-
-        </Figure>
-      </Container>
-    )
-
-  }
-
-
-
-
+  const [ hotSpots, assignSpots ] = useState([])
+  
+  useEffect(() => {
+    async function fetch () {
+      const spots = await Axios.get(`/hotspots/userId=${props.userId}`)
+      try {
+        assignSpots(spots);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }, [])
 
 
   return (
     <Container>
-      <h4 onClick={getLocation}>Get some stuff</h4>
+      <h4> Hot Spots </h4>
+      {
+        hotSpots.map(locale => (
+          <Figure>
+
+            <Figure.Image 
+            width="540px"
+            height="400px"
+            src={locale.image}
+            alt="540x400"
+            />
+
+            <Figure.Caption>
+              {locale.info}
+            </Figure.Caption>
+
+          </Figure>
+        ))
+      }
     </Container>
-    
   );
 }
 
