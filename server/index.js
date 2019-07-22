@@ -330,6 +330,7 @@ app.post('/matches', async (req, res) => {
       Promise.all([couplePromise, matchedUserPromise])
         .then(([couple, matchedUser]) => {
           const sanitizedMatch = sanitizeUser(matchedUser);
+          sanitizedMatch.coupleId = couple.id;
           res.status(201).send(sanitizedMatch);
         });
     } else {
