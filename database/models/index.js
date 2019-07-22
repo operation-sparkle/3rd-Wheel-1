@@ -54,30 +54,35 @@ User.prototype.findMatches = async (interests, user) => {
     // const matchingInterests = await interests.map((categoryId) => {
     //   return UserInterest.findAll({ categoryId });
     // });
-    const matchingInterests = await UserInterest.findAll({
+    const matchingUsers = await UserInterest.findAll({
       where: {
         categoryId: {
           [Op.or]: interests,
         },
       },
     });
-    const filteredMatches = matchingInterests.reduce(async (matches, match) => {
-      const { userId: matchId, categoryId } = match;
+    const matchIds = matchingUsers.map(match => match.id);
+    const allMatchData = await User.findAll({
+      where: {
+        id: {
+          [Op.or]: [matchIds],
+        },
+      },
+    });
+    const filteredMatches = allMatchData.reduce((matches, match) => {
       const {
-        longitude: matchLon, latitude: matchLat, gender: matchGen, preference: matchPref,
-      } = await User.findOne({ matchId });
-      const coupleExists = await Couple.findOne({ where: { user2Id: matchId } });
+        id: matchId, longitude: matchLon, latitude: matchLat, gender: matchGen, preference: matchPref,
+      } = match;
       if (matchId === userId
-        || !!coupleExists
         || haversineDistance([userLon, userLat], [matchLon, matchLat]) > 10
         || userPref !== matchGen
         || matchPref !== userGen) {
         return matches;
       }
       if (matches[matchId] === undefined) {
-        matches[matchId] = [];
+        matches[matchId] = 0;
       }
-      matches[matchId].push(categoryId);
+      matches[matchId]++;
       return matches;
     }, {});
     return filteredMatches;
