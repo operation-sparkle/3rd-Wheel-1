@@ -41,14 +41,15 @@ class App extends React.Component {
     .then(response => {
       // console.log('test', response);
       if (typeof response.data === 'object'){
-        
+        this.openGate(response);
+
         const successCallback = (position) => {
           // By using the 'maximumAge' option above, the position
           // object is guaranteed to be at most 10 minutes old.
           // could send timestamp too!
           const { longitude, latitude } = position.coords;
           axios.patch('/users', { longitude, latitude })
-            .then(this.openGate)              
+            .then(data => this.setUser(data))              
             .catch(err => console.warn(err));
         }
         
@@ -81,6 +82,12 @@ class App extends React.Component {
     this.setState({
       isLoggedIn: !this.state.isLoggedIn,
       user: response.data,
+    })
+  }
+
+  setUser(user) {
+    this.setState({
+      user: user.data,
     })
   }
 
@@ -133,7 +140,7 @@ class App extends React.Component {
           // !loggedIn routes
             <Switch>
               <Route exact path="/" render={() => (
-                <Redirect to="/login"/>
+                <Redirect to="/signup"/>
               )} />
               <Route path="/signup" render={(props) => <Signup {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
               <Route path="/login" render={(props) => <Login {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />

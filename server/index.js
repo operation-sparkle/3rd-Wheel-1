@@ -177,11 +177,11 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup', async (req, res) => {
   const { userId: id } = req.session;
   const {
-    age, preference, bio, interests,
+    age, gender, preference, bio, interests,
   } = req.body;
   //  Note that interests are split off to be used in a join table
   const options = {
-    age, preference, bio,
+    age, gender, preference, bio,
   };
   try {
     const user = await User.findOne({
@@ -230,6 +230,8 @@ app.patch('/users', async (req, res) => {
   try {
     const { userId } = req.session;
 
+    console.log(req.body);
+    
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);

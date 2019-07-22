@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 
-const UserInfo = ({ id }) => {
+const UserInfo = () => {
   const [ genres, modGenres ] = useState([]);
 
   const [ subArr1, modSubArr1 ] = useState([]);
@@ -21,25 +21,21 @@ const UserInfo = ({ id }) => {
   const [ subGenre2, addSubGenre2 ] = useState(null);
   const [ subGenre3, addSubGenre3 ] = useState(null);
 
+  const [ age, editAge ] = useState(null);
   const [ gender, editGender ] = useState(null);
   const [ preference, editPreference ] = useState(null);
   const [ bio, editBio ] = useState('');
-  // const [ array, affectArray ] = useState([]);
 
   const handleChangeG = (event, func) => {
     event.preventDefault();
     const arr = genres.filter(e => {
       return e.name === event.target.value;
     })
-
-    // console.log('e', arr, arr[0].id);
-
     func(arr[0].id);
   };
   
   const handleChangeS = (event, func) => {
     event.preventDefault();
-    // console.log('etv', event.target.value);
     func(event.target.value);
   };
 
@@ -49,34 +45,32 @@ const UserInfo = ({ id }) => {
   }
 
   // post user info to signup
-  const interestSubmit = (data) => {
+  const interestSubmit = async (data) => {
     // dont allow re-render until complete!
     event.preventDefault();
 
     console.log(data);
 
-    // return axios.patch(`/signup/${id}`, {
-    //   interests: [ sub1, sub2, sub3 ],
-    // }).then(() => console.log('greaattt success!!!'))
-    //   .catch(err => console.warn(err));
+    const patch = await axios.patch('/signup', data)
+      try {
+        console.log('greaattt success!!!')
+      } catch(err) {
+        console.warn(err)
+      }
   };
 
   useEffect(() => {
-    // console.log(genre1, 'uf1');
     async function fetch() {
       const result = await axios.get(`/categories/${genre1}`);
       modSubArr1(result.data);
-      // console.log('test uf1', subArr1);
     }
     fetch();
   }, [genre1])
 
   useEffect(() => {
-    // console.log(genre2, 'uf1');
     async function fetch() {
       const result = await axios.get(`/categories/${genre2}`);
       modSubArr2(result.data);
-      // console.log('test uf1', subArr2);
     }
     fetch();
   }, [genre2])
@@ -85,7 +79,6 @@ const UserInfo = ({ id }) => {
     async function fetch() {
       const result = await axios.get(`/categories/${genre3}`);
       modSubArr3(result.data);
-      // console.log(result);
     }
     fetch();
   }, [genre3])
@@ -100,7 +93,6 @@ const UserInfo = ({ id }) => {
       const result = await axios.get('/categories');
       if (!ignore) {
         modGenres(result.data);
-        // console.log(result);
       }
     }
 
@@ -110,7 +102,9 @@ const UserInfo = ({ id }) => {
 
   return (
     <div>
-      <Form onSubmit={interestSubmit()}>
+      <Form onSubmit={() => {
+        return interestSubmit({ age, preference, gender, bio, interests: [ subGenre1, subGenre2, subGenre3 ] })
+      }}>
 
         <Form.Row>
 
@@ -132,6 +126,11 @@ const UserInfo = ({ id }) => {
               <option value="Female">Female</option>
               <option value="Non Binary">NonBinary</option>
             </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="formAge">
+            <Form.Label>Age</Form.Label>
+            <Form.Control type="text" placeholder="Age, honesty is the best policy!" onChange={(e) => handleChange(e, editAge)}></Form.Control>
           </Form.Group>
 
         </Form.Row>
@@ -156,6 +155,7 @@ const UserInfo = ({ id }) => {
             }
           </Form.Control>
         </Form.Group>
+
         <Form.Group controlId="sub-genre" className="1" >
           <Form.Label>Now be More Specific</Form.Label>
           <Form.Control as="select" multiple onChange={(e) => handleChangeS(e, addSubGenre1) }>
@@ -174,6 +174,7 @@ const UserInfo = ({ id }) => {
             }
           </Form.Control>
         </Form.Group>
+
         <Form.Group controlId="genre" className="2" >
           <Form.Label>2) Choose a Category!!</Form.Label>
           <Form.Control as="select" onChange={(e) => handleChangeG(e, addGenre2) }>
@@ -189,6 +190,7 @@ const UserInfo = ({ id }) => {
             }
           </Form.Control>
         </Form.Group>
+
         <Form.Group controlId="sub-genre" className="2" >
           <Form.Label>Now be More Specific</Form.Label>
           <Form.Control as="select" multiple onChange={(e) => handleChangeS(e, addSubGenre2) }>
@@ -206,7 +208,9 @@ const UserInfo = ({ id }) => {
               }) 
             }
           </Form.Control>
-        </Form.Group><Form.Group controlId="genre" className="3">
+        </Form.Group>
+
+        <Form.Group controlId="genre" className="3">
           <Form.Label>3) Choose a Category!!</Form.Label>
           <Form.Control as="select" onChange={(e) => handleChangeG(e, addGenre3) }>
           <option value={null}>...   </option>
@@ -221,6 +225,7 @@ const UserInfo = ({ id }) => {
             }
           </Form.Control>
         </Form.Group>
+
         <Form.Group controlId="sub-genre" className="3">
           <Form.Label>Now be More Specific</Form.Label>
           <Form.Control as="select" multiple onChange={(e) => handleChangeS(e, addSubGenre3)}>
@@ -239,6 +244,7 @@ const UserInfo = ({ id }) => {
             }
           </Form.Control>
         </Form.Group>
+
         <Button /* variant="success" size="lg" */ block type="submit"> 
           Submit 
         </Button>
