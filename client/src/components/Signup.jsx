@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom'
 import axios from 'axios';
 
+import Login from './Login';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
@@ -19,7 +20,7 @@ const Signup = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
       .then(() => {
         // add data param and remove sensitive data to eliminate need to send get to users
         // console.log('signup', data);
-        gateKeeper();
+        return gateKeeper();
       })
       .catch(err => {
         console.warn(err);
@@ -35,11 +36,12 @@ const Signup = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
   return (
     isLoggedIn ?
       // if !!loggedIn === true, redirect to index (swapping to restricted view)
-      <Switch>
-        <Route path="/signup" component={() => {
-          <Redirect to="/" />
+      <Route>
+        <Route path="/" render={() => {
+          <Redirect to="/login" />
         }} />
-      </Switch>
+        <Route path="/signup" render={Login} />
+      </Route>
       :
       // if !!loggedIn === false, redirect to index (swapping to restricted view)
       <Form>
