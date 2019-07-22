@@ -199,7 +199,7 @@ app.patch('/signup', async (req, res) => {
 //  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
   try {
-    const id = req.session.userId;
+    const id = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(id);
     const sanitizedUser = sanitizeUser(user);
     res.status(200).json(sanitizedUser);
@@ -212,7 +212,8 @@ app.get('/users', loggedIn, async (req, res) => {
 //  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
-    const { userId } = req.session;
+    let { userId } = req.session;
+    userId = Number(paramSplitter(userId)[1]);
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -401,7 +402,8 @@ app.post('/hotspots', async (req, res) => {
   try {
     //  Here we need to find matching categories between the spot and user
     const { apiId } = req.body;
-    const { userId } = req.session;
+    let { userId } = req.session;
+    userId = Number(paramSplitter(userId)[1]);
     const { spotId } = await Spot.findOrCreate({ apiId });
     //  This gets the users interests
     const categories = await UserInterest.findAll({
@@ -448,7 +450,8 @@ app.post('/hotspots', async (req, res) => {
 //  This will fetch all dates associated with a user
 app.get('/dates', async (req, res) => {
   try {
-    const { userId } = req.session;
+    let { userId } = req.session;
+    userId = Number(paramSplitter(userId)[1]);
 
     //  First find all couple ids with status 'accepted'
     const couples = await Couple.findAll({
