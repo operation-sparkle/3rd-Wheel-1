@@ -5,14 +5,13 @@ import CarouselItem from 'react-bootstrap/CarouselItem'
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import CardImg from 'react-bootstrap/CardImg';
-import Axios from 'axios';
+import axios from 'axios';
 
 
 
-const Matches = (props) => {
-  const [index, changeIndex] = useState(0);
-  const {user} = props;
-  const [coupleId, newCouple] = useState(null);
+const Matches = ({ user }) => {
+  // const [index, changeIndex] = useState(0);
+  // const [coupleId, newCouple] = useState(null);
 
   // function handleChange() {
   //   changeIndex(index++);
@@ -20,25 +19,33 @@ const Matches = (props) => {
   // }
 
   function accept() {
-    Axios.patch('/matches', {
-      status: "accepted",
-      coupleID,
-    }).then(() => {
-      console.log('Accepted');
-    }).catch((err) => {
-      console.error(`Error while accepting: ${err}`);
-    });
+    axios.post('/matches', { userId: user.id })
+      .then(couple => {
+        console.log(couple);
+        return axios.patch('/matches', {
+          status: "accepted",
+          coupleId: couple.id,
+        })       
+      }).then(() => {
+        console.log('Accepted');
+      }).catch((err) => {
+        console.error(`Error while accepting: ${err}`);
+      });
   }
 
   function reject() {
-    Axios.patch('/matches', {
-      status: "rejected",
-      coupleID,
-    }).then(() => {
-      console.log('Rejected');
-    }).catch((err) => {
-      console.error(`Error while rejecting: ${err}`);
-    });
+    axios.post('/matches', { userId: user.id })
+      .then(couple => {
+        console.log(couple);
+        return axios.patch('/matches', {
+          status: "rejected",
+          coupleId,
+        })
+      }).then(() => {
+        console.log('Rejected');
+      }).catch((err) => {
+        console.error(`Error while rejecting: ${err}`);
+      });
   }
 
   function newMatch(users) {
@@ -57,8 +64,9 @@ const Matches = (props) => {
   }
   function getNewMatch() {
     console.log('clicked');
-    Axios.post(`/matches`)
+    axios.post(`/matches`)
     .then((user) => {
+      newCouple(user.coupleId);
       newMatch([user]);
       console.log(user);
     }).catch((err) => {
@@ -82,7 +90,7 @@ const Matches = (props) => {
     </Carousel>
       <Button onClick={accept} variant="success" size="lg" block>Accept</Button>
       <Button onClick={getNewMatch} variant="primary" size="lg" block>Skip</Button>
-      <Button onClick={reject} variant="danger" size="lg" block>Reject</Button>
+      <Button onClick={reject} variant="danger" size="lg" block>Reject </Button>
     </div>
 
   );
