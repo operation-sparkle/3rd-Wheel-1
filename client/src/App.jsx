@@ -21,7 +21,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       user: {},
-      isLoggedIn: true,
+      isLoggedIn: false,
       failedLogin: false,
     }
     
