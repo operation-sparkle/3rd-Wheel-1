@@ -12,13 +12,33 @@ import Axios from 'axios';
 const Matches = (props) => {
   const [index, changeIndex] = useState(0);
   const {user} = props;
+  const [coupleId, newCouple] = useState(null);
 
   function handleChange() {
     changeIndex(index++);
     setDirection(index++);
   }
-  function test() {
-    console.log(props, 'Ok');
+
+  function accept() {
+    Axios.patch('/matches', {
+      status: "accepted",
+      coupleID,
+    }).then(() => {
+      console.log('Accepted');
+    }).catch((err) => {
+      console.error(`Error while accepting: ${err}`);
+    });
+  }
+
+  function reject() {
+    Axios.patch('/matches', {
+      status: "rejected",
+      coupleID,
+    }).then(() => {
+      console.log('Rejected');
+    }).catch((err) => {
+      console.error(`Error while rejecting: ${err}`);
+    });
   }
 
   function newMatch(users) {
@@ -39,7 +59,7 @@ const Matches = (props) => {
   }
   function getNewMatch() {
     console.log('clicked');
-    Axios.post(`/matches/userId=${user.id}`)
+    Axios.post(`/matches`)
     .then((user) => {
       console.log(user);
     }).catch((err) => {
@@ -62,9 +82,9 @@ const Matches = (props) => {
           </Card>
         </CarouselItem>
     </Carousel>
-      <Button onClick={test} variant="success" size="lg" block>Accept</Button>
+      <Button onClick={accept} variant="success" size="lg" block>Accept</Button>
       <Button onClick={getNewMatch} variant="primary" size="lg" block>Skip</Button>
-      <Button variant="danger" size="lg" block>Reject</Button>
+      <Button onClick={reject} variant="danger" size="lg" block>Reject</Button>
     </div>
 
   );
