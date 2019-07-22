@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const {
-  User, Date, UserInterest, Couple, Category, Spot,
+  User, Date, UserInterest, Couple, Category, Spot, Op,
 } = require('../database/models/index.js');
 const {
   fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
