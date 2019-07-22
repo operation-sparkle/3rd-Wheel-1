@@ -229,10 +229,12 @@ app.patch('/users/pic/:userId', upload.single('pic'), async (req, res) => {
   try {
     const { buffer } = req.file;
     const pic = buffer.toString('base64');
+    const imgurData = await imgur.uploadBase64(pic);
+    const { id: picId } = imgurData.data;
     const { userId } = req.params;
     const user = await User.findByPk(userId);
     //  Here we use a custom method that uploads to imgur and updates the user
-    const updatedUser = await user.processPic(user, pic);
+    const updatedUser = await user.update({ pic: picId });
     const sanitizedUser = sanitizeUser(updatedUser);
     res.status(201).json(sanitizedUser);
   } catch (err) {
