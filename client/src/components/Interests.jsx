@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 
-const UserInfo = () => {
+const UserInfo = ({ user, setInterests, interests}) => {
   const [ genres, modGenres ] = useState([]);
 
   const [ subArr1, modSubArr1 ] = useState([]);
@@ -28,6 +28,7 @@ const UserInfo = () => {
 
   const handleChangeG = (event, func) => {
     event.preventDefault();
+    setInterests([subGenre1, subGenre2, subGenre3])
     const arr = genres.filter(e => {
       return e.name === event.target.value;
     })
@@ -110,7 +111,7 @@ const UserInfo = () => {
   return (
     <div>
       <Form onSubmit={() => {
-        return interestSubmit({ age, preference, gender, bio, interests: [ subGenre1, subGenre2, subGenre3 ] })
+        return interestSubmit({ age: age || user.age, preference: preference || user.preference, gender: gender || user.gender, bio: bio || user.bio, interests: [ (subGenre1 || interests[0]), (subGenre2 || interests[1]), (subGenre3 || interests[2]) ] })
       }}>
 
         <Form.Row>

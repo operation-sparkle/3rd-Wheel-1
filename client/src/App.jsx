@@ -23,9 +23,11 @@ class App extends React.Component {
       user: {},
       isLoggedIn: false,
       failedLogin: false,
+      interests: [null, null, null]
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
+    this.setInterests = this.setInterests.bind(this); 
     this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
     this.openGate = this.openGate.bind(this);
@@ -71,7 +73,13 @@ class App extends React.Component {
       this.showAuthFail();
     });
   }
-  
+
+  setInterests(array) {
+    this.setState({
+      interests: array,
+    })
+  }
+
   getUserInfo() {
     // no auto login happening. send get to login instead?
     return axios.get('/users/');
@@ -136,10 +144,10 @@ class App extends React.Component {
                 <Redirect to="/profile" />
               }} />
               <Route path="/matches" render={(props) => <Matches {...props} user={user} />}  />
-              <Route path="/interests" render={(props) => <Interests {...props} user={user} />} />
+              <Route path="/interests" render={(props) => <Interests {...props} user={user} setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
               <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
-              <Route path="/profile" render={(props) => <Profile {...props} user={user} />} />
+              <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
           // !loggedIn routes
@@ -151,7 +159,6 @@ class App extends React.Component {
               <Route path="/login" render={(props) => <Login {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
             </Switch>
         }
-        { failedLogin ? <p>Please try again</p> : <div/> }
       </div>
     )
   }

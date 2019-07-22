@@ -59,6 +59,7 @@ const Matches = (props) => {
     console.log('clicked');
     Axios.post(`/matches`)
     .then((user) => {
+      newMatch([user]);
       console.log(user);
     }).catch((err) => {
       console.error(`There was an error: ${err}`);
