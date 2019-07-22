@@ -9,10 +9,19 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const {
-  User, Date, UserInterest, Couple, Category, Spot,
+  User,
+  Date,
+  UserInterest,
+  Couple,
+  Category,
+  Spot,
 } = require('../database/models/index.js');
 const {
-  fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
+  fetchRestaurants,
+  fetchSpot,
+  selectMatch,
+  sanitizeUser,
+  paramSplitter,
 } = require('./helpers/index.js');
 
 const app = express();
@@ -26,7 +35,9 @@ imgur.setAPIUrl('https://api.imgur.com/3/');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true,
+}));
 app.use(session({
   secret: 'third-wheel',
   resave: false,
@@ -52,13 +63,19 @@ passport.deserializeUser((id, done) => {
  */
 
 passport.use(new LocalStrategy((username, password, done) => {
-  User.findOne({ username })
+  User.findOne({
+    username,
+  })
     .then((user) => {
       if (!user) {
-        return done(null, false, { message: 'Incorrect username' });
+        return done(null, false, {
+          message: 'Incorrect username',
+        });
       }
       if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password' });
+        return done(null, false, {
+          message: 'Incorrect password',
+        });
       }
       return done(null, user);
     })
@@ -135,10 +152,16 @@ app.get('/logout', loggedIn, (req, res) => {
  */
 app.post('/signup', async (req, res) => {
   try {
-    const { username } = req.body;
+    const {
+      username,
+    } = req.body;
 
     //  First see if a user already exists with that username
-    const user = await User.findOne({ where: { username } });
+    const user = await User.findOne({
+      where: {
+        username,
+      },
+    });
     if (user) {
       res.status(400).redirect('/');
     } else {
@@ -165,29 +188,42 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup', async (req, res) => {
   const id = Number(paramSplitter(req.session.userId)[1]);
   const {
-    name, pic, age, preference, bio, interests,
+    name,
+    pic,
+    age,
+    preference,
+    bio,
+    interests,
   } = req.body;
   //  Note that interests are split off to be used in a join table
   const options = {
-    name, pic, age, preference, bio,
+    name,
+    pic,
+    age,
+    preference,
+    bio,
   };
   try {
-    const user = await User.findOne({ where: { id } });
-    //  make sure the user exists!
-    if (user) {
-      const updatedUser = await user.update(options, { where: { id } });
-      const updatedInterests = await interests.map(async (interest) => {
-        return UserInterest.create({ userId: id, categoryId: interest.id });
-      });
-      //  Just to be sure there are no errors before we return!
-      Promise.all([updatedUser, updatedInterests])
-        .then(() => {
-          const sanitizedUser = sanitizeUser(updatedUser);
-          res.status(201).json(sanitizedUser);
-        });
-    } else {
-      res.status(400).send();
+    const user = await User.findOne({
+      where: {
+        id,
+      },
+    });
+    const updatedUser = await user.update(options, {
+      where: {
+        id,
+      },
+    });
+    const sanitizedUser = sanitizeUser(updatedUser);
+    if (interests) {
+      interests.map(async (interest) => UserInterest.findOrCreate({
+          where: {
+            userId: id,
+            categoryId: interest.id,
+          },
+        }));
     }
+    res.status(201).json(sanitizedUser);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
@@ -212,7 +248,10 @@ app.get('/users', loggedIn, async (req, res) => {
 //  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
-    const { userId } = req.session;
+    const {
+      userId,
+    } = req.session;
+
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -228,15 +267,21 @@ app.patch('/users', async (req, res) => {
 app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
   try {
     //  First get the buffered image from the req object
-    const { buffer } = req.file;
+    const {
+      buffer,
+    } = req.file;
     const pic = buffer.toString('base64');
     //  Upload the base64 encoded image and receive a data object
     const imgurData = await imgur.uploadBase64(pic);
-    const { id: picId } = imgurData.data;
+    const {
+      id: picId,
+    } = imgurData.data;
     const userId = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(userId);
     //  Update the user with the new url shortcode
-    const updatedUser = await user.update({ pic: picId });
+    const updatedUser = await user.update({
+      pic: picId,
+    });
     const sanitizedUser = sanitizeUser(updatedUser);
     res.status(201).json(sanitizedUser);
   } catch (err) {
@@ -246,7 +291,11 @@ app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
 });
 
 //  This retrieves the top-level categories ie Restaurants
-app.get('/categories', (req, res) => Category.findAll({ where: { parentId: null } })
+app.get('/categories', (req, res) => Category.findAll({
+  where: {
+    parentId: null,
+  },
+})
   .then((categories) => {
     res.status(200).send(categories);
   })
@@ -259,8 +308,14 @@ app.get('/categories', (req, res) => Category.findAll({ where: { parentId: null 
 //    If we are looking in Restaurants, this retrieves
 //    vietnamese, new american, hot dog, etc
 app.get('/categories/:id', (req, res) => {
-  const { id: parentId } = req.params;
-  return Category.findAll({ where: { parentId } })
+  const {
+    id: parentId,
+  } = req.params;
+  return Category.findAll({
+    where: {
+      parentId,
+    },
+  })
     .then((interests) => {
       res.status(200).send(interests);
     })
@@ -275,12 +330,14 @@ app.get('/categories/:id', (req, res) => {
 //  We set the default status to null
 //    If one person accepts, it becomes pending
 //    If both accept we find a date!
-app.post('/matches/', async (req, res) => {
+app.post('/matches', async (req, res) => {
   try {
     //  First we get the user information
-    const { userId } = req.session;
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(userId);
-    const interests = await UserInterest.findAll({ userId });
+    const interests = await UserInterest.findAll({
+      userId,
+    });
     const interestsIds = interests.map(interest => interest.categoryId);
     //  Here we use a custom method to find suitable matches
     const matches = await user.findMatches(interestsIds, user);
@@ -300,7 +357,7 @@ app.post('/matches/', async (req, res) => {
           res.status(201).send(sanitizedMatch);
         });
     } else {
-      res.status(404).send({});
+      res.status(400).send({});
     }
   } catch (err) {
     console.error(`Failed to find a match: ${err}`);
@@ -309,69 +366,96 @@ app.post('/matches/', async (req, res) => {
 });
 
 //  This retrieves outgoing and incoming requests
-app.get('/matches/:bound', (req, res) => {
-  const { bound } = req.params;
-  const { userId, status } = req.body;
-  if (bound === 'outbound') {
-    //  Semantically, user1 requested the date
-    //  a null status means that no one has acted on it
-    return Couple.findAll({
-      where: {
-        user1Id: userId,
-        status: {
-          [Op.or]: [status, null],
+app.get('/matches/:bound', async (req, res) => {
+  try {
+    const {
+      bound,
+    } = req.params;
+    const {
+      status,
+    } = req.body;
+    const userId = Number(paramSplitter(req.session.userId)[1]);
+    if (bound === 'outbound') {
+      //  Semantically, user1 requested the date
+      //  a null status means that no one has acted on it
+      const couples = await Couple.findAll({
+        where: {
+          user1Id: userId,
+          status: {
+            [Op.or]: [status, null],
+          },
         },
-      },
-    })
-      .then(result => res.status(200).send(result))
-      .catch((err) => {
-        console.error(`error: ${err}`);
-        res.send(500).send(err);
+        attributes: ['id', 'user2Id'],
       });
-  }
-  if (bound === 'inbound') {
-    //  user2 was requested a date
-    //  they cannot see requests they weren't offered
-    //    ie no access to a null status
-    return Couple.findAll({
-      where: {
-        user2Id: userId,
-        status,
-      },
-    })
-      .then(result => res.status(200).send(result))
-      .catch((err) => {
-        console.error(`error: ${err}`);
-        res.send(500).send(err);
+      res.status(200).json(couples);
+    }
+    if (bound === 'inbound') {
+      //  user2 was requested a date
+      //  they cannot see requests they weren't offered
+      //    ie no access to a null status
+      const couples = await Couple.findAll({
+        where: {
+          user2Id: userId,
+          status,
+        },
+        attributes: ['id', 'user1Id'],
       });
+      res.status(200).json(couples);
+    }
+  } catch (err) {
+    console.error(`Failed to get matches: ${err}`);
+    res.status(500).json(err);
   }
 });
+
 
 //  this updates a couple status
 //  if accepted we need to create a new date!
 app.patch('/matches', async (req, res) => {
   try {
-    const { status, coupleId } = req.body;
+    const {
+      status,
+      coupleId,
+    } = req.body;
     const couple = await Couple.findByPk(coupleId);
-    const { status: oldStatus } = couple;
+    const {
+      status: oldStatus,
+    } = couple;
     //  if the status is rejected then the match is forever hidden
     if (status === 'rejected') {
-      const updatedCouple = await couple.update({ status });
+      const updatedCouple = await couple.update({
+        status,
+      });
       res.status(201).json(updatedCouple);
       //  If the oldStatus was null, then only one person has now accepted
       //  This is what we may think of as requesting a date
     } else if (status === 'accepted' && oldStatus === null) {
-      const updatedCouple = await couple.update({ status: 'pending' });
+      const updatedCouple = await couple.update({
+        status: 'pending',
+      });
       res.status(201).json(updatedCouple);
       //  If the oldStatus was pending, we have a date!
     } else if (status === 'accepted' && oldStatus === 'pending') {
-      const updatedCouple = await couple.update({ status });
+      const updatedCouple = await couple.update({
+        status,
+      });
       //  This is a custom function to find a suitable date spot
       const spot = await updatedCouple.findSpot(updatedCouple);
-      const { id: apiId } = spot;
+      const {
+        id: apiId,
+      } = spot;
       //  Only create a new spot in the database if it is new
-      const { id: spotId } = await Spot.findOrCreate({ apiId });
-      const { id: dateId } = await Date.create({ coupleId, spotId });
+      const {
+        id: spotId,
+      } = await Spot.findOrCreate({
+        apiId,
+      });
+      const {
+        id: dateId,
+      } = await Date.create({
+        coupleId,
+        spotId,
+      });
       res.status(201).json(dateId);
     }
   } catch (err) {
@@ -386,9 +470,14 @@ app.patch('/matches', async (req, res) => {
 app.get('/hotspots', async (req, res) => {
   try {
     const userId = Number(paramSplitter(req.session.userId)[1]);
-    const { latitude, longitude } = await User.findByPk(userId);
+    const {
+      latitude,
+      longitude,
+    } = await User.findByPk(userId);
     const categories = await UserInterest.findAll({
-      where: { userId },
+      where: {
+        userId,
+      },
       attributes: ['alias'],
     });
     //  This helper does the dirty work
@@ -404,16 +493,26 @@ app.get('/hotspots', async (req, res) => {
 app.post('/hotspots', async (req, res) => {
   try {
     //  Here we need to find matching categories between the spot and user
-    const { apiId } = req.body;
-    const { userId } = req.session;
-    const { spotId } = await Spot.findOrCreate({ apiId });
+    const {
+      apiId,
+    } = req.body;
+    const {
+      spotId,
+    } = await Spot.findOrCreate({
+      apiId,
+    });
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     //  This gets the users interests
     const categories = await UserInterest.findAll({
-      where: { userId },
+      where: {
+        userId,
+      },
       attributes: ['categoryId'],
     });
     //  this gets the spot categories using the aliases and isolates ids
-    const { categories: spotCategories } = await fetchSpot(apiId);
+    const {
+      categories: spotCategories,
+    } = await fetchSpot(apiId);
     const spotAliases = spotCategories.map(category => category.alias);
     const spotCategoryIds = await Category.findAll({
       where: {
@@ -440,8 +539,13 @@ app.post('/hotspots', async (req, res) => {
       user2: matchId,
       status: 'pending',
     };
-    const { coupleId } = await Couple.create(coupleOptions);
-    const date = await Date.create({ coupleId, spotId });
+    const {
+      coupleId,
+    } = await Couple.create(coupleOptions);
+    const date = await Date.create({
+      coupleId,
+      spotId,
+    });
     res.status(201).json(date);
   } catch (err) {
     console.error(`Failed to insert new spot: ${err}`);
@@ -452,13 +556,16 @@ app.post('/hotspots', async (req, res) => {
 //  This will fetch all dates associated with a user
 app.get('/dates', async (req, res) => {
   try {
-    const { userId } = req.session;
-
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     //  First find all couple ids with status 'accepted'
     const couples = await Couple.findAll({
       where: {
         status: 'accepted',
-        [Op.or]: [{ user1Id: userId }, { user2Id: userId }],
+        [Op.or]: [{
+          user1Id: userId,
+        }, {
+          user2Id: userId,
+        }],
       },
     });
 
@@ -476,13 +583,25 @@ app.get('/dates', async (req, res) => {
     //  We need the restaurant info and the partner
     const datesInfo = await dates.map(async (date) => {
       const dateInfo = {};
-      const { id: dateId, spotId, coupleId } = date;
-      const { apiId } = await Spot.findOne({ id: spotId });
+      const {
+        id: dateId,
+        spotId,
+        coupleId,
+      } = date;
+      const {
+        apiId,
+      } = await Spot.findOne({
+        id: spotId,
+      });
       dateInfo.dateId = dateId;
       dateInfo.spot = await fetchSpot(apiId);
       //  This is awful time complexity, should be improved
       couples.forEach(async (couple) => {
-        const { id, user1Id, user2Id } = couple;
+        const {
+          id,
+          user1Id,
+          user2Id,
+        } = couple;
         if (id === coupleId) {
           if (user1Id !== userId) {
             const partner = await User.findByPk(user1Id);
@@ -507,8 +626,12 @@ app.get('/dates', async (req, res) => {
 //  This removes a date from the records
 app.delete('/dates/:dateId', async (req, res) => {
   try {
-    const { dateId } = req.params;
-    const result = await Date.destroy({ id: dateId });
+    const {
+      dateId,
+    } = req.params;
+    const result = await Date.destroy({
+      id: dateId,
+    });
     res.status(201).json(result);
   } catch (err) {
     console.error(`Failed to delete date: ${dateId}`);
