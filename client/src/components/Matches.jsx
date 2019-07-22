@@ -39,7 +39,7 @@ const Matches = ({ user }) => {
         console.log(couple);
         return axios.patch('/matches', {
           status: "rejected",
-          coupleId,
+          coupleId: couple.id,
         })
       }).then(() => {
         console.log('Rejected');
