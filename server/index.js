@@ -358,9 +358,14 @@ app.get('/matches/:bound', async (req, res) => {
             [Op.or]: [status, null],
           },
         },
-        attributes: ['id', 'user2Id'],
       });
-      res.status(200).json(couples);
+      const parsedCouples = couples.map((couple) => {
+        return {
+          coupleId: couple.id,
+          partnerId: couple.user2Id,
+        };
+      });
+      res.status(200).json(parsedCouples);
     }
     if (bound === 'inbound') {
       //  user2 was requested a date
@@ -371,9 +376,14 @@ app.get('/matches/:bound', async (req, res) => {
           user2Id: userId,
           status,
         },
-        attributes: ['id', 'user1Id'],
       });
-      res.status(200).json(couples);
+      const parsedCouples = couples.map((couple) => {
+        return {
+          coupleId: couple.id,
+          partnerId: couple.user1Id,
+        };
+      });
+      res.status(200).json(parsedCouples);
     }
   } catch (err) {
     console.error(`Failed to get matches: ${err}`);
