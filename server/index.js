@@ -196,7 +196,7 @@ app.patch('/signup', async (req, res) => {
 //  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
   try {
-    const id = Number(paramSplitter(req.session.userId)[1]);
+    const id = req.session.userId;
     const user = await User.findByPk(id);
     const sanitizedUser = sanitizeUser(user);
     res.status(200).json(sanitizedUser);
@@ -209,7 +209,8 @@ app.get('/users', loggedIn, async (req, res) => {
 //  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
+
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
