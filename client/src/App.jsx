@@ -47,9 +47,9 @@ class App extends React.Component {
           // By using the 'maximumAge' option above, the position
           // object is guaranteed to be at most 10 minutes old.
           // could send timestamp too!
-          const { longitude, latitude } = position.coords;
-          const data = await axios.patch('/users', { longitude, latitude })
           try {
+            const { longitude, latitude } = position.coords;
+            const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
           } catch(err) {
             console.warn(err);
