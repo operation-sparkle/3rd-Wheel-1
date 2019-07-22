@@ -162,8 +162,8 @@ app.post('/signup', async (req, res) => {
 });
 
 //  This updates user information from the profile page
-app.patch('/signup/:id', async (req, res) => {
-  const { id } = req.params;
+app.patch('/signup', async (req, res) => {
+  const id = Number(paramSplitter(req.session.userId)[1]);
   const {
     name, pic, age, preference, bio, interests,
   } = req.body;
@@ -225,7 +225,7 @@ app.patch('/users', async (req, res) => {
 });
 
 //  This edits the user picture
-app.patch('/users/pic/:userId', upload.single('pic'), async (req, res) => {
+app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
   try {
     //  First get the buffered image from the req object
     const { buffer } = req.file;
@@ -233,7 +233,7 @@ app.patch('/users/pic/:userId', upload.single('pic'), async (req, res) => {
     //  Upload the base64 encoded image and receive a data object
     const imgurData = await imgur.uploadBase64(pic);
     const { id: picId } = imgurData.data;
-    const { userId } = req.params;
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(userId);
     //  Update the user with the new url shortcode
     const updatedUser = await user.update({ pic: picId });
@@ -278,8 +278,7 @@ app.get('/categories/:id', (req, res) => {
 app.post('/matches/:userId', async (req, res) => {
   try {
     //  First we get the user information
-    let { userId } = req.params;
-    userId = Number(paramSplitter(userId)[1]);
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
     const interestsIds = interests.map(interest => interest.categoryId);
@@ -380,9 +379,9 @@ app.patch('/matches', async (req, res) => {
 //  This function will find 5 potential date spots
 //  This only uses api calls and does not need to store in the database
 //  If the user clicks one of them, we will find them a date there!
-app.get('/hotspots/:userId', async (req, res) => {
+app.get('/hotspots', async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const { latitude, longitude } = await User.findByPk(userId);
     const categories = await UserInterest.findAll({
       where: { userId },
