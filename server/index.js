@@ -226,11 +226,9 @@ app.get('/users', loggedIn, async (req, res) => {
 });
 
 //  This is specifically built for editing location information
-app.patch('/users', async (req, res) => {
+app.patch('/users', loggedIn, async (req, res) => {
   try {
     const { userId } = req.session;
-
-    console.log(req.body);
     
     const options = req.body;
     const user = await User.findByPk(userId);

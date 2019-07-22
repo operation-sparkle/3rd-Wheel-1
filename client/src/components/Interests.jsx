@@ -60,27 +60,34 @@ const UserInfo = () => {
   };
 
   useEffect(() => {
-    async function fetch() {
-      const result = await axios.get(`/categories/${genre1}`);
-      modSubArr1(result.data);
+    if (genre1) {
+      async function fetch() {
+        const result = await axios.get(`/categories/${genre1}`);
+        modSubArr1(result.data);
+      }
+      fetch();
     }
-    fetch();
   }, [genre1])
 
   useEffect(() => {
-    async function fetch() {
-      const result = await axios.get(`/categories/${genre2}`);
-      modSubArr2(result.data);
+    if (genre1) {
+      async function fetch() {
+        const result = await axios.get(`/categories/${genre2}`);
+        modSubArr2(result.data);
+      }
+      fetch();
     }
-    fetch();
+
   }, [genre2])
 
   useEffect(() => {
-    async function fetch() {
-      const result = await axios.get(`/categories/${genre3}`);
-      modSubArr3(result.data);
+    if (genre1) {
+      async function fetch() {
+        const result = await axios.get(`/categories/${genre3}`);
+        modSubArr3(result.data);
+      }
+      fetch();
     }
-    fetch();
   }, [genre3])
 
   useEffect(() => {
@@ -111,7 +118,7 @@ const UserInfo = () => {
           <Form.Group as={Col} controlId="formGender"> 
             <Form.Label>Gender</Form.Label>
             <Form.Control as="select" onChange={(e) => handleChange(e, editGender)}>
-              <option value={null}>...   </option>
+              <option value={''}>...   </option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Non Binary">NonBinary</option>
@@ -121,7 +128,7 @@ const UserInfo = () => {
           <Form.Group as={Col} controlId="formPerfer"> 
             <Form.Label>Preference</Form.Label>
             <Form.Control as="select" onChange={(e) => handleChange(e, editPreference)}>
-              <option value={null}>...   </option>
+              <option value={''}>...   </option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
               <option value="Non Binary">NonBinary</option>
@@ -164,7 +171,7 @@ const UserInfo = () => {
               genre1 ? 
               subArr1.map(e => {
                 return (
-                  <option key={e.id} value={e.name}  >
+                  <option key={e.id} value={e.id}  >
                     {e.name}
                   </option>
                 );
@@ -201,7 +208,7 @@ const UserInfo = () => {
               :
               subArr2.map(e => {
                 return (
-                  <option key={e.id} value={e.name}  >
+                  <option key={e.id} value={e.id}  >
                     {e.name}
                   </option>
                 );
@@ -236,7 +243,7 @@ const UserInfo = () => {
               :
               subArr3.map(e => {
                 return (
-                  <option key={e.id} value={e.name} >
+                  <option key={e.id} value={e.id} >
                     {e.name}
                   </option>
                 );
