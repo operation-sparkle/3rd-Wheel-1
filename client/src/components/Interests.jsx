@@ -23,8 +23,7 @@ const UserInfo = ({ id }) => {
 
   const [ gender, editGender ] = useState(null);
   const [ preference, editPreference ] = useState(null);
-  
-  const [ bio, addBio ] = useState('')
+  const [ bio, editBio ] = useState('');
   // const [ array, affectArray ] = useState([]);
 
   const handleChangeG = (event, func) => {
@@ -33,7 +32,7 @@ const UserInfo = ({ id }) => {
       return e.name === event.target.value;
     })
 
-    console.log('e', arr, arr[0].id);
+    // console.log('e', arr, arr[0].id);
 
     func(arr[0].id);
   };
