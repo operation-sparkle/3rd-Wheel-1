@@ -34,14 +34,18 @@ const Matches = ({ user }) => {
   }
 
   function reject() {
-    axios.patch('/matches', {
-      status: "rejected",
-      coupleId,
-    }).then(() => {
-      console.log('Rejected');
-    }).catch((err) => {
-      console.error(`Error while rejecting: ${err}`);
-    });
+    axios.post('/matches', { userId: user.id })
+      .then(couple => {
+        console.log(couple);
+        return axios.patch('/matches', {
+          status: "rejected",
+          coupleId,
+        })
+      }).then(() => {
+        console.log('Rejected');
+      }).catch((err) => {
+        console.error(`Error while rejecting: ${err}`);
+      });
   }
 
   function newMatch(users) {
