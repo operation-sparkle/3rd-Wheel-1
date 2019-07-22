@@ -16,8 +16,8 @@ const HotSpots = (props) => {
     async function fetch () {
       try {
         const result = await Axios.get('/hotspots');
+        console.log(result);
         const spots = result.data;
-        console.log(spots);
         assignSpots(spots);
       } catch (err) {
         console.error(err);
@@ -34,6 +34,10 @@ const HotSpots = (props) => {
         hotSpots.map(locale => (
           <Figure>
 
+            <Figure.Caption>
+              {locale.name}
+            </Figure.Caption>
+
             <Figure.Image 
             width="540px"
             height="400px"
@@ -41,9 +45,7 @@ const HotSpots = (props) => {
             alt="540x400"
             />
 
-            <Figure.Caption>
-              {locale.info}
-            </Figure.Caption>
+            
 
           </Figure>
         ))
