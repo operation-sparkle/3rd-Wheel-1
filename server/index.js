@@ -176,12 +176,13 @@ app.post('/signup', async (req, res) => {
 //  This updates user information from the profile page
 app.patch('/signup', async (req, res) => {
   const { userId: id } = req.session;
+  console.log(req.body);
   const {
-    age, preference, bio, interests,
+    age, gender, preference, bio, interests,
   } = req.body;
   //  Note that interests are split off to be used in a join table
   const options = {
-    age, preference, bio,
+    age, gender, preference, bio,
   };
   try {
     const user = await User.findOne({
