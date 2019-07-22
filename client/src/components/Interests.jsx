@@ -23,8 +23,7 @@ const UserInfo = ({ id }) => {
 
   const [ gender, editGender ] = useState(null);
   const [ preference, editPreference ] = useState(null);
-  
-  const [ bio, addBio ] = useState('')
+  const [ bio, editBio ] = useState('');
   // const [ array, affectArray ] = useState([]);
 
   const handleChangeG = (event, func) => {
@@ -33,21 +32,26 @@ const UserInfo = ({ id }) => {
       return e.name === event.target.value;
     })
 
-    console.log('e', arr, arr[0].id);
+    // console.log('e', arr, arr[0].id);
 
     func(arr[0].id);
   };
   
   const handleChangeS = (event, func) => {
     event.preventDefault();
-    console.log('etv', event.target.value);
+    // console.log('etv', event.target.value);
     func(event.target.value);
   };
+
+  const handleChange = (event, func) => {
+    event.preventDefault();
+    func(event.target.value);
+  }
 
   // post user info to signup
   const interestSubmit = (data) => {
     // dont allow re-render until complete!
-    // event.preventDefault();
+    event.preventDefault();
 
     console.log(data);
 
@@ -106,13 +110,13 @@ const UserInfo = ({ id }) => {
 
   return (
     <div>
-      <Form onSubmit={interestSubmit}>
+      <Form onSubmit={interestSubmit()}>
 
         <Form.Row>
 
           <Form.Group as={Col} controlId="formGender"> 
             <Form.Label>Gender</Form.Label>
-            <Form.Control as="select" >
+            <Form.Control as="select" onChange={(e) => handleChange(e, editGender)}>
               <option value={null}>...   </option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -122,7 +126,7 @@ const UserInfo = ({ id }) => {
 
           <Form.Group as={Col} controlId="formPerfer"> 
             <Form.Label>Preference</Form.Label>
-            <Form.Control as="select" >
+            <Form.Control as="select" onChange={(e) => handleChange(e, editPreference)}>
               <option value={null}>...   </option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -134,9 +138,7 @@ const UserInfo = ({ id }) => {
 
         <Form.Group controlId="formGender"> 
           <Form.Label>Bio</Form.Label>
-          <Form.Control type="text" placeholder="Make it count!" >
-
-          </Form.Control>
+          <Form.Control type="text" placeholder="Make it count!" onChange={(e) => handleChange(e, editBio)}></Form.Control>
         </Form.Group>
 
         <Form.Group controlId="genre" className="1" >
@@ -237,10 +239,10 @@ const UserInfo = ({ id }) => {
             }
           </Form.Control>
         </Form.Group>
+        <Button /* variant="success" size="lg" */ block type="submit"> 
+          Submit 
+        </Button>
       </Form>
-      <Button /* variant="success" size="lg" */ block type="submit"> 
-        Submit 
-      </Button>
     </div>
   );  
 }
