@@ -60,33 +60,34 @@ const UserInfo = () => {
   };
 
   useEffect(() => {
-    async function fetch() {
-      const result = await axios.get(`/categories/${genre1}`);
-      modSubArr1(result.data);
+    if (genre1) {
+      async function fetch() {
+        const result = await axios.get(`/categories/${genre1}`);
+        modSubArr1(result.data);
+      }
+      fetch();
     }
-
-    fetch();
-
   }, [genre1])
 
   useEffect(() => {
-    async function fetch() {
-      const result = await axios.get(`/categories/${genre2}`);
-      modSubArr2(result.data);
+    if (genre1) {
+      async function fetch() {
+        const result = await axios.get(`/categories/${genre2}`);
+        modSubArr2(result.data);
+      }
+      fetch();
     }
-
-    fetch();
 
   }, [genre2])
 
   useEffect(() => {
-    async function fetch() {
-      const result = await axios.get(`/categories/${genre3}`);
-      modSubArr3(result.data);
+    if (genre1) {
+      async function fetch() {
+        const result = await axios.get(`/categories/${genre3}`);
+        modSubArr3(result.data);
+      }
+      fetch();
     }
-
-    fetch();
-
   }, [genre3])
 
   useEffect(() => {
