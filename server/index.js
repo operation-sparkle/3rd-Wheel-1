@@ -177,7 +177,11 @@ app.patch('/signup', async (req, res) => {
     const sanitizedUser = sanitizeUser(updatedUser);
     if (interests) {
       interests.map(async (interest) => {
-        return UserInterest.findOrCreate({ where: { userId: id, categoryId: interest.id } });
+        return UserInterest.findOrCreate({
+          where: {
+            userId: id, categoryId: interest.id,
+          },
+        });
       });
     }
     res.status(201).json(sanitizedUser);
