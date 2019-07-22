@@ -14,13 +14,16 @@ const HotSpots = (props) => {
   
   useEffect(() => {
     async function fetch () {
-      const spots = await Axios.get(`/hotspots/userId=${props.userId}`)
       try {
+        const result = await Axios.get('/hotspots');
+        console.log(result);
+        const spots = result.data;
         assignSpots(spots);
       } catch (err) {
         console.error(err);
       }
     }
+    fetch();
   }, [])
 
 
@@ -31,16 +34,18 @@ const HotSpots = (props) => {
         hotSpots.map(locale => (
           <Figure>
 
+            <Figure.Caption>
+              {locale.name}
+            </Figure.Caption>
+
             <Figure.Image 
             width="540px"
             height="400px"
-            src={locale.image}
+            src={locale.image_url}
             alt="540x400"
             />
 
-            <Figure.Caption>
-              {locale.info}
-            </Figure.Caption>
+            
 
           </Figure>
         ))
