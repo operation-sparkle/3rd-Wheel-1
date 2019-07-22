@@ -64,7 +64,11 @@ const UserInfo = () => {
       const result = await axios.get(`/categories/${genre1}`);
       modSubArr1(result.data);
     }
-    fetch();
+
+    if (genre1){
+      fetch();
+    }
+
   }, [genre1])
 
   useEffect(() => {
@@ -72,7 +76,11 @@ const UserInfo = () => {
       const result = await axios.get(`/categories/${genre2}`);
       modSubArr2(result.data);
     }
-    fetch();
+    
+    if (genre2){
+      fetch();
+    }
+
   }, [genre2])
 
   useEffect(() => {
@@ -80,7 +88,11 @@ const UserInfo = () => {
       const result = await axios.get(`/categories/${genre3}`);
       modSubArr3(result.data);
     }
-    fetch();
+
+    if (genre3){
+      fetch();
+    }
+
   }, [genre3])
 
   useEffect(() => {

@@ -43,19 +43,22 @@ class App extends React.Component {
       if (typeof response.data === 'object'){
         this.openGate(response);
 
-        const successCallback = (position) => {
+        const successCallback = async (position) => {
           // By using the 'maximumAge' option above, the position
           // object is guaranteed to be at most 10 minutes old.
           // could send timestamp too!
           const { longitude, latitude } = position.coords;
-          axios.patch('/users', { longitude, latitude })
-            .then(data => this.setUser(data))              
-            .catch(err => console.warn(err));
+          const data = await axios.patch('/users', { longitude, latitude })
+          try {
+            this.setUser(data);
+          } catch(err) {
+            console.warn(err);
+          }         
         }
         
-        const errorCallback = () => {
+        const errorCallback = async () => {
           // Update a div element with error.message.
-          this.showAuthFail();
+          return await this.showAuthFail();
         }
 
         return navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 })
