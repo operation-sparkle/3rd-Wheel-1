@@ -9,19 +9,10 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const {
-  User,
-  Date,
-  UserInterest,
-  Couple,
-  Category,
-  Spot,
+  User, Date, UserInterest, Couple, Category, Spot,
 } = require('../database/models/index.js');
 const {
-  fetchRestaurants,
-  fetchSpot,
-  selectMatch,
-  sanitizeUser,
-  paramSplitter,
+  fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
 } = require('./helpers/index.js');
 
 const app = express();
@@ -318,7 +309,7 @@ app.get('/categories/:id', (req, res) => {
 app.post('/matches', async (req, res) => {
   try {
     //  First we get the user information
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({
       userId,
