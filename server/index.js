@@ -261,7 +261,7 @@ app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
     const sanitizedUser = sanitizeUser(updatedUser);
     res.status(201).json(sanitizedUser);
   } catch (err) {
-    console.error(`Failed to patch user pic: ${err}`);
+    console.error('Failed to patch user pic:', err );
     res.send(500).json(err);
   }
 });

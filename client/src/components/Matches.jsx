@@ -14,10 +14,10 @@ const Matches = (props) => {
   const {user} = props;
   const [coupleId, newCouple] = useState(null);
 
-  function handleChange() {
-    changeIndex(index++);
-    setDirection(index++);
-  }
+  // function handleChange() {
+  //   changeIndex(index++);
+  //   setDirection(index++);
+  // }
 
   function accept() {
     Axios.patch('/matches', {
@@ -48,10 +48,8 @@ const Matches = (props) => {
           <Card>
             <CardImg width="70%" height="60%" src={ user.image || "https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" } />
             <Card.Title>{user.name || "Error"}</Card.Title>
-            <Card.Text>
-              <div>Age: {user.age || "Error"}</div>
-              <div>Interest: {`${user.interest1, user.interest2, user.interest3}` || "An error has ocurred."}</div>
-            </Card.Text>
+            <Card.Text> Age: {user.age || "Error"}</Card.Text>
+            <Card.Text> Interest: {`${user.interest1, user.interest2, user.interest3}` || "An error has ocurred."}</Card.Text>
           </Card>
         </CarouselItem>
       )
@@ -70,7 +68,7 @@ const Matches = (props) => {
 
   return (
     <div>
-    <Carousel controls={false} activeIndex={index} dir="left">
+    <Carousel controls={false} /* activeIndex={index} */ dir="left">
         <CarouselItem>
           <Card>
             <CardImg width="70%" height="60%" src={"https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg"} />
