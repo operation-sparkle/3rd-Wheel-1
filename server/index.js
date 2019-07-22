@@ -358,9 +358,14 @@ app.get('/matches/:bound', async (req, res) => {
             [Op.or]: [status, null],
           },
         },
-        attributes: ['id', 'user2Id'],
       });
-      res.status(200).json(couples);
+      const parsedCouples = couples.map((couple) => {
+        return {
+          coupleId: couple.id,
+          partnerId: couple.user2Id,
+        };
+      });
+      res.status(200).json(parsedCouples);
     }
     if (bound === 'inbound') {
       //  user2 was requested a date
@@ -371,9 +376,14 @@ app.get('/matches/:bound', async (req, res) => {
           user2Id: userId,
           status,
         },
-        attributes: ['id', 'user1Id'],
       });
-      res.status(200).json(couples);
+      const parsedCouples = couples.map((couple) => {
+        return {
+          coupleId: couple.id,
+          partnerId: couple.user1Id,
+        };
+      });
+      res.status(200).json(parsedCouples);
     }
   } catch (err) {
     console.error(`Failed to get matches: ${err}`);
@@ -460,25 +470,23 @@ app.post('/hotspots', async (req, res) => {
     const { spotId } = await Spot.findOrCreate({ apiId });
     const { userId } = req.session;
     //  This gets the users interests
-    const categories = await UserInterest.findAll({
+    const userInterests = await UserInterest.findAll({
       where: {
         userId,
       },
-      attributes: ['categoryId'],
     });
+    const categories = userInterests.map(userInt => userInt.categoryId);
     //  this gets the spot categories using the aliases and isolates ids
-    const {
-      categories: spotCategories,
-    } = await fetchSpot(apiId);
+    const { categories: spotCategories } = await fetchSpot(apiId);
     const spotAliases = spotCategories.map(category => category.alias);
-    const spotCategoryIds = await Category.findAll({
+    const spotCategories = await Category.findAll({
       where: {
         alias: {
           [Op.or]: spotAliases,
         },
       },
-      attributes: ['categoryId'],
     });
+    const spotCategoryIds = spotCategories.map(spotCat => spotCat.categoryId);
     //  Here we isolate only the ones that both arrays contain
     const matchedCategories = categories.reduce((matches, categoryId) => {
       if (spotCategoryIds.includes(categoryId)) {
@@ -543,7 +551,7 @@ app.get('/dates', async (req, res) => {
         spotId,
         coupleId,
       } = date;
-      const { apiId,} = await Spot.findOne({
+      const { apiId } = await Spot.findOne({
         id: spotId,
       });
       dateInfo.dateId = dateId;
