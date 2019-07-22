@@ -212,8 +212,7 @@ app.get('/users', loggedIn, async (req, res) => {
 //  This is specifically built for editing location information
 app.patch('/users', async (req, res) => {
   try {
-    let { userId } = req.session;
-    userId = Number(paramSplitter(userId)[1]);
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -308,7 +307,8 @@ app.post('/matches', async (req, res) => {
 //  This retrieves outgoing and incoming requests
 app.get('/matches/:bound', (req, res) => {
   const { bound } = req.params;
-  const { userId, status } = req.body;
+  const { status } = req.body;
+  const userId = Number(paramSplitter(req.session.userId)[1]);
   if (bound === 'outbound') {
     //  Semantically, user1 requested the date
     //  a null status means that no one has acted on it
@@ -403,9 +403,8 @@ app.post('/hotspots', async (req, res) => {
   try {
     //  Here we need to find matching categories between the spot and user
     const { apiId } = req.body;
-    let { userId } = req.session;
-    userId = Number(paramSplitter(userId)[1]);
     const { spotId } = await Spot.findOrCreate({ apiId });
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     //  This gets the users interests
     const categories = await UserInterest.findAll({
       where: { userId },
@@ -451,9 +450,7 @@ app.post('/hotspots', async (req, res) => {
 //  This will fetch all dates associated with a user
 app.get('/dates', async (req, res) => {
   try {
-    let { userId } = req.session;
-    userId = Number(paramSplitter(userId)[1]);
-
+    const userId = Number(paramSplitter(req.session.userId)[1]);
     //  First find all couple ids with status 'accepted'
     const couples = await Couple.findAll({
       where: {
