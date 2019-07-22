@@ -18,6 +18,7 @@ const {
 const app = express();
 const upload = multer();
 imgur.setClientId(process.env.ACCESS_TOKEN);
+imgur.setAPIUrl('https://api.imgur.com/3/');
 
 /*  Here is the authentication
  *  We're using passport which requires cookies and sessions
