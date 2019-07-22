@@ -13,7 +13,13 @@ const populateCategories = async () => {
       name: 'Restaurants',
       alias: 'restaurants',
     };
-    const categoryArray = await Category.findOrCreate({ where: categoryOptions });
+    const options = {
+      name: 'movie',
+      alias: 'movie',
+    };
+    const categoryArray = await Category.findOrCreate({ where: categoryOptions });   
+    const re = await Category.findOrCreate({ where: options });
+
     const { id: categoryId } = categoryArray[0];
     const interests = await restCategories();
     interests.forEach((interest) => {
@@ -30,7 +36,7 @@ const populateCategories = async () => {
 };
 
 //  Feel free to comment this call out after the first run
-populateCategories();
+// populateCategories();
 
 User.prototype.validPassword = async (password) => {
   try {

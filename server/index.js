@@ -161,11 +161,11 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup/:id', async (req, res) => {
   const { id } = req.params;
   const {
-    name, pic, age, preference, bio, interests,
+    age, preference, bio, interests,
   } = req.body;
   //  Note that interests are split off to be used in a join table
   const options = {
-    name, pic, age, preference, bio,
+    age, preference, bio,
   };
   try {
     const user = await User.findOne({ where: { id } });
