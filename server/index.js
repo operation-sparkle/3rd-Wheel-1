@@ -227,13 +227,15 @@ app.patch('/users', async (req, res) => {
 //  This edits the user picture
 app.patch('/users/pic/:userId', upload.single('pic'), async (req, res) => {
   try {
+    //  First get the buffered image from the req object
     const { buffer } = req.file;
     const pic = buffer.toString('base64');
+    //  Upload the base64 encoded image and receive a data object
     const imgurData = await imgur.uploadBase64(pic);
     const { id: picId } = imgurData.data;
     const { userId } = req.params;
     const user = await User.findByPk(userId);
-    //  Here we use a custom method that uploads to imgur and updates the user
+    //  Update the user with the new url shortcode
     const updatedUser = await user.update({ pic: picId });
     const sanitizedUser = sanitizeUser(updatedUser);
     res.status(201).json(sanitizedUser);

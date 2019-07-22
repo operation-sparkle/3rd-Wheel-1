@@ -2,7 +2,7 @@ const {
   User, Date, UserInterest, Couple, Category, Spot,
 } = require('../sequelize');
 const {
-  restCategories, fetchRestaurant, haversineDistance, topInterest, postPic,
+  restCategories, fetchRestaurant, haversineDistance, topInterest,
 } = require('../helpers/db-helpers.js');
 
 //  Use this function to populate the restaurant sub-categories.
@@ -37,18 +37,6 @@ User.prototype.validPassword = async (password) => {
     return bcrypt.compare(password, this.password);
   } catch (err) {
     return console.error(err);
-  }
-};
-
-//  This method will post the picture to imgur and return a urlId
-User.prototype.processPic = async (user, pic) => {
-  try {
-    const picId = await postPic(pic);
-    const updatedUser = await user.update({ pic: picId });
-    return updatedUser;
-  } catch (err) {
-    console.error(`Failed to process pic: ${err}`);
-    return (err);
   }
 };
 
