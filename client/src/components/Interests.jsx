@@ -171,7 +171,7 @@ const UserInfo = () => {
               genre1 ? 
               subArr1.map(e => {
                 return (
-                  <option key={e.id} value={e.id}  >
+                  <option key={e.id} value={e.id} >
                     {e.name}
                   </option>
                 );
