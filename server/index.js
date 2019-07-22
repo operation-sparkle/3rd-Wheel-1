@@ -177,7 +177,7 @@ app.post('/signup', async (req, res) => {
 app.patch('/signup', async (req, res) => {
   const { userId: id } = req.session;
   const {
-    age, gender, preference, bio, interests,
+    age, gender, preference, bio, interests: interestIds,
   } = req.body;
   //  Note that interests are split off to be used in a join table
   const options = {
@@ -195,11 +195,11 @@ app.patch('/signup', async (req, res) => {
       },
     });
     const sanitizedUser = sanitizeUser(updatedUser);
-    if (interests) {
-      interests.map(async interest => UserInterest.findOrCreate({
+    if (interestIds) {
+      interestIds.map(async interestId => UserInterest.findOrCreate({
         where: {
           userId: id,
-          categoryId: interest.id,
+          categoryId: interestId,
         },
       }));
     }
