@@ -303,42 +303,41 @@ app.post('/matches', async (req, res) => {
 });
 
 //  This retrieves outgoing and incoming requests
-app.get('/matches/:bound', (req, res) => {
-  const { bound } = req.params;
-  const { status } = req.body;
-  const userId = Number(paramSplitter(req.session.userId)[1]);
-  if (bound === 'outbound') {
-    //  Semantically, user1 requested the date
-    //  a null status means that no one has acted on it
-    return Couple.findAll({
-      where: {
-        user1Id: userId,
-        status: {
-          [Op.or]: [status, null],
+app.get('/matches/:bound', async (req, res) => {
+  try {
+    const { bound } = req.params;
+    const { status } = req.body;
+    const userId = Number(paramSplitter(req.session.userId)[1]);
+    if (bound === 'outbound') {
+      //  Semantically, user1 requested the date
+      //  a null status means that no one has acted on it
+      const couples = await Couple.findAll({
+        where: {
+          user1Id: userId,
+          status: {
+            [Op.or]: [status, null],
+          },
         },
-      },
-    })
-      .then(result => res.status(200).send(result))
-      .catch((err) => {
-        console.error(`error: ${err}`);
-        res.send(500).send(err);
+        attributes: ['id', 'user2Id'],
       });
-  }
-  if (bound === 'inbound') {
-    //  user2 was requested a date
-    //  they cannot see requests they weren't offered
-    //    ie no access to a null status
-    return Couple.findAll({
-      where: {
-        user2Id: userId,
-        status,
-      },
-    })
-      .then(result => res.status(200).send(result))
-      .catch((err) => {
-        console.error(`error: ${err}`);
-        res.send(500).send(err);
+      res.status(200).json(couples);
+    }
+    if (bound === 'inbound') {
+      //  user2 was requested a date
+      //  they cannot see requests they weren't offered
+      //    ie no access to a null status
+      const couples = await Couple.findAll({
+        where: {
+          user2Id: userId,
+          status,
+        },
+        attributes: ['id', 'user1Id'],
       });
+      res.status(200).json(couples);
+    }
+  } catch (err) {
+    console.error(`Failed to get matches: ${err}`);
+    res.status(500).json(err);
   }
 });
 
