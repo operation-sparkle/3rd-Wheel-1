@@ -102,7 +102,7 @@ const UserInfo = () => {
 
   return (
     <div>
-      <Form onSubmit={() => { 
+      <Form onSubmit={() => {
         return interestSubmit({ age, preference, gender, bio, interests: [ subGenre1, subGenre2, subGenre3 ] })
       }}>
 
@@ -128,7 +128,7 @@ const UserInfo = () => {
             </Form.Control>
           </Form.Group>
 
-          <Form.Group controlId="formAge"> 
+          <Form.Group controlId="formAge">
             <Form.Label>Age</Form.Label>
             <Form.Control type="text" placeholder="Age, honesty is the best policy!" onChange={(e) => handleChange(e, editAge)}></Form.Control>
           </Form.Group>
