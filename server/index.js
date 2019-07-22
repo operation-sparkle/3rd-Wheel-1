@@ -278,7 +278,7 @@ app.get('/categories/:id', (req, res) => {
 app.post('/matches/', async (req, res) => {
   try {
     //  First we get the user information
-    const userId = Number(paramSplitter(req.session.userId)[1]);
+    const { userId } = req.session;
     const user = await User.findByPk(userId);
     const interests = await UserInterest.findAll({ userId });
     const interestsIds = interests.map(interest => interest.categoryId);
