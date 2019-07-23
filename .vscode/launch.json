@@ -8,7 +8,7 @@
       "type": "node",
       "request": "launch",
       "name": "Launch Program ct3",
-      "runtimeExecutable": "/Users/CTeamer56/.nvm/versions/node/v8.16.0/bin/node",
+      // "runtimeExecutable": "/Users/CTeamer56/.nvm/versions/node/v8.16.0/bin/node",
       "program": "${workspaceFolder}/server/index.js"
     },
     {

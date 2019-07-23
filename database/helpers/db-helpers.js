@@ -6,6 +6,7 @@ const restCategories = () => {
     url: 'https://api.yelp.com/v3/categories',
     headers: { 'Authorization': `Bearer ${process.env.YELP_KEY}` },
   };
+
   return axios(options)
     .then((response) => {
       const { categories } = response.data;

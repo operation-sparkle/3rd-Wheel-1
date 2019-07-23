@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const {
   User, Date, UserInterest, Couple, Category, Spot, Op,
 } = require('../sequelize');
@@ -36,10 +37,11 @@ const populateCategories = async () => {
 };
 
 //  Feel free to comment this call out after the first run
-// populateCategories();
+ populateCategories();
 
 User.prototype.validPassword = async (password) => {
   try {
+    console.log(password, this.password);
     return bcrypt.compare(password, this.password);
   } catch (err) {
     return console.error(err);
