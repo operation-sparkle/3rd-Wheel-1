@@ -51,8 +51,8 @@ const Matches = ({ user }) => {
   function newMatch(users) {
    return users.map((user) => {
       return (
-        <CarouselItem>
-          <Card>
+        <CarouselItem className='match-card'>
+          <Card className='match-card'>
             <CardImg width="70%" height="60%" src={ user.image || "https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" } />
             <Card.Title>{user.name || "Error"}</Card.Title>
             <Card.Text> Age: {user.age || "Error"}</Card.Text>
