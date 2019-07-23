@@ -36,7 +36,7 @@ const populateCategories = async () => {
 };
 
 //  Feel free to comment this call out after the first run
-// populateCategories();
+ // populateCategories();
 
 User.prototype.validPassword = async (password) => {
   try {

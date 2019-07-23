@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
+import "./App.css";
 // import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
@@ -51,7 +52,7 @@ class App extends React.Component {
           // could send timestamp too!
           try {
             const { longitude, latitude } = position.coords;
-            console.log(longitude, lattitude);
+            console.log(longitude, latitude);
 
             const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
@@ -102,6 +103,7 @@ class App extends React.Component {
     this.setState({
       user: user.data,
     })
+    console.log(this.state.user);
   }
 
   render() {
@@ -122,8 +124,8 @@ class App extends React.Component {
               <Link className="dropdown-item" to="/interests" >Interests</Link>
             </NavDropdown>
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
-            <Link className="nav-link" to="/matches" >Matches</Link>
-            <Link className="nav-link" to="/pending" >Pending</Link>
+            <Link className="nav-link" to="/matches" >Find Matches</Link>
+            <Link className="nav-link" to="/pending" >Mutual Interests</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>

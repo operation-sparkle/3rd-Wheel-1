@@ -92,7 +92,6 @@ const Matches = ({ user }) => {
       <Button onClick={getNewMatch} variant="primary" size="lg" block>Skip</Button>
       <Button onClick={reject} variant="danger" size="lg" block>Reject </Button>
     </div>
-
   );
 }
 
