@@ -7,8 +7,8 @@ import ListGroupItem from 'react-bootstrap/ListGroupItem';
 
 
 const Profile = ({ user }) => {
-  // const [user, changeUser] = useState(props.user)
-
+  //  const [user, changeUser] = useState(props.user)
+  console.log(user);
   return (
     <div>
     <Card style={{ width: '24rem' }}>
@@ -19,7 +19,7 @@ const Profile = ({ user }) => {
         <ListGroup className="list-group-first">
           <ListGroupItem>{user.age || "My Age"}</ListGroupItem>
           <ListGroupItem>{user.gender || "My Gender"}</ListGroupItem>
-          <ListGroupItem>{user.gender || "My Preference"}</ListGroupItem>
+          <ListGroupItem>{user.preference || "My Preference"}</ListGroupItem>
         </ListGroup>
       <Card.Body>
         <Card.Text>
