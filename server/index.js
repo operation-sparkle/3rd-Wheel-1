@@ -228,6 +228,16 @@ app.get('/users', loggedIn, async (req, res) => {
   }
 });
 
+app.get('/customers', (req, res) => {
+  User.findAll()
+    .then((users) => {
+      res.send(users);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 //  This is specifically built for editing location information
 app.patch('/users', loggedIn, async (req, res) => {
   try {
