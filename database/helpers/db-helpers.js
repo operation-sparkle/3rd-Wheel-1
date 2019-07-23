@@ -80,9 +80,34 @@ const topInterest = (interests) => {
   return topMatch;
 };
 
+const restDecider = async (filter, latitude, longitude) => {
+  try {
+    const options = {
+      method: 'get',
+      url: 'https://api.yelp.com/v3/businesses/search',
+      headers: {
+        Authorization: `Bearer ${process.env.YELP_KEY}`,
+      },
+      params: {
+        limit: '5',
+        categories: filter,
+        latitude: latitude.toString(),
+        longitude: longitude.toString(),
+      },
+    };
+    const response = await axios(options);
+    const { businesses } = response.data;
+    return businesses;
+  } catch (err) {
+    console.error(`Failed to fetch from Yelp: ${err}`);
+    return err;
+  }
+};
+
 module.exports = {
   restCategories,
   fetchRestaurant,
   haversineDistance,
   topInterest,
+  restDecider,
 };

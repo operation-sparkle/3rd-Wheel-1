@@ -14,6 +14,7 @@ const {
 const {
   fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
 } = require('./helpers/index.js');
+const { restDecider } = require('../database/helpers/db-helpers');
 
 const app = express();
 const upload = multer();
@@ -589,6 +590,22 @@ app.delete('/dates/:dateId', async (req, res) => {
   } catch (err) {
     console.error(`Failed to delete date: ${dateId}`);
     res.status(500).json(err);
+  }
+});
+
+app.get('/restDecider', async (req, res) => {
+  try {
+    const { userId } = req.session;
+    const { latitude, longitude } = await User.findByPk(userId);
+    const { restaurantFilter } = req.query;
+    const alias = restaurantFilter;
+    console.log(alias, typeof alias);
+    const data = await restDecider(alias, latitude, longitude);
+    console.log(data);
+    res.json(data);
+  } catch (err) {
+    console.log(`shame on you ${err}`);
+    res.json(err);
   }
 });
 
