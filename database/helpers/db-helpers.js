@@ -101,6 +101,7 @@ const restDecider = async (filter, latitude, longitude) => {
   } catch (err) {
     console.error(`Failed to fetch from Yelp: ${err}`);
     return err;
+    // franco was here
   }
 };
 
