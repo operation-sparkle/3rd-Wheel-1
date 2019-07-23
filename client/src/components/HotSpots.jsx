@@ -10,7 +10,26 @@ import FigureImage from 'react-bootstrap/FigureImage';
 
 
 const HotSpots = (props) => {
-  const [ hotSpots, assignSpots ] = useState([])
+  const [hotSpots, assignSpots] = useState([])
+  let [restaurantType, setType] = useState(null);
+
+  function setRestaurant(input) {
+    setType(restaurantType = input.target.value)
+    const options = {
+      method: 'get',
+      url: '/restDecider',
+      params: {
+        restaurantFilter: restaurantType,
+      }
+    }
+    Axios(options)
+      .then((response) => {
+        console.log('no error', response)
+      })
+      .catch((error) => {
+        console.log('error'.errror)
+      })
+  }
   
   useEffect(() => {
     async function fetch () {
@@ -29,6 +48,19 @@ const HotSpots = (props) => {
 
   return (
     <Container>
+      <h1>Restaurant Decider</h1>
+        <select onChange={setRestaurant}>
+        <option value="burgers">Burgers</option>
+        <option value="hotdog">Hot Dogs</option>
+        <option value="mexican">Mexican</option>
+        <option value="bbq">Barbeque</option>
+        <option value="cajun">Cajun</option>
+        <option value="french">French</option>
+        <option value="kosher">Kosher</option>
+        <option value="halal">Halal</option>
+        <option value="pizza">Pizza</option>
+        <option value="seafood">Seafood</option>
+        </select>
       <h4> Hot Spots </h4>
       {
         hotSpots.map(locale => (
