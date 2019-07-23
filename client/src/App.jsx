@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
+import "./App.css";
 // import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
@@ -135,8 +136,8 @@ class App extends React.Component {
               <Link className="dropdown-item" to="/interests" >Interests</Link>
             </NavDropdown>
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
-            <Link className="nav-link" to="/matches" >Matches</Link>
-            <Link className="nav-link" to="/pending" >Pending</Link>
+            <Link className="nav-link" to="/matches" >Find Matches</Link>
+            <Link className="nav-link" to="/pending" >Mutual Interests</Link>
             <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
