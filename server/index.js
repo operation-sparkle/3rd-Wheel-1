@@ -603,6 +603,8 @@ app.delete('/dates/:dateId', async (req, res) => {
   }
 });
 
+// //////////////////////////////////////////////////////////////
+// franco
 app.get('/restDecider', async (req, res) => {
   try {
     const { userId } = req.session;
@@ -616,6 +618,37 @@ app.get('/restDecider', async (req, res) => {
   } catch (err) {
     console.log(`shame on you ${err}`);
     res.json(err);
+  }
+});
+
+app.patch('/updateUser', async (req, res) => {
+  const { age, bio, gender, int1, int2, int3, preference } = req.query;
+  const { userId } = req.session;
+  const options = {
+    age,
+    bio,
+    gender,
+    int1,
+    int2,
+    int3,
+    preference,
+  };
+  try {
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    const updatedUser = await user.update(options, {
+      where: {
+        id: userId,
+      },
+    });
+    console.log(updatedUser);
+    res.send('oh truck yeah');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
   }
 });
 
