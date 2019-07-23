@@ -13,6 +13,8 @@ import Alert from 'react-bootstrap/Alert';
 const Pending = (props) => {
   const [out, newOuts] = useState([]);
   const [inc, newIns] = useState([]);
+  const {customers} = this.props;
+  console.log(customers);
 
   function getPending() {
     return axios.get('/matches/inbound', {
