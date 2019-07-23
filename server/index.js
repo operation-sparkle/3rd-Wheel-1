@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
-const LocalStrategy = require('passport-local');
+const LocalStrategy = require('passport-local').Strategy;
 const {
   User, Date, UserInterest, Couple, Category, Spot, Op,
 } = require('../database/models/index.js');
@@ -131,8 +131,10 @@ app.post('/login', (req, res, next) => {
 });
 
 app.get('/logout', loggedIn, (req, res) => {
-  req.logout();
-  res.redirect('/');
+  req.session.destroy(() => {
+    req.logout();
+    res.redirect('/');
+  });
 });
 
 /* DATA REQUESTS */
@@ -229,7 +231,7 @@ app.get('/users', loggedIn, async (req, res) => {
 app.patch('/users', loggedIn, async (req, res) => {
   try {
     const { userId } = req.session;
-    
+
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -267,20 +269,18 @@ app.patch('/users/pic/', upload.single('pic'), async (req, res) => {
 });
 
 //  This retrieves the top-level categories ie Restaurants
-app.get('/categories', (req, res) => {
-  return Category.findAll({
-    where: {
-      parentId: null,
-    },
+app.get('/categories', (req, res) => Category.findAll({
+  where: {
+    parentId: null,
+  },
+})
+  .then((categories) => {
+    res.status(200).send(categories);
   })
-    .then((categories) => {
-      res.status(200).send(categories);
-    })
-    .catch((err) => {
-      console.error(err);
-      res.status(500).send(err);
-    });
-});
+  .catch((err) => {
+    console.error(err);
+    res.status(500).send(err);
+  }));
 
 //  This retrieves the subcategories aka interests
 //    If we are looking in Restaurants, this retrieves
@@ -359,12 +359,10 @@ app.get('/matches/:bound', async (req, res) => {
           },
         },
       });
-      const parsedCouples = couples.map((couple) => {
-        return {
-          coupleId: couple.id,
-          partnerId: couple.user2Id,
-        };
-      });
+      const parsedCouples = couples.map(couple => ({
+        coupleId: couple.id,
+        partnerId: couple.user2Id,
+      }));
       res.status(200).json(parsedCouples);
     }
     if (bound === 'inbound') {
@@ -377,12 +375,10 @@ app.get('/matches/:bound', async (req, res) => {
           status,
         },
       });
-      const parsedCouples = couples.map((couple) => {
-        return {
-          coupleId: couple.id,
-          partnerId: couple.user1Id,
-        };
-      });
+      const parsedCouples = couples.map(couple => ({
+        coupleId: couple.id,
+        partnerId: couple.user1Id,
+      }));
       res.status(200).json(parsedCouples);
     }
   } catch (err) {

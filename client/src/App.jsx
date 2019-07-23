@@ -31,6 +31,7 @@ class App extends React.Component {
     this.getUserInfo = this.getUserInfo.bind(this);
     this.gateKeeper = this.gateKeeper.bind(this);
     this.openGate = this.openGate.bind(this);
+    this.logout = this.logout.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -39,19 +40,20 @@ class App extends React.Component {
 
   // function to flip bool and get user info when signup succeeds
   gateKeeper() {
+    
     return this.getUserInfo()
     .then(response => {
       // console.log('test', response);
       if (typeof response.data === 'object'){
         this.openGate(response);
-
+        console.log(response);
         const successCallback = async (position) => {
           // By using the 'maximumAge' option above, the position
           // object is guaranteed to be at most 10 minutes old.
           // could send timestamp too!
           try {
             const { longitude, latitude } = position.coords;
-            console.log(longitude, lattitude);
+            console.log(longitude, latitude);
 
             const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
@@ -74,6 +76,14 @@ class App extends React.Component {
     });
   }
 
+  logout() {
+    console.log('clicked');
+    axios.get('/logout');
+    this.setState({
+      isLoggedIn: false,
+    })
+  }
+
   setInterests(array) {
     this.setState({
       interests: array,
@@ -82,7 +92,7 @@ class App extends React.Component {
 
   getUserInfo() {
     // no auto login happening. send get to login instead?
-    return axios.get('/users/');
+    return axios.get('/users');
   }
 
   showAuthFail() {
@@ -96,12 +106,15 @@ class App extends React.Component {
       isLoggedIn: !this.state.isLoggedIn,
       user: response.data,
     })
+
   }
 
   setUser(user) {
     this.setState({
       user: user.data,
+     
     })
+    console.log(this.state.user);
   }
 
   render() {
@@ -124,6 +137,7 @@ class App extends React.Component {
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
             <Link className="nav-link" to="/matches" >Matches</Link>
             <Link className="nav-link" to="/pending" >Pending</Link>
+            <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
