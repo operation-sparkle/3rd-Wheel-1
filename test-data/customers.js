@@ -7,9 +7,12 @@ module.exports = [
     age: 32,
     preference: 'Female',
     gender: 'Male',
-    bio: "null",
+    bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'burgers',
+    intTwo: 'pizza',
+    intThree: 'seafood',
   },
   {
     username: 'CTeamer56',
@@ -22,6 +25,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'mexican',
+    intTwo: 'bbq',
+    intThree: 'pizza',
   },
   {
     username: 'aswils',
@@ -34,6 +40,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'hotdog',
+    intTwo: 'mexican',
+    intThree: 'pizza',
   },
   {
     username: 'mp377',
@@ -46,6 +55,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'pizza',
+    intTwo: 'cajun',
+    intThree: 'french',
   },
   {
     username: 'BennyBrosh',
@@ -58,6 +70,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'cajun',
+    intTwo: 'pizza',
+    intThree: 'kosher',
   },
   {
     username: 'SessaSessaSessa',
@@ -70,6 +85,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'pizza',
+    intTwo: 'bbq',
+    intThree: 'cajun',
   },
   {
     username: 'jone388',
@@ -82,6 +100,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'seafood',
+    intTwo: 'pizza',
+    intThree: 'burgers',
   },
   {
     username: 'shaya',
@@ -94,6 +115,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'pizza',
+    intTwo: 'seafood',
+    intThree: 'hotdog',
   },
   {
     username: 'lukeDaDuke',
@@ -106,6 +130,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'cajun',
+    intTwo: 'pizza',
+    intThree: 'kosher',
   },
   {
     username: 'QueenCarmelyne',
@@ -118,6 +145,9 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'cajun',
+    intTwo: 'seafood',
+    intThree: 'pizza',
   },
   {
     username: 'ScreamQueen',
@@ -130,5 +160,8 @@ module.exports = [
     bio: 'null',
     latitude: 29.9856,
     longitude: -90.084,
+    intOne: 'pizza',
+    intTwo: 'hotdog',
+    intThree: 'bbq',
   },
 ];
