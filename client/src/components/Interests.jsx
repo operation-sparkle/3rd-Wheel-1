@@ -5,6 +5,7 @@ import regeneratorRuntime from "regenerator-runtime";
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
+import Axios from 'axios';
 
 const UserInfo = ({ user, setInterests, interests}) => {
   const [ genres, modGenres ] = useState([]);
@@ -21,10 +22,69 @@ const UserInfo = ({ user, setInterests, interests}) => {
   const [ subGenre2, addSubGenre2 ] = useState(null);
   const [ subGenre3, addSubGenre3 ] = useState(null);
 
-  const [ age, editAge ] = useState(null);
-  const [ gender, editGender ] = useState(null);
-  const [ preference, editPreference ] = useState(null);
-  const [ bio, editBio ] = useState('');
+
+  let [ gender, editGender ] = useState(null);
+  let [ preference, editPreference ] = useState(null);
+  let [ age, editAge ] = useState(null);
+  let [ bio, editBio ] = useState(null);
+  let [ int1, editInt1 ] = useState(null);
+  let [ int2, editInt2 ] = useState(null);
+  let [ int3, editInt3 ] = useState(null);
+
+  ////////////////////////////////////////////////////////
+  // Franco
+  const franco = () => {
+    const options = {
+      method: 'patch',
+      url: '/updateUser',
+      params: {
+        gender,
+        preference,
+        age,
+        bio,
+        int1,
+        int2,
+        int3
+      }
+    }
+    Axios(options)
+      .then((response) => {
+        console.log('no error', response)
+      })
+      .catch((error) => {
+        console.log('error'.errror)
+      })
+  }
+
+  const handleGender = function(input){
+    editGender(gender = input.target.value)
+  }
+
+  const handlePreference = function(input){
+    editPreference(preference = input.target.value)
+  }
+
+  const handleAge = function(input){
+    editAge(age = input.target.value)
+  }
+
+  const handleBio = function(input){
+    editBio(bio = input.target.value)
+  }
+
+  const handleFood1 = function(input){
+    editInt1(int1 = input.target.value)
+  }
+
+  const handleFood2 = function (input) {
+    editInt2(int2 = input.target.value)
+  }
+
+  const handleFood3 = function (input) {
+    editInt3(int3 = input.target.value)
+  }
+  // Franco
+  ////////////////////////////////////////////////////////
 
   const handleChangeG = (event, func) => {
     event.preventDefault();
@@ -59,6 +119,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
         console.warn(err)
       }
   };
+
 
   useEffect(() => {
     if (genre1) {
@@ -110,15 +171,13 @@ const UserInfo = ({ user, setInterests, interests}) => {
 
   return (
     <div>
-      <Form onSubmit={() => {
-        return interestSubmit({ age: age || user.age, preference: preference || user.preference, gender: gender || user.gender, bio: bio || user.bio, interests: [ (subGenre1 || interests[0]), (subGenre2 || interests[1]), (subGenre3 || interests[2]) ] })
-      }}>
+      <Form onSubmit={() => {console.log('hi im paul')}}>
 
         <Form.Row>
 
           <Form.Group as={Col} controlId="formGender"> 
             <Form.Label>Gender</Form.Label>
-            <Form.Control as="select" onChange={(e) => handleChange(e, editGender)}>
+            <Form.Control as="select" onChange={handleGender}>
               <option value={''}>...   </option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -128,7 +187,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
 
           <Form.Group as={Col} controlId="formPerfer"> 
             <Form.Label>Preference</Form.Label>
-            <Form.Control as="select" onChange={(e) => handleChange(e, editPreference)}>
+            <Form.Control as="select" onChange={handlePreference}>
               <option value={''}>...   </option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
@@ -138,18 +197,18 @@ const UserInfo = ({ user, setInterests, interests}) => {
 
           <Form.Group controlId="formAge">
             <Form.Label>Age</Form.Label>
-            <Form.Control type="text" placeholder="Age, honesty is the best policy!" onChange={(e) => handleChange(e, editAge)}></Form.Control>
+            <Form.Control type="text" placeholder="Age, honesty is the best policy!" onChange={handleAge}></Form.Control>
           </Form.Group>
 
         </Form.Row>
 
         <Form.Group controlId="formGender"> 
           <Form.Label>Bio</Form.Label>
-          <Form.Control type="text" placeholder="Make it count!" onChange={(e) => handleChange(e, editBio)}></Form.Control>
+          <Form.Control type="text" placeholder="Make it count!" onChange={handleBio}></Form.Control>
         </Form.Group>
 
         <Form.Group controlId="genre" className="1" >
-          <Form.Label>1) Choose a Category!!</Form.Label>
+          <Form.Label> Choose a Category!!</Form.Label>
           <Form.Control as="select"  onChange={(e) => handleChangeG(e, addGenre1)} >
           <option value={null}>...   </option>
             { 
@@ -166,13 +225,13 @@ const UserInfo = ({ user, setInterests, interests}) => {
 
         <Form.Group controlId="sub-genre" className="1" >
           <Form.Label>Now be More Specific</Form.Label>
-          <Form.Control as="select" multiple onChange={(e) => handleChangeS(e, addSubGenre1) }>
+          <Form.Control as="select" className='0' onChange={handleFood1}>
           <option value={null}>...   </option>
             { 
               genre1 ? 
               subArr1.map(e => {
                 return (
-                  <option key={e.id} value={e.id} >
+                  <option key={e.id} value={e.alias} >
                     {e.name}
                   </option>
                 );
@@ -184,7 +243,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
         </Form.Group>
 
         <Form.Group controlId="genre" className="2" >
-          <Form.Label>2) Choose a Category!!</Form.Label>
+          <Form.Label>Choose a Category!!</Form.Label>
           <Form.Control as="select" onChange={(e) => handleChangeG(e, addGenre2) }>
           <option value={null}>...   </option>
             { 
@@ -201,7 +260,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
 
         <Form.Group controlId="sub-genre" className="2" >
           <Form.Label>Now be More Specific</Form.Label>
-          <Form.Control as="select" multiple onChange={(e) => handleChangeS(e, addSubGenre2) }>
+          <Form.Control as="select" className='1' onChange={handleFood2}>
           <option value={null}>...   </option>
             { 
               subArr2 == [] ? 
@@ -209,7 +268,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
               :
               subArr2.map(e => {
                 return (
-                  <option key={e.id} value={e.id}  >
+                  <option key={e.id} value={e.alias}  >
                     {e.name}
                   </option>
                 );
@@ -219,7 +278,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
         </Form.Group>
 
         <Form.Group controlId="genre" className="3">
-          <Form.Label>3) Choose a Category!!</Form.Label>
+          <Form.Label>Choose a Category!!</Form.Label>
           <Form.Control as="select" onChange={(e) => handleChangeG(e, addGenre3) }>
           <option value={null}>...   </option>
             { 
@@ -236,7 +295,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
 
         <Form.Group controlId="sub-genre" className="3">
           <Form.Label>Now be More Specific</Form.Label>
-          <Form.Control as="select" multiple onChange={(e) => handleChangeS(e, addSubGenre3)}>
+          <Form.Control as="select" className='2' onChange={handleFood3}>
           <option value={null}>...   </option>
             { 
               subArr3 == [] ? 
@@ -244,7 +303,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
               :
               subArr3.map(e => {
                 return (
-                  <option key={e.id} value={e.id} >
+                  <option key={e.id} value={e.alias} >
                     {e.name}
                   </option>
                 );
@@ -253,7 +312,7 @@ const UserInfo = ({ user, setInterests, interests}) => {
           </Form.Control>
         </Form.Group>
 
-        <Button /* variant="success" size="lg" */ block type="submit"> 
+        <Button /* variant="success" size="lg" */ block type="submit" onClick={franco}> 
           Submit 
         </Button>
       </Form>
