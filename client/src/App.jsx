@@ -7,6 +7,7 @@ import "./App.css";
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import Toggle from 'react-bootstrap-toggle';
 
 import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
@@ -24,7 +25,8 @@ class App extends React.Component {
       user: {},
       isLoggedIn: false,
       failedLogin: false,
-      interests: [null, null, null]
+      interests: [null, null, null],
+      customers: [],
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -33,10 +35,12 @@ class App extends React.Component {
     this.gateKeeper = this.gateKeeper.bind(this);
     this.openGate = this.openGate.bind(this);
     this.logout = this.logout.bind(this);
+    this.getCustomers = this.getCustomers.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
     this.gateKeeper();
+    
   }
 
   // function to flip bool and get user info when signup succeeds
@@ -58,10 +62,12 @@ class App extends React.Component {
 
             const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
+            this.getCustomers();
           } catch(err) {
             console.warn(err);
           }         
         }
+        
         
         const errorCallback = async () => {
           // Update a div element with error.message.
@@ -76,6 +82,19 @@ class App extends React.Component {
       this.showAuthFail();
     });
   }
+  
+  getCustomers(){
+    axios.get('/customers')
+    .then((response) => {
+      let everyoneElse = response.data.filter((person)=>{
+        return person.id !== this.state.user.id;
+      })
+      this.setState({
+        customers: everyoneElse,
+      })
+    })
+  }
+
 
   logout() {
     console.log('clicked');
@@ -84,17 +103,18 @@ class App extends React.Component {
       isLoggedIn: false,
     })
   }
-
+  
   setInterests(array) {
     this.setState({
       interests: array,
     })
   }
-
+  
   getUserInfo() {
     // no auto login happening. send get to login instead?
     return axios.get('/users');
   }
+
 
   showAuthFail() {
     this.setState({
@@ -117,16 +137,18 @@ class App extends React.Component {
     })
     console.log(this.state.user);
   }
-
+  
+  
   render() {
     const { isLoggedIn, failedLogin, user } = this.state;
-
+    
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
           <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
+          
         { 
           isLoggedIn ? 
           // logged in nav
@@ -150,6 +172,7 @@ class App extends React.Component {
           </Nav>
         }
           </Navbar.Collapse>
+  
         </Navbar>
         { 
           isLoggedIn ? 
