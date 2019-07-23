@@ -5,6 +5,7 @@ const {
 const {
   restCategories, fetchRestaurant, haversineDistance, topInterest,
 } = require('../helpers/db-helpers.js');
+const customers = require('../../test-data/customers');
 
 //  Use this function to populate the restaurant sub-categories.
 //  This only needs to be done on database init
@@ -18,7 +19,7 @@ const populateCategories = async () => {
     //   name: 'movie',
     //   alias: 'movie',
     // };
-    const categoryArray = await Category.findOrCreate({ where: categoryOptions });   
+    const categoryArray = await Category.findOrCreate({ where: categoryOptions });
     // const re = await Category.findOrCreate({ where: options });
 
     const { id: categoryId } = categoryArray[0];
@@ -37,7 +38,13 @@ const populateCategories = async () => {
 };
 
 //  Feel free to comment this call out after the first run
- populateCategories();
+populateCategories();
+console.log(customers);
+const populateUsers = () => {
+  User.bulkCreate(customers);
+};
+
+populateUsers();
 
 User.prototype.validPassword = async (password) => {
   try {
