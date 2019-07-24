@@ -82,7 +82,7 @@ const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatc
   return (
     
     <div>
-    <Carousel controls={false} /* activeIndex={index} */ dir="left">
+      <Carousel className="match-carousel col-12 col-md-4 mx-auto" controls={false} /* activeIndex={index} */ dir="left">
         <CarouselItem>
           <Card>
             <CardImg src={customer.pic} />
@@ -92,9 +92,9 @@ const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatc
           </Card>
         </CarouselItem>
     </Carousel>
-      <Button onClick={acceptMatch} variant="success" size="lg" block>Accept</Button>
-      <Button onClick={skipMatch} variant="primary" size="lg" block>Skip</Button>
-      <Button onClick={rejectMatch} variant="danger" size="lg" block>Reject </Button>
+      <Button className="col-10 col-md-4 mx-auto" onClick={acceptMatch} variant="success" size="md" block>Accept</Button>
+      <Button className="col-10 col-md-4 mx-auto"  onClick={skipMatch} variant="primary" size="md" block>Skip</Button>
+      <Button className="col-10 col-md-4 mx-auto"  onClick={rejectMatch} variant="danger" size="md" block>Reject </Button>
     </div>
 
   );
