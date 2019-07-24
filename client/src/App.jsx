@@ -30,7 +30,9 @@ class App extends React.Component {
       failedLogin: false,
       interests: [null, null, null],
       customers: [],
+      interested: [],
       toggleValue: false,
+      customer: null,
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -40,6 +42,9 @@ class App extends React.Component {
     this.openGate = this.openGate.bind(this);
     this.logout = this.logout.bind(this);
     this.getCustomers = this.getCustomers.bind(this);
+    this.acceptMatch = this.acceptMatch.bind(this);
+    this.rejectMatch = this.rejectMatch.bind(this);
+    this.skipMatch = this.skipMatch.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -95,6 +100,7 @@ class App extends React.Component {
       })
       this.setState({
         customers: everyoneElse,
+        customer: everyoneElse[0],
       })
     })
   }
@@ -114,6 +120,43 @@ class App extends React.Component {
     })
   }
   
+  acceptMatch(){
+    console.log("accept");
+    let profile = this.state.customers.shift();
+    let customersNow = this.state.customers;
+    this.state.interested.push(profile);
+    let interestedNow = this.state.interested;
+    this.setState({
+      customers: customersNow,
+      interested: interestedNow,
+      customer: customersNow[0],
+    });
+  }
+
+  rejectMatch(){
+    console.log("reject");
+    let profile = this.state.customers.shift();
+    let customersNow = this.state.customers;
+    this.setState({
+      customers: customersNow,
+      customer: customersNow[0],
+    });
+    // save to database that they were rejected.
+  }
+
+  skipMatch(){
+    console.log("skip");
+    let profile = this.state.customers.shift();
+    
+    this.state.customers.push(profile);
+    let customersNow = this.state.customers;
+    
+    this.setState({
+      customers: customersNow,
+      customer: customersNow[0],
+    })
+  }
+
   getUserInfo() {
     // no auto login happening. send get to login instead?
     return axios.get('/users');
@@ -144,7 +187,7 @@ class App extends React.Component {
   
   
   render() {
-    const { isLoggedIn, failedLogin, user, customers, toggleValue } = this.state;
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue } = this.state;
     
     return (
       <div className="App" >
@@ -196,8 +239,8 @@ class App extends React.Component {
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} />}  />
-              <Route path="/interests" render={(props) => <Interests {...props} user={user} setInterests={this.setInterests} />} />
+              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
+              <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
               <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />

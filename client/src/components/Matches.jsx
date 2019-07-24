@@ -9,10 +9,12 @@ import axios from 'axios';
 
 
 
-const Matches = ({ user, customers }) => {
+const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatch }) => {
   // const [index, changeIndex] = useState(0);
   // const [coupleId, newCouple] = useState(null);
-  let customer = customers[5];
+
+ 
+ 
   // console.log(customer.interest1);
   // function handleChange() {
   //   changeIndex(index++);
@@ -75,7 +77,7 @@ const Matches = ({ user, customers }) => {
     })
   }
 
-  getNewMatch();
+  // getNewMatch();
 
   return (
     
@@ -90,9 +92,9 @@ const Matches = ({ user, customers }) => {
           </Card>
         </CarouselItem>
     </Carousel>
-      <Button onClick={accept} variant="success" size="lg" block>Accept</Button>
-      <Button onClick={getNewMatch} variant="primary" size="lg" block>Skip</Button>
-      <Button onClick={reject} variant="danger" size="lg" block>Reject </Button>
+      <Button onClick={acceptMatch} variant="success" size="lg" block>Accept</Button>
+      <Button onClick={skipMatch} variant="primary" size="lg" block>Skip</Button>
+      <Button onClick={rejectMatch} variant="danger" size="lg" block>Reject </Button>
     </div>
 
   );
