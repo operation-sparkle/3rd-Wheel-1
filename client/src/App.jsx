@@ -18,6 +18,7 @@ import Login from './components/Login';
 import Interests from './components/Interests';
 import Datezone from './components/Datezone';
 import Friendzone from './components/Friendzone';
+import Messages from './components/Messages';
 
 
 class App extends React.Component {
@@ -114,13 +115,13 @@ class App extends React.Component {
         customer: everyoneElse[0],
         datingPool: pool,
       })
-      console.log(this.state.datingPool);
+      
     })
   }
 
 
   logout() {
-    console.log('clicked');
+ 
     axios.get('/logout');
     this.setState({
       isLoggedIn: false,
@@ -134,7 +135,7 @@ class App extends React.Component {
   }
   
   acceptMatch(){
-    console.log("accept");
+    
     let profile = this.state.customers.shift();
     let customersNow = this.state.customers;
     this.state.interested.push(profile);
@@ -147,7 +148,7 @@ class App extends React.Component {
   }
 
   rejectMatch(){
-    console.log("reject");
+   
     let profile = this.state.customers.shift();
     let customersNow = this.state.customers;
     this.setState({
@@ -158,7 +159,7 @@ class App extends React.Component {
   }
 
   skipMatch(){
-    console.log("skip");
+    
     let profile = this.state.customers.shift();
     
     this.state.customers.push(profile);
@@ -199,12 +200,15 @@ class App extends React.Component {
       user: user.data,
       interests: myInterests,
     })
-    console.log(this.state.user, this.state.interests);
   }
   
   
   render() {
+<<<<<<< HEAD
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
+=======
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests } = this.state;
+>>>>>>> 7ae1f6e9e19accc9d3eb3d3e5154ab7ba2a9b2a3
           let navStyle = "";
           let appStyle = "";
           if(!toggleValue){
@@ -245,6 +249,7 @@ class App extends React.Component {
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
             <Link className="nav-link" to="/matches" >Find Matches</Link>
             <Link className="nav-link" to="/pending" >Mutual Interests</Link>
+            <Link className="nav-link" to="/messages">Messages</Link>
             <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
@@ -269,8 +274,8 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests}/> : <Datezone {...props} user={user} interested={interested} /> }/>
-
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
+              <Route path="/messages" render={(props) => <Messages {...props} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
