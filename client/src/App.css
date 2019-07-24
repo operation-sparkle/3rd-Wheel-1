@@ -2,3 +2,44 @@
   margin: 0 2rem 1rem !important;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.navigation {
+  background-color: rgb(255, 86, 86);
+}
+
+.toggle-div {
+ 
+
+}
+
+.zone-toggle {
+  width: 100px !important;
+}
+
+#zone-toggler {
+  width: 120px !important;
+}
+
+.toggle-emoji {
+  margin: 0 0 -.1rem;
+  font-size: 1.1rem;
+}
+
+.zone-title {
+  color: white;
+  margin: 0rem;
+  font-size: .7rem;
+  display: inline;
+}
+
+.zone-title-date {
+  margin-right: 20px;
+}
+
+.friend-div {
+  margin: 1rem 0;
+}
+
+.friend-cards {
+  max-width: 400px !important;
+}
