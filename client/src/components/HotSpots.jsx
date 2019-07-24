@@ -90,7 +90,6 @@ const HotSpots = (props) => {
   return (
     <Container>
       <h1>We help you decide!</h1>
-      <h4>Select a date</h4>
       <h4>Select a type of restaurant below</h4>
         <select onChange={setRestaurant}>
         {restChoices.map((choice) => {
@@ -110,9 +109,7 @@ const HotSpots = (props) => {
         />
       </Figure>
       <br></br>
-      <button type="button">YUM! It's a date!</button>
-      <br></br>
-      <button type="button" onClick={removeChoice}>YUCK!</button>
+      <button type="button" onClick={removeChoice}>YUCK! New Choice Please</button>
         <br></br>
       <h4> Hot Spots </h4>
       {

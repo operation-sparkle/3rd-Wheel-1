@@ -207,7 +207,7 @@ class App extends React.Component {
   
   
   render() {
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests } = this.state;
     
     return (
       <div className="App" >
@@ -264,7 +264,7 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests}/> : <Datezone {...props} user={user} interested={interested} /> }/>
 
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
