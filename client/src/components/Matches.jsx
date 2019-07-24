@@ -9,12 +9,12 @@ import axios from 'axios';
 
 
 
-const Matches = ({ user, customers, skipMatch, acceptMatch, rejectMatch }) => {
+const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatch }) => {
   // const [index, changeIndex] = useState(0);
   // const [coupleId, newCouple] = useState(null);
 
-  let customer = customers[5];
-  console.log(typeof skipMatch, acceptMatch)
+ 
+ 
   // console.log(customer.interest1);
   // function handleChange() {
   //   changeIndex(index++);
@@ -77,7 +77,7 @@ const Matches = ({ user, customers, skipMatch, acceptMatch, rejectMatch }) => {
     })
   }
 
-  getNewMatch();
+  // getNewMatch();
 
   return (
     

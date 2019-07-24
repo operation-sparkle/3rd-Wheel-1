@@ -2,12 +2,15 @@ import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
 import "./App.css";
+import ToggleButton from 'react-toggle-button'
 // import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import Toggle from 'react-bootstrap-toggle';
+
+// import Toggle from 'react-bootstrap-toggle';
+
 
 import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
@@ -27,6 +30,9 @@ class App extends React.Component {
       failedLogin: false,
       interests: [null, null, null],
       customers: [],
+      interested: [],
+      toggleValue: false,
+      customer: null,
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -94,6 +100,7 @@ class App extends React.Component {
       })
       this.setState({
         customers: everyoneElse,
+        customer: everyoneElse[0],
       })
     })
   }
@@ -115,14 +122,39 @@ class App extends React.Component {
   
   acceptMatch(){
     console.log("accept");
+    let profile = this.state.customers.shift();
+    let customersNow = this.state.customers;
+    this.state.interested.push(profile);
+    let interestedNow = this.state.interested;
+    this.setState({
+      customers: customersNow,
+      interested: interestedNow,
+      customer: customersNow[0],
+    });
   }
 
   rejectMatch(){
     console.log("reject");
+    let profile = this.state.customers.shift();
+    let customersNow = this.state.customers;
+    this.setState({
+      customers: customersNow,
+      customer: customersNow[0],
+    });
+    // save to database that they were rejected.
   }
 
   skipMatch(){
     console.log("skip");
+    let profile = this.state.customers.shift();
+    
+    this.state.customers.push(profile);
+    let customersNow = this.state.customers;
+    
+    this.setState({
+      customers: customersNow,
+      customer: customersNow[0],
+    })
   }
 
   getUserInfo() {
@@ -155,12 +187,23 @@ class App extends React.Component {
   
   
   render() {
-    const { isLoggedIn, failedLogin, user, customers } = this.state;
-     
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue } = this.state;
+    
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
           <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
+          <Navbar.Brand>Datezone</Navbar.Brand>
+          <ToggleButton className="zone-toggle" id="zone-toggler"
+            inactiveLabel={'d'}
+            activeLabel={<p>&#128515;</p>}
+            value={this.state.toggleValue}
+            onToggle={(value) => {
+              this.setState({
+                toggleValue: !value,
+              })
+            }} />
+          <Navbar.Brand>Friendzone</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
           
@@ -196,8 +239,8 @@ class App extends React.Component {
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} />}  />
-              <Route path="/interests" render={(props) => <Interests {...props} user={user} acceptMatch={this.acceptMatch} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} setInterests={this.setInterests} />} />
+              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
+              <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
               <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
