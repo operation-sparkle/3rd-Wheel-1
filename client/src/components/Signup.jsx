@@ -6,7 +6,7 @@ import Login from './Login';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Signup = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
+const Signup = ({ gateKeeper, isLoggedIn, showAuthFail, toggleValue }) => {
   // hooks for input values
   const [ username, setUsername ] = useState('');
   const [ name, setName ] = useState('');
@@ -33,6 +33,12 @@ const Signup = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
     func(event.target.value);
   };
 
+  let buttonStyle = ""
+  if (!toggleValue) {
+    buttonStyle = "date-button";
+  } else {
+    buttonStyle = "friend-button";
+  }
   return (
     isLoggedIn ?
       // if !!loggedIn === true, redirect to index (swapping to restricted view)
@@ -64,7 +70,7 @@ const Signup = ({ gateKeeper, isLoggedIn, showAuthFail }) => {
           <Form.Control type="password" placeholder="Password" onChange={(e) => handleChange(e, setPassword) } />
         </Form.Group>
         {/* run on enter button too!!!! */}
-        <Button variant="primary" type="submit" onClick={() => usernameSubmit(username, password)}>
+        <Button className={buttonStyle} variant="primary" type="submit" onClick={() => usernameSubmit(username, password)}>
           Submit
         </Button>
       </Form>
