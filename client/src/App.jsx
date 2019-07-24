@@ -34,6 +34,7 @@ class App extends React.Component {
       interested: [],
       toggleValue: false,
       customer: null,
+      poolOption: null,
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -106,16 +107,20 @@ class App extends React.Component {
        if(this.state.user.preference === person.gender && this.state.user.gender === person.preference){
          if (this.state.interests.indexOf(person.int1) !== -1 || this.state.interests.indexOf(person.int2) !== -1 || this.state.interests.indexOf(person.int3) !== -1){
           pool.push((person));
-         }
-       }
-      })
-      
+        }
+      }
+    })
+    
+    console.log('pool', pool);
+
       this.setState({
         customers: everyoneElse,
         customer: everyoneElse[0],
         datingPool: pool,
+        poolOption: pool[0],
       })
-      
+      console.log('state dating pool', this.state.datingPool);
+      console.log('state poolOption', this.state.poolOption);
     })
   }
 
@@ -135,39 +140,48 @@ class App extends React.Component {
   }
   
   acceptMatch(){
-    
-    let profile = this.state.customers.shift();
-    let customersNow = this.state.customers;
+    console.log("accept");
+    let profile = this.state.datingPool.shift();
+    let datingPoolNow = this.state.datingPool;
     this.state.interested.push(profile);
     let interestedNow = this.state.interested;
     this.setState({
-      customers: customersNow,
+      // customers: customersNow,
       interested: interestedNow,
-      customer: customersNow[0],
+      // customer: customersNow[0],
+      datingPool: datingPoolNow,
+      poolOption: datingPoolNow[0],
     });
+    axios.post('/couples', {user1Id: this.state.user.id, user2Id: profile.id})
+    .then((result) => {
+      console.log('couples post result:', result);
+    })
+    .catch((err) => {
+      console.log('couples post error:', err);
+    })
   }
 
   rejectMatch(){
-   
-    let profile = this.state.customers.shift();
-    let customersNow = this.state.customers;
+    console.log("reject");
+    let profile = this.state.datingPool.shift();
+    let datingPoolNow = this.state.datingPool;
     this.setState({
-      customers: customersNow,
-      customer: customersNow[0],
+      datingPool: datingPoolNow,
+      poolOption: datingPoolNow[0],
     });
     // save to database that they were rejected.
   }
 
   skipMatch(){
+    console.log("skip");
+    let profile = this.state.datingPool.shift();
     
-    let profile = this.state.customers.shift();
-    
-    this.state.customers.push(profile);
-    let customersNow = this.state.customers;
+    this.state.datingPool.push(profile);
+    let datingPoolNow = this.state.datingPool;
     
     this.setState({
-      customers: customersNow,
-      customer: customersNow[0],
+      datingPool: datingPoolNow,
+      poolOption: datingPoolNow[0],
     })
   }
 
@@ -204,11 +218,8 @@ class App extends React.Component {
   
   
   render() {
-<<<<<<< HEAD
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
-=======
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests } = this.state;
->>>>>>> 7ae1f6e9e19accc9d3eb3d3e5154ab7ba2a9b2a3
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption } = this.state;
+
           let navStyle = "";
           let appStyle = "";
           if(!toggleValue){
@@ -271,10 +282,10 @@ class App extends React.Component {
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
+              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} /> : <Datezone {...props} user={user} interested={interested} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>

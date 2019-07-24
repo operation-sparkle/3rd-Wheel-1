@@ -9,7 +9,8 @@ import axios from 'axios';
 
 
 
-const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatch }) => {
+const Matches = ({ user, customer, customers, datingPool, poolOption, skipMatch, acceptMatch, rejectMatch }) => {
+  console.log('datingpool', datingPool);
   // const [index, changeIndex] = useState(0);
   // const [coupleId, newCouple] = useState(null);
 
@@ -83,14 +84,23 @@ const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatc
     
     <div>
       <Carousel className="match-carousel col-12 col-md-4 mx-auto" controls={false} /* activeIndex={index} */ dir="left">
+      {datingPool.length > 0 ? 
         <CarouselItem>
           <Card>
-            <CardImg src={customer.pic} />
-            <Card.Title>{customer.username}</Card.Title>
-            <Card.Text>Age: {customer.age}</Card.Text>
-            <Card.Text>Bio: {customer.bio}</Card.Text>
+            <CardImg src={poolOption.pic} />
+            <Card.Title>{poolOption.username}</Card.Title>
+            <Card.Text>Age: {poolOption.age}</Card.Text>
+            <Card.Text>Bio: {poolOption.bio}</Card.Text>
           </Card>
         </CarouselItem>
+        :
+        <CarouselItem>
+          <Card>
+            <CardImg src="https://media.giphy.com/media/3o6gg3IDiuTKFgGzN6/giphy.gif"/>
+            <Card.Text>Sorry, there are no more perspective matches in your area at this time.</Card.Text>
+            </Card>
+        </CarouselItem>
+      }
     </Carousel>
       <Button className="col-10 col-md-4 mx-auto" onClick={acceptMatch} variant="success" size="md" block>Accept</Button>
       <Button className="col-10 col-md-4 mx-auto"  onClick={skipMatch} variant="primary" size="md" block>Skip</Button>
