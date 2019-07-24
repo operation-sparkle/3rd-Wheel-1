@@ -209,19 +209,21 @@ class App extends React.Component {
     
     return (
       <div className="App" >
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar className="navigation" collapseOnSelect expand="lg" variant="dark">
           <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
-          <Navbar.Brand>Datezone</Navbar.Brand>
-          <ToggleButton className="zone-toggle" id="zone-toggler"
-            inactiveLabel={'d'}
-            activeLabel={<p>&#128515;</p>}
+          <div className="toggle-div row col-4">
+          <p className="zone-title zone-title-date col-3">Datezone</p>
+          <ToggleButton className="zone-toggle col-3" id="zone-toggler"
+            inactiveLabel={<p className="toggle-emoji">&#128525;</p>}
+              activeLabel={<p className="toggle-emoji">&#128515;</p>}
             value={this.state.toggleValue}
             onToggle={(value) => {
               this.setState({
                 toggleValue: !value,
               })
             }} />
-          <Navbar.Brand>Friendzone</Navbar.Brand>
+          <p className="zone-title col-3">Friendzone</p>
+          </div>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
           
