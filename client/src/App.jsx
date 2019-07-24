@@ -32,6 +32,7 @@ class App extends React.Component {
       failedLogin: false,
       interests: [null, null, null],
       customers: [],
+      datingPool: [],
       interested: [],
       toggleValue: false,
       customer: null,
@@ -100,10 +101,23 @@ class App extends React.Component {
       let everyoneElse = response.data.filter((person)=>{
         return person.id !== this.state.user.id;
       })
+      var pool = [];
+      everyoneElse.forEach((person)=> {
+       
+        
+       if(this.state.user.preference === person.gender && this.state.user.gender === person.preference){
+         if (this.state.interests.indexOf(person.int1) !== -1 || this.state.interests.indexOf(person.int2) !== -1 || this.state.interests.indexOf(person.int3) !== -1){
+          pool.push((person));
+         }
+       }
+      })
+      
       this.setState({
         customers: everyoneElse,
         customer: everyoneElse[0],
+        datingPool: pool,
       })
+      console.log(this.state.datingPool);
     })
   }
 
@@ -180,11 +194,15 @@ class App extends React.Component {
   }
 
   setUser(user) {
+    let myInterests = [];
+    myInterests.push(user.data.int1);
+    myInterests.push(user.data.int2);
+    myInterests.push(user.data.int3);
     this.setState({
       user: user.data,
-     
+      interests: myInterests,
     })
-    console.log(this.state.user);
+    console.log(this.state.user, this.state.interests);
   }
   
   
