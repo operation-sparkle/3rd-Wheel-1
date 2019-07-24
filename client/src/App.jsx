@@ -155,9 +155,13 @@ class App extends React.Component {
     axios.post('/couples', {user1Id: this.state.user.id, user2Id: profile.id})
     .then((result) => {
       console.log('couples post result:', result);
+      return axios.get('/couples');
+    })
+    .then((couples) => {
+      console.log('couples from front-end get:', couples);
     })
     .catch((err) => {
-      console.log('couples post error:', err);
+      console.log('couples post/get error:', err);
     })
   }
 

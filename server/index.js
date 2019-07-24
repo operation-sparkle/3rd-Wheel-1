@@ -317,7 +317,26 @@ app.get('/categories/:id', (req, res) => {
 app.post('/couples', (req, res) => {
   console.log('inside app post');
   console.log('couples req.body:', req.body);
+  Couple.create(req.body);
+  res.status(201).send(req.body);
 });
+
+app.get('/couples', (req, res) => {
+  Couple.findAll({
+    where: {
+      user1id: 1,
+    },
+  })
+  .then((results) => {
+    res.send(results);
+  })
+  .catch((err) => {
+    console.log('couples get error:', err)
+    res.send(500);
+  });
+});
+
+
 
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
