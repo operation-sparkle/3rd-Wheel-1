@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt');
 const {
-  User, Date, UserInterest, Couple, Category, Spot, Op,
+  User, Date, UserInterest, Couple, Category, Spot, Op, Messages,
 } = require('../sequelize');
 const {
   restCategories, fetchRestaurant, haversineDistance, topInterest,
 } = require('../helpers/db-helpers.js');
 const customers = require('../../test-data/customers');
+const messages = require('../../test-data/messages');
 
 //  Use this function to populate the restaurant sub-categories.
 //  This only needs to be done on database init
@@ -45,6 +46,12 @@ const populateUsers = () => {
 };
 
 populateUsers();
+
+const populateMessages = () => {
+  Messages.bulkCreate(messages);
+};
+
+populateMessages();
 
 User.prototype.validPassword = async (password) => {
   try {
