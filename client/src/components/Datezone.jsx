@@ -5,7 +5,7 @@ const Datezone = (props) => {
     console.log('datezone props', props);
     return (
         <div>
-            <p>You are in the Datezone!</p>
+            <h2>You are in the Datezone!</h2>
             <p>No current matches</p>
         </div>
     )
