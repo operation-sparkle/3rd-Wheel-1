@@ -104,8 +104,6 @@ class App extends React.Component {
        
         
        if(this.state.user.preference === person.gender && this.state.user.gender === person.preference){
-         
-         console.log('gay:', person.name);
          if (this.state.interests.indexOf(person.int1) !== -1 || this.state.interests.indexOf(person.int2) !== -1 || this.state.interests.indexOf(person.int3) !== -1){
           pool.push((person));
          }
