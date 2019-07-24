@@ -36,6 +36,9 @@ class App extends React.Component {
     this.openGate = this.openGate.bind(this);
     this.logout = this.logout.bind(this);
     this.getCustomers = this.getCustomers.bind(this);
+    this.acceptMatch = this.acceptMatch.bind(this);
+    this.rejectMatch = this.rejectMatch.bind(this);
+    this.skipMatch = this.skipMatch.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -110,6 +113,18 @@ class App extends React.Component {
     })
   }
   
+  acceptMatch(){
+    console.log("accept");
+  }
+
+  rejectMatch(){
+    console.log("reject");
+  }
+
+  skipMatch(){
+    console.log("skip");
+  }
+
   getUserInfo() {
     // no auto login happening. send get to login instead?
     return axios.get('/users');
@@ -141,7 +156,7 @@ class App extends React.Component {
   
   render() {
     const { isLoggedIn, failedLogin, user, customers } = this.state;
-    
+     
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -182,7 +197,7 @@ class App extends React.Component {
                 <Redirect to="/profile" />
               }} />
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} />}  />
-              <Route path="/interests" render={(props) => <Interests {...props} user={user} setInterests={this.setInterests} />} />
+              <Route path="/interests" render={(props) => <Interests {...props} user={user} acceptMatch={this.acceptMatch} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
               <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
