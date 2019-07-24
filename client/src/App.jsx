@@ -181,10 +181,10 @@ class App extends React.Component {
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/matches" render={(props) => <Matches {...props} user={user} />}  />
+              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user} setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => <Pending {...props} user={user} customers={customers}/>} />
+              <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
