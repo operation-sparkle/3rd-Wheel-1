@@ -21,6 +21,7 @@ import Login from './components/Login';
 import Interests from './components/Interests';
 import Datezone from './components/Datezone';
 import Friendzone from './components/Friendzone';
+import Messages from './components/Messages';
 
 
 class App extends React.Component {
@@ -117,13 +118,13 @@ class App extends React.Component {
         customer: everyoneElse[0],
         datingPool: pool,
       })
-      console.log(this.state.datingPool);
+      
     })
   }
 
 
   logout() {
-    console.log('clicked');
+ 
     axios.get('/logout');
     this.setState({
       isLoggedIn: false,
@@ -137,7 +138,7 @@ class App extends React.Component {
   }
   
   acceptMatch(){
-    console.log("accept");
+    
     let profile = this.state.customers.shift();
     let customersNow = this.state.customers;
     this.state.interested.push(profile);
@@ -150,7 +151,7 @@ class App extends React.Component {
   }
 
   rejectMatch(){
-    console.log("reject");
+   
     let profile = this.state.customers.shift();
     let customersNow = this.state.customers;
     this.setState({
@@ -161,7 +162,7 @@ class App extends React.Component {
   }
 
   skipMatch(){
-    console.log("skip");
+    
     let profile = this.state.customers.shift();
     
     this.state.customers.push(profile);
@@ -202,7 +203,6 @@ class App extends React.Component {
       user: user.data,
       interests: myInterests,
     })
-    console.log(this.state.user, this.state.interests);
   }
   
   
@@ -248,6 +248,7 @@ class App extends React.Component {
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
             <Link className="nav-link" to="/matches" >Find Matches</Link>
             <Link className="nav-link" to="/pending" >Mutual Interests</Link>
+            <Link className="nav-link" to="/messages">Messages</Link>
             <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
@@ -273,7 +274,7 @@ class App extends React.Component {
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
               <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
-
+              <Route path="/messages" render={(props) => <Messages {...props} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
