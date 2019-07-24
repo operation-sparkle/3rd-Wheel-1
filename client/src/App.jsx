@@ -18,6 +18,7 @@ import Login from './components/Login';
 import Interests from './components/Interests';
 import Datezone from './components/Datezone';
 import Friendzone from './components/Friendzone';
+import Messages from './components/Messages';
 
 
 class App extends React.Component {
@@ -125,7 +126,7 @@ class App extends React.Component {
 
 
   logout() {
-    console.log('clicked');
+ 
     axios.get('/logout');
     this.setState({
       isLoggedIn: false,
@@ -151,6 +152,13 @@ class App extends React.Component {
       datingPool: datingPoolNow,
       poolOption: datingPoolNow[0],
     });
+    axios.post('/couples', {user1Id: this.state.user.id, user2Id: profile.id})
+    .then((result) => {
+      console.log('couples post result:', result);
+    })
+    .catch((err) => {
+      console.log('couples post error:', err);
+    })
   }
 
   rejectMatch(){
@@ -206,12 +214,12 @@ class App extends React.Component {
       user: user.data,
       interests: myInterests,
     })
-    console.log(this.state.user, this.state.interests);
   }
   
   
   render() {
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, datingPool, poolOption } = this.state;
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption } = this.state;
+
           let navStyle = "";
           let appStyle = "";
           if(!toggleValue){
@@ -252,6 +260,7 @@ class App extends React.Component {
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
             <Link className="nav-link" to="/matches" >Find Matches</Link>
             <Link className="nav-link" to="/pending" >Mutual Interests</Link>
+            <Link className="nav-link" to="/messages">Messages</Link>
             <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
@@ -276,8 +285,8 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
-
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} /> : <Datezone {...props} user={user} interested={interested} /> }/>
+              <Route path="/messages" render={(props) => <Messages {...props} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
