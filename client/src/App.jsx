@@ -205,11 +205,19 @@ class App extends React.Component {
   
   render() {
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
-    
+          let navStyle = "";
+          let appStyle = "";
+          if(!toggleValue){
+            navStyle = "date-navigation";
+            appStyle = "App-date";
+          } else{
+            navStyle = "friend-navigation";
+            appStyle = "App-friend";
+          }
     return (
-      <div className="App" >
-        <Navbar className="navigation" collapseOnSelect expand="lg" variant="dark">
-          <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
+      <div className={appStyle} >
+        <Navbar className={navStyle} collapseOnSelect expand="lg" variant="dark">
+          <Navbar.Brand href="/" className="title">3rd-Wheel</Navbar.Brand>
           <div className="toggle-div row col-4">
           <p className="zone-title zone-title-date col-3">Datezone</p>
           <ToggleButton className="zone-toggle col-3" id="zone-toggler"
@@ -271,8 +279,8 @@ class App extends React.Component {
               <Route exact path="/" render={() => (
                 <Redirect to="/signup"/>
               )} />
-              <Route path="/signup" render={(props) => <Signup {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
-              <Route path="/login" render={(props) => <Login {...props} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/signup" render={(props) => <Signup {...props} toggleValue={toggleValue} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
+              <Route path="/login" render={(props) => <Login {...props} toggleValue={toggleValue} showAuthFail={this.showAuthFail} gateKeeper={this.gateKeeper} isLoggedIn={isLoggedIn} />} />
             </Switch>
         }
       </div>

@@ -5,7 +5,7 @@ import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin }) => {
+const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin, toggleValue }) => {
   // hooks for input values
   const [ username, setUsername ] = useState('');
   const [ password, setPassword ] = useState('');
@@ -30,6 +30,12 @@ const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin }) => {
   const handleChange = (event, func) => {
     func(event.target.value);
   };
+     let buttonStyle = ""
+  if(!toggleValue){
+    buttonStyle = "date-button";
+  } else {
+    buttonStyle = "friend-button";
+  }
 
   return (
     isLoggedIn ?
@@ -41,7 +47,7 @@ const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin }) => {
       </Switch>
       :
       <Form>
-        <Form.Group controlId="form-username">
+        <Form.Group controlId="form-username" className="form">
           <Form.Label>Username</Form.Label>
           <Form.Control type="text" placeholder="Enter Username"  onChange={(e) => handleChange(e, setUsername) } />
           <Form.Text className="text-muted">
@@ -56,7 +62,7 @@ const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin }) => {
           </Form.Text>
         </Form.Group>
         {/* run on enter button too!!!! */}
-        <Button variant="primary" type="submit" onClick={() => loginUser(username, password)}>
+        <Button className={buttonStyle} variant="primary" type="submit" onClick={() => loginUser(username, password)}>
           Login
         </Button>
         { failedLogin ? <p>Please try again</p> : <div/> }
