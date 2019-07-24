@@ -83,6 +83,6 @@
 }
 
 .message-pic {
-  float: left;
-  padding: 3px;
+  max-width: 25%;
+  padding-bottom: 3px;
 }

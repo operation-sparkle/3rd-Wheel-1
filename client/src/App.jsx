@@ -207,10 +207,6 @@ class App extends React.Component {
   
   
   render() {
-<<<<<<< HEAD
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests } = this.state;
-    
-=======
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
           let navStyle = "";
           let appStyle = "";
@@ -221,7 +217,6 @@ class App extends React.Component {
             navStyle = "friend-navigation";
             appStyle = "App-friend";
           }
->>>>>>> 3ea0a7864b247ac0a9874983c4394e309d9b2ede
     return (
       <div className={appStyle} >
         <Navbar className={navStyle} collapseOnSelect expand="lg" variant="dark">
@@ -278,13 +273,8 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-<<<<<<< HEAD
               <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} />} />
-=======
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests}/> : <Datezone {...props} user={user} interested={interested} /> }/>
-
->>>>>>> 1723238f0f5be10ffd6e8b5c6bd29213a9b6d272
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
