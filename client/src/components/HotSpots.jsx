@@ -22,7 +22,7 @@ const HotSpots = (props) => {
     
   let [restaurantType, setType] = useState(null);
   let [restChoices, setChoices] = useState([{title: 'Burgers', value: 'burgers'},
-    { title: 'Hot Dogs', value: ' hotdog'},
+    { title: 'Hot Dogs', value: 'hotdog'},
     { title: 'Mexican', value:'mexican'},
     { title: 'Barbeque', value:'bbq'},
     { title: 'Cajun', value:'cajun'},
@@ -86,6 +86,10 @@ const HotSpots = (props) => {
     fetch();
   }, [])
 
+  function reRoute(){
+    document.location.replace(recommendedRest[0].url)
+  }
+
 
   return (
     <Container>
@@ -109,6 +113,7 @@ const HotSpots = (props) => {
         />
       </Figure>
       <br></br>
+      <button type="button" onClick={reRoute}>Yes! See Website</button>
       <button type="button" onClick={removeChoice}>YUCK! New Choice Please</button>
         <br></br>
       <h4> Hot Spots </h4>
