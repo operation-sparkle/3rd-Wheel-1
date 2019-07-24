@@ -52,10 +52,10 @@ const selectMatch = (matches) => {
 
 const sanitizeUser = (user) => {
   const {
-    username, name, pic, age, gender, preference, bio, latitude, longitude, id,
+    username, name, pic, age, gender, preference, bio, latitude, longitude, id, int1, int2, int3,
   } = user;
   const sanitizedUser = {
-    username, name, pic, age, gender, preference, bio, latitude, longitude, id,
+    username, name, pic, age, gender, preference, bio, latitude, longitude, id, int1, int2, int3,
   };
   return sanitizedUser;
 };
