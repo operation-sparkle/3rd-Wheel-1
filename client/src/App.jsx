@@ -9,9 +9,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
-// import Toggle from 'react-bootstrap-toggle';
-
-
 import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
 import Pending from './components/Pending';
@@ -207,7 +204,11 @@ class App extends React.Component {
   
   
   render() {
+<<<<<<< HEAD
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
+=======
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests } = this.state;
+>>>>>>> 7ae1f6e9e19accc9d3eb3d3e5154ab7ba2a9b2a3
           let navStyle = "";
           let appStyle = "";
           if(!toggleValue){
