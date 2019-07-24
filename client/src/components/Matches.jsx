@@ -9,10 +9,13 @@ import axios from 'axios';
 
 
 
-const Matches = ({ user }) => {
+const Matches = ({ user, customer, customers, skipMatch, acceptMatch, rejectMatch }) => {
   // const [index, changeIndex] = useState(0);
   // const [coupleId, newCouple] = useState(null);
 
+ 
+ 
+  // console.log(customer.interest1);
   // function handleChange() {
   //   changeIndex(index++);
   //   setDirection(index++);
@@ -74,23 +77,24 @@ const Matches = ({ user }) => {
     })
   }
 
-  getNewMatch();
+  // getNewMatch();
 
   return (
+    
     <div>
     <Carousel controls={false} /* activeIndex={index} */ dir="left">
         <CarouselItem>
           <Card>
-            <CardImg width="70%" height="60%" src={"https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg"} />
-            <Card.Title>{"Find a Match"}</Card.Title>
-            <Card.Text>Age: {"???"}</Card.Text>
-            <Card.Text>Interest: {"???"}</Card.Text>
+            <CardImg src={customer.pic} />
+            <Card.Title>{customer.username}</Card.Title>
+            <Card.Text>Age: {customer.age}</Card.Text>
+            <Card.Text>Bio: {customer.bio}</Card.Text>
           </Card>
         </CarouselItem>
     </Carousel>
-      <Button onClick={accept} variant="success" size="lg" block>Accept</Button>
-      <Button onClick={getNewMatch} variant="primary" size="lg" block>Skip</Button>
-      <Button onClick={reject} variant="danger" size="lg" block>Reject </Button>
+      <Button onClick={acceptMatch} variant="success" size="lg" block>Accept</Button>
+      <Button onClick={skipMatch} variant="primary" size="lg" block>Skip</Button>
+      <Button onClick={rejectMatch} variant="danger" size="lg" block>Reject </Button>
     </div>
 
   );
