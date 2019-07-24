@@ -19,6 +19,8 @@ import Matches from './components/Matches';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Interests from './components/Interests';
+import Datezone from './components/Datezone';
+import Friendzone from './components/Friendzone';
 
 
 class App extends React.Component {
@@ -205,7 +207,7 @@ class App extends React.Component {
   
   
   render() {
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue } = this.state;
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
     
     return (
       <div className="App" >
@@ -262,7 +264,8 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} /> : <Datezone {...props} user={user} interested={interested} /> }/>
+
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :

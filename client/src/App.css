@@ -35,3 +35,11 @@
 .zone-title-date {
   margin-right: 20px;
 }
+
+.friend-div {
+  margin: 1rem 0;
+}
+
+.friend-cards {
+  max-width: 400px !important;
+}
