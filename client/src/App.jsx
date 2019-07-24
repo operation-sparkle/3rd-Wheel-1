@@ -8,7 +8,9 @@ import ToggleButton from 'react-toggle-button'
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+
 // import Toggle from 'react-bootstrap-toggle';
+
 
 import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
@@ -194,10 +196,10 @@ class App extends React.Component {
               <Route exact path="/" components={() => {
                 <Redirect to="/profile" />
               }} />
-              <Route path="/matches" render={(props) => <Matches {...props} user={user} />}  />
+              <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user} setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => <Pending {...props} user={user} customers={customers}/>} />
+              <Route path="/pending" render={(props) => <Pending {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
