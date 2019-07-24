@@ -182,6 +182,7 @@ app.patch('/signup', async (req, res) => {
   const {
     age, gender, preference, bio, interests: interestIds,
   } = req.body;
+
   //  Note that interests are split off to be used in a join table
   const options = {
     age, gender, preference, bio,
