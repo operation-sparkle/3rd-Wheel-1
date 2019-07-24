@@ -2,11 +2,15 @@ import React from 'react';
 import { Route, Switch, Link, Redirect } from 'react-router-dom'
 import axios from 'axios';
 import "./App.css";
+import ToggleButton from 'react-toggle-button'
 // import getLocation from '../helpers/index';
 
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+
+// import Toggle from 'react-bootstrap-toggle';
+
 
 import Profile from './components/Profile';
 import HotSpots from './components/HotSpots';
@@ -26,6 +30,7 @@ class App extends React.Component {
       failedLogin: false,
       interests: [null, null, null],
       customers: [],
+      toggleValue: false,
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -139,12 +144,23 @@ class App extends React.Component {
   
   
   render() {
-    const { isLoggedIn, failedLogin, user, customers } = this.state;
+    const { isLoggedIn, failedLogin, user, customers, toggleValue } = this.state;
     
     return (
       <div className="App" >
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
           <Navbar.Brand href="/">3rd-Wheel</Navbar.Brand>
+          <Navbar.Brand>Datezone</Navbar.Brand>
+          <ToggleButton className="zone-toggle" id="zone-toggler"
+            inactiveLabel={'d'}
+            activeLabel={<p>&#128515;</p>}
+            value={this.state.toggleValue}
+            onToggle={(value) => {
+              this.setState({
+                toggleValue: !value,
+              })
+            }} />
+          <Navbar.Brand>Friendzone</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
           

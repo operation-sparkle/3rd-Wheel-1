@@ -2,3 +2,11 @@
   margin: 0 2rem 1rem !important;
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.zone-toggle {
+  width: 100px !important;
+}
+
+#zone-toggler {
+  width: 120px !important;
+}
