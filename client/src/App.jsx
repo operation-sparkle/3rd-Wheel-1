@@ -207,11 +207,7 @@ class App extends React.Component {
   
   
   render() {
-<<<<<<< HEAD
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests } = this.state;
-    
-=======
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested } = this.state;
           let navStyle = "";
           let appStyle = "";
           if(!toggleValue){
@@ -221,7 +217,6 @@ class App extends React.Component {
             navStyle = "friend-navigation";
             appStyle = "App-friend";
           }
->>>>>>> 3ea0a7864b247ac0a9874983c4394e309d9b2ede
     return (
       <div className={appStyle} >
         <Navbar className={navStyle} collapseOnSelect expand="lg" variant="dark">
