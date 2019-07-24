@@ -31,11 +31,6 @@
  background-color: rgb(87, 142, 224);
 }
 
-.toggle-div {
- 
-
-}
-
 .zone-toggle {
   width: 100px !important;
 }
@@ -72,3 +67,17 @@
   margin: 1rem 0;
 }
 
+.message {
+    margin: auto;
+    width: 90%;
+    border: 10px;
+    border-style: double;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 2px red, 0 0 1em blue, 0 0 0.2em blue;
+}
+
+.message-pic {
+  max-width: 25%;
+  padding-bottom: 3px;
+}
