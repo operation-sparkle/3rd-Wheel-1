@@ -9,13 +9,13 @@ class Messages extends React.Component {
       intervalOne: null,
       toggleValue,
       messages: {
-        0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#127814;</p>],
-        1: [<p className="emoji">&#129340;?</p>],
+        0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
+        1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
         2: [<p></p>],
-        3: [<p></p>],
+        3: [<p className="emoji">&#129340;?</p>],
         4: [<p></p>],
         5: [<p></p>],
-        6: [<p></p>],
+        6: [<p>Hey</p>, <p>BTW</p>, <p>&#129314;YOU NASTY&#129314;</p>],
       },
       dateMessages: [],
       friendMessages: [],
@@ -33,7 +33,7 @@ clickMessage(event){
     let count = 0;
     this.state.intervalOne = setInterval(()=>{
       this.setState({
-        message: arr[count],
+        message: messageArr[count],
       })
       count++;
       if(count > messageArr.length){
@@ -56,7 +56,7 @@ clickMessage(event){
     return (
     <div>
       <div className="message">
-          <div onClick={this.clickMessage} id="1" blah="blah">
+          <div onClick={this.clickMessage} id="6" blah="blah">
             <h3>New Message From Sessa</h3>
             <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
       </div>
