@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const {
-  User, Date, UserInterest, Couple, Category, Spot, Op, Messages,
+  User, Date, UserInterest, Couple, Friends, Category, Spot, Op, Messages,
 } = require('../database/models/index.js');
 const {
   fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
@@ -379,6 +379,53 @@ app.delete('/couples', (req, res) => {
     console.log('error from server delete couple:', err);
   });
 
+});
+
+// Functionality for Friends routes to store, get, and delete friends of user
+
+app.post('/friends', (req, res) => {
+  console.log('inside app friends post');
+  console.log('friends req.body:', req.body);
+  currentUserID = req.body.user1Id;
+  Friends.create(req.body);
+  res.status(201).send(req.body);
+});
+
+app.get('/friends', (req, res) => {
+  Friends.findAll({
+    where: {
+      user1id: currentUserID,
+    },
+  })
+    .then((friends) => {
+      console.log('friends from server get:', friends);
+      const friendIds = friends.map(match => match.user2Id);
+      console.log('friendIds:', friendIds);
+      const duplicateFreeFriendIds = [];
+      friendIds.forEach((friendId) => {
+        if (duplicateFreeFriendIds.indexOf(friendId) === -1) {
+          duplicateFreeFriendIds.push(friendId);
+        }
+      });
+      console.log('duplicate free friends:', duplicateFreeFriendIds);
+      // res.send(couples);
+      // return duplicateFreeMatches.forEach(matchID => User.findByPk(matchID));
+      return User.findAll({
+        where: {
+          id: {
+            [Op.or]: duplicateFreeFriendIds,
+          },
+        },
+      });
+    })
+    .then((people) => {
+      console.log('people from server for friends', people);
+      res.send(people);
+    })
+    .catch((err) => {
+      console.log('friends get error:', err);
+      res.send(500);
+    });
 });
 
 
