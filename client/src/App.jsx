@@ -53,6 +53,7 @@ class App extends React.Component {
     this.onDumpMatch = this.onDumpMatch.bind(this);
     this.onFriendzoneMatch = this.onFriendzoneMatch.bind(this);
     this.getFriends = this.getFriends.bind(this);
+    this.onGhostFriend = this.onGhostFriend.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -190,6 +191,19 @@ class App extends React.Component {
       })
       .catch((err) => {
         console.log('Friends get error from front-end:', err);
+      })
+  }
+
+  onGhostFriend(event) {
+    let ghostedId = parseInt(event.currentTarget.id, 10);
+    console.log('ghostedId!', ghostedId);
+    axios.delete('./friends', { data: { ghostId: ghostedId, userId: this.state.user.id } })
+      .then((results) => {
+        console.log('ghosted results from front:', results);
+        this.getFriends();
+      })
+      .catch((err) => {
+        console.log('ghosting error from front:', err);
       })
   }
 
@@ -374,7 +388,7 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
