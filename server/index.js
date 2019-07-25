@@ -720,5 +720,20 @@ app.post('/sendMessage', async (req, res) => {
   }
 });
 
+app.get('/sendMessage', async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const storedMessages = await Messages.findAll({
+      where: {
+        userId: 1,
+      },
+    });
+    res.send(storedMessages);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT);
