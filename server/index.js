@@ -313,6 +313,12 @@ app.get('/categories/:id', (req, res) => {
     });
 });
 
+// Posts couple IDs to couples table on accept from the matches route
+app.post('/couples', (req, res) => {
+  console.log('inside app post');
+  console.log('couples req.body:', req.body);
+});
+
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
 //  We set the default status to null

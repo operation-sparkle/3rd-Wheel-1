@@ -69,6 +69,7 @@
 
 .message {
     margin: auto;
+    min-height: 200px;
     width: 90%;
     border: 10px;
     border-style: double;
@@ -80,4 +81,9 @@
 .message-pic {
   max-width: 25%;
   padding-bottom: 3px;
+}
+
+.message-body {
+  text-align: center;
+  padding-top: 80px;
 }

@@ -59,6 +59,15 @@ const Spot = sequelize.define('spot', {
   weigth: Sequelize.INTEGER,
 }, { sequelize, modelName: 'spot' });
 
+const Messages = sequelize.define('messages', {
+  sentFrom: {
+    type: Sequelize.STRING,
+    unique: true,
+  },
+  userId: Sequelize.INTEGER,
+  message: Sequelize.INTEGER,
+}, { sequelize, modelName: 'messages' });
+
 Category.belongsTo(Category, { as: 'children', foreignKey: 'parentId', useJunctionTable: false });
 Date.belongsTo(Spot);
 Date.belongsTo(Couple);
@@ -66,6 +75,7 @@ UserInterest.belongsTo(Category);
 UserInterest.belongsTo(User);
 Couple.belongsTo(User, { as: 'user1' });
 Couple.belongsTo(User, { as: 'user2' });
+Messages.belongsTo(User);
 
 sequelize.sync({ force: false })
   .then(() => console.log('users table has been successfully created, if one doesn\'t exist'))
@@ -79,3 +89,4 @@ exports.UserInterest = UserInterest;
 exports.Couple = Couple;
 exports.Category = Category;
 exports.Spot = Spot;
+exports.Messages = Messages;

@@ -16,7 +16,7 @@ const FriendOption = (props) => {
         function suggester(){
             friendInt.forEach((interest) => {
                 if(interests.indexOf(interest) !== 1){
-                    suggestionChange(dateSuggestion = (interest[0].toUpperCase() + interest.slice(1)));
+                    suggestionChange(dateSuggestion = interest);
                 }
             })
         }
