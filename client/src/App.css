@@ -160,3 +160,15 @@
   height: 40px;
   margin: 0rem;
 }
+
+.ghost-button-div {
+  max-height: 60px !important;
+}
+
+.ghost-button {
+  font-size: .8rem;
+  background-color: rgb(87, 142, 224);
+  color: white;
+  height: 40px;
+  margin: 0rem;
+}

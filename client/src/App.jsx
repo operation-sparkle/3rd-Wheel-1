@@ -36,6 +36,7 @@ class App extends React.Component {
       toggleValue: false,
       customer: null,
       poolOption: null,
+      friends: [],
       navExpanded: false,
     }
     
@@ -51,6 +52,9 @@ class App extends React.Component {
     this.skipMatch = this.skipMatch.bind(this);
     this.getMatches = this.getMatches.bind(this);
     this.onDumpMatch = this.onDumpMatch.bind(this);
+    this.onFriendzoneMatch = this.onFriendzoneMatch.bind(this);
+    this.getFriends = this.getFriends.bind(this);
+    this.onGhostFriend = this.onGhostFriend.bind(this);
     this.closeNav = this.closeNav.bind(this);
     this.setNavExpanded = this.setNavExpanded.bind(this);
 
@@ -82,6 +86,7 @@ class App extends React.Component {
             this.setUser(data);
             this.getCustomers();
             this.getMatches();
+            this.getFriends();
           } catch(err) {
             console.warn(err);
           }         
@@ -156,6 +161,57 @@ class App extends React.Component {
     .catch((err) => {
       console.log('dumping error from front:', err);
     })
+  }
+
+  onFriendzoneMatch(event) {
+    let friendId = parseInt(event.currentTarget.id, 10);
+    axios.post('/friends', { user1Id: this.state.user.id, user2Id: friendId })
+      .then((result) => {
+        console.log('friends post result:', result);
+        return axios.get('/friends');
+      })
+      .then((friendObjects) => {
+        console.log('friend objects from front', friendObjects);
+        console.log('friends before setState:', this.state.friends);
+        this.setState({
+          friends: friendObjects.data,
+        });
+        console.log('friends after setState:', this.state.friends);
+        return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
+      })
+      .then((results) => {
+        console.log('friendzoned results from front:', results);
+        this.getMatches();
+      })
+      .catch((err) => {
+        console.log('friends post/get error:', err);
+      })
+  }
+
+  getFriends() {
+    axios.get('/friends')
+      .then((friends) => {
+        console.log('Friends got!', friends);
+        this.setState({
+          friends: friends.data,
+        })
+      })
+      .catch((err) => {
+        console.log('Friends get error from front-end:', err);
+      })
+  }
+
+  onGhostFriend(event) {
+    let ghostedId = parseInt(event.currentTarget.id, 10);
+    console.log('ghostedId!', ghostedId);
+    axios.delete('./friends', { data: { ghostId: ghostedId, userId: this.state.user.id } })
+      .then((results) => {
+        console.log('ghosted results from front:', results);
+        this.getFriends();
+      })
+      .catch((err) => {
+        console.log('ghosting error from front:', err);
+      })
   }
 
 
@@ -280,7 +336,7 @@ class App extends React.Component {
   }
 
   render() {
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption } = this.state;
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
 
           let navStyle = "";
           let appStyle = "";
@@ -347,7 +403,7 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} /> }/>
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
