@@ -361,6 +361,26 @@ app.get('/couples', (req, res) => {
     });
 });
 
+app.delete('/couples', (req, res) => {
+  console.log('inside server delete couples');
+  console.log('req.body delete', req.body);
+  const { userId, dumpId } = req.body;
+  Couple.destroy({
+    where: {
+      user1Id: userId,
+      user2Id: dumpId,
+    },
+  })
+  .then((result) => {
+    console.log('server delete result:', result);
+    res.send(200);
+  })
+  .catch((err) => {
+    console.log('error from server delete couple:', err);
+  });
+
+});
+
 
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
