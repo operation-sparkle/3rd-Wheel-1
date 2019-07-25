@@ -29,7 +29,7 @@ const Profile = ({ user }) => {
       </Card>
 
       <Container>
-        <span>Give me some text or something.</span>
+        <span></span>
       </Container>
 
       </div>

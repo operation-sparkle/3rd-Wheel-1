@@ -37,6 +37,7 @@ class App extends React.Component {
       customer: null,
       poolOption: null,
       friends: [],
+      navExpanded: false,
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -54,6 +55,9 @@ class App extends React.Component {
     this.onFriendzoneMatch = this.onFriendzoneMatch.bind(this);
     this.getFriends = this.getFriends.bind(this);
     this.onGhostFriend = this.onGhostFriend.bind(this);
+    this.closeNav = this.closeNav.bind(this);
+    this.setNavExpanded = this.setNavExpanded.bind(this);
+
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -322,7 +326,15 @@ class App extends React.Component {
     })
   }
   
-  
+  closeNav() {
+    console.log("selected");
+    this.setState({ navExpanded: false });
+  }
+
+  setNavExpanded(expanded) {
+    this.setState({ navExpanded: expanded });
+  }
+
   render() {
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
 
@@ -337,7 +349,7 @@ class App extends React.Component {
           }
     return (
       <div className={appStyle} >
-        <Navbar className={navStyle} collapseOnSelect expand="lg" variant="dark">
+        <Navbar className={navStyle} expand="lg" variant="dark" onToggle={this.setNavExpanded} expanded={this.state.navExpanded}>
           <Navbar.Brand href="/" className="title">3rd-Wheel</Navbar.Brand>
           <div className="toggle-div row col-4">
           <p className="zone-title zone-title-date col-3">Datezone</p>
@@ -358,24 +370,24 @@ class App extends React.Component {
         { 
           isLoggedIn ? 
           // logged in nav
-          <Nav className="top-bar">
+          <Nav className="top-bar" >
             <NavDropdown title="Your Card" id="basic-nav-dropdown">
-              <Link className="dropdown-item" to="/profile" >Profile</Link>
-              <Link className="dropdown-item" to="/interests" >Interests</Link>
+              <Link onClick={this.closeNav} className="dropdown-item" to="/profile" >Profile</Link>
+                    <Link onClick={this.closeNav} className="dropdown-item" to="/interests" >Interests</Link>
             </NavDropdown>
-            <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
-            <Link className="nav-link" to="/matches" >Find Matches</Link>
-            <Link className="nav-link" to="/pending" >Mutual Interests</Link>
-            <Link className="nav-link" to="/messages">Messages</Link>
-            <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/hotspots" >Hot Spots</Link>
+                  {toggleValue ? null : <Link onClick={this.closeNav} className="nav-link" to="/matches" >Find Matches</Link>}
+                  <Link onClick={this.closeNav} className="nav-link" to="/pending" >Mutual Interests</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/messages">Messages</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
           : 
           // not logged in nav
           <Nav className="top-bar">
-            <Link className="nav-link" to="/signup" >Sign up</Link>
-            <Link className="nav-link" to="/login" >Log in</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/signup" >Sign up</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/login" >Log in</Link>
           </Nav>
         }
           </Navbar.Collapse>

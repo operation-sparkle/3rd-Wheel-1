@@ -15,6 +15,7 @@ const {
   fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
 } = require('./helpers/index.js');
 const { restDecider } = require('../database/helpers/db-helpers');
+const messages = require('../test-data/messages');
 
 const app = express();
 const upload = multer();
@@ -107,7 +108,7 @@ app.get('/#/login', (req, res) => {
 
 //  All other get requests to pages should verify login first
 app.get('/#/*', loggedIn, (req, res) => {
-  res.redirect('/');
+  res.redirect('/hotspots');
 });
 
 /* AUTHENTICATION REQUESTS */
@@ -147,7 +148,6 @@ app.get('/logout', loggedIn, (req, res) => {
 app.post('/signup', async (req, res) => {
   try {
     const { username } = req.body;
-
     //  First see if a user already exists with that username
     const user = await User.findOne({
       where: {
@@ -218,6 +218,7 @@ app.patch('/signup', async (req, res) => {
 
 //  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
+
   try {
     const { userId: id } = req.session;
     const user = await User.findByPk(id);
@@ -243,7 +244,7 @@ app.get('/customers', (req, res) => {
 app.patch('/users', loggedIn, async (req, res) => {
   try {
     const { userId } = req.session;
-
+  
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -375,14 +376,13 @@ app.delete('/couples', (req, res) => {
       user2Id: dumpId,
     },
   })
-  .then((result) => {
-    console.log('server delete result:', result);
-    res.send(200);
-  })
-  .catch((err) => {
-    console.log('error from server delete couple:', err);
-  });
-
+    .then((result) => {
+      console.log('server delete result:', result);
+      res.send(200);
+    })
+    .catch((err) => {
+      console.log('error from server delete couple:', err);
+    });
 });
 
 // Functionality for Friends routes to store, get, and delete friends of user
@@ -764,8 +764,8 @@ app.get('/restDecider', async (req, res) => {
 
 app.patch('/updateUser', async (req, res) => {
   const {
- age, bio, gender, int1, int2, int3, preference 
-} = req.query;
+    age, bio, gender, int1, int2, int3, preference,
+  } = req.query;
   const { userId } = req.session;
   const options = {
     age,
@@ -813,6 +813,7 @@ app.post('/sendMessage', async (req, res) => {
 
 app.get('/sendMessage', async (req, res) => {
   const { userId } = req.query;
+ 
   try {
     const storedMessages = await Messages.findAll({
       where: {
