@@ -10,6 +10,7 @@ const MatchOption = (props) => {
     let [dateSuggestion, suggestionChange] = useState([]);
     let [dateinfo, dateChange] = useState([{ name: 'yes' }])
     let [restaurantType, setType] = useState(null);
+    let [count, setCount] = useState(1);
 
     useEffect(() => {
         // Your code here
@@ -23,7 +24,6 @@ const MatchOption = (props) => {
         suggester();
     }, []);
 
-    useEffect(() => {
         async function setRestaurant() {
             try {
                 setType(restaurantType = dateSuggestion)
@@ -40,9 +40,7 @@ const MatchOption = (props) => {
                 console.log(err);
             }
         }
-        // Your code here
-        setRestaurant();
-    }, []);
+
 
     function newChoice() {
         if (dateinfo.length === 1) {
@@ -52,8 +50,9 @@ const MatchOption = (props) => {
         }
     }
 
-    function sendLunch() {
-        alert(`Lunch invite sent to ${match.name}`);
+    function invite() {
+        count++ % 2 === 0 ? alert(`Lunch date set with ${match.name}. Go get em tiger!`) : setRestaurant()
+        setCount(count++)
     }
 
     return (
@@ -64,7 +63,7 @@ const MatchOption = (props) => {
             <Card.Text>Bio: {match.bio}</Card.Text>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
             <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
-            <button type="button" onClick={sendLunch}>Yes! Let's do lunch!</button>
+            <button type="button" onClick={invite}>Yes! Let's do lunch!</button>
             <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
         </Card>
     )
