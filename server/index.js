@@ -314,10 +314,53 @@ app.get('/categories/:id', (req, res) => {
 });
 
 // Posts couple IDs to couples table on accept from the matches route
+let currentUserID = 1;
+
 app.post('/couples', (req, res) => {
   console.log('inside app post');
   console.log('couples req.body:', req.body);
+  currentUserID = req.body.user1Id;
+  Couple.create(req.body);
+  res.status(201).send(req.body);
 });
+
+app.get('/couples', (req, res) => {
+  Couple.findAll({
+    where: {
+      user1id: currentUserID,
+    },
+  })
+    .then((couples) => {
+      console.log('couples from server get:', couples);
+      const matches = couples.map(match => match.user2Id);
+      console.log('matches:', matches);
+      const duplicateFreeMatches = [];
+      matches.forEach((match) => {
+        if (duplicateFreeMatches.indexOf(match) === -1) {
+          duplicateFreeMatches.push(match);
+        }
+      });
+      console.log('duplicate free matches:', duplicateFreeMatches);
+      // res.send(couples);
+      // return duplicateFreeMatches.forEach(matchID => User.findByPk(matchID));
+      return User.findAll({
+        where: {
+          id: {
+            [Op.or]: duplicateFreeMatches,
+          },
+        },
+      });
+    })
+    .then((people) => {
+      console.log('people from server', people);
+      res.send(people);
+    })
+    .catch((err) => {
+      console.log('couples get error:', err);
+      res.send(500);
+    });
+});
+
 
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
@@ -629,7 +672,9 @@ app.get('/restDecider', async (req, res) => {
 });
 
 app.patch('/updateUser', async (req, res) => {
-  const { age, bio, gender, int1, int2, int3, preference } = req.query;
+  const {
+ age, bio, gender, int1, int2, int3, preference 
+} = req.query;
   const { userId } = req.session;
   const options = {
     age,
