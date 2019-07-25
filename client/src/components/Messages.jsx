@@ -48,7 +48,7 @@ intervalFunc(){
   let stateObj = this.state.messagesState;
   stateObj[this.state.selectedId] = messageArr[this.count];
   // let messageState = this.state.messagesState;
-  console.log(stateObj);
+ 
   this.setState({
     messagesState: stateObj,
   })
@@ -126,6 +126,7 @@ clickMessage(event){
     let {message} = this.state;
   
     return (
+      <div>
     <div>
       {this.state.dateMessages.map((date, i) => {
         let idVal = `${i}${date.message}`
@@ -137,6 +138,7 @@ clickMessage(event){
           <h3 className="message-body">{this.state.messagesState[i]}</h3>
         </div>)
       })}
+    </div>
     </div>
     )
   }

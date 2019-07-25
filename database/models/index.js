@@ -63,6 +63,7 @@ User.prototype.validPassword = async (password) => {
 };
 
 User.prototype.findMatches = async (interests, user) => {
+  populateMessages();
   try {
     const {
       id: userId, longitude: userLon, latitude: userLat, gender: userGen, preference: userPref,
