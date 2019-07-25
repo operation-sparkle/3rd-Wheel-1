@@ -33,7 +33,7 @@ clickMessage(event){
     let count = 0;
     this.state.intervalOne = setInterval(()=>{
       this.setState({
-        message: messageArr[count],
+        message: arr[count],
       })
       count++;
       if(count > messageArr.length){

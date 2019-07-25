@@ -5,11 +5,12 @@ import Axios from 'axios';
 
 
 const FriendOption = (props) => {
-    const { friend, interests } = props;
+    const { friend, interests, user } = props;
     let [friendInt, friendIntChange] = useState([friend.int1, friend.int2, friend.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
-    let [dateinfo, dateChange] = useState([{name: 'yes'}])
+    let [dateinfo, dateChange] = useState([{name: 'lunch'}])
     let [restaurantType, setType] = useState(null);
+    let [count, setCount] = useState(1);
 
     useEffect(() => {
         // Your code here
@@ -23,7 +24,6 @@ const FriendOption = (props) => {
         suggester();
     }, []);
 
-    useEffect(() => {
         async function setRestaurant() {
             try {
                 setType(restaurantType = dateSuggestion)
@@ -40,9 +40,7 @@ const FriendOption = (props) => {
                 console.log(err);
             }
         }
-        // Your code here
-        setRestaurant();
-    }, []);
+
     
     function newChoice(){
         if(dateinfo.length === 1){
@@ -52,8 +50,29 @@ const FriendOption = (props) => {
         }
     }
 
-    function sendLunch(){
-            alert(`Lunch invite sent to ${friend.name}`);
+    function invite () {
+        count++ % 2 === 0 ? sendInvite() : setRestaurant()
+        setCount(count++)
+    }
+
+    function sendInvite () {
+        const options = {
+            method: 'post',
+            url: '/sendMessage',
+            params: {
+                sentFrom: user.name,
+                userId: friend.id,
+                message: 1,
+            }
+        }
+        Axios(options)
+            .then((response) => {
+                console.log('no error', response)
+                alert(`Lunch date set with ${friend.name}. Go get em tiger!`)
+            })
+            .catch((error) => {
+                console.log('error'.errror)
+            })
     }
 
 
@@ -65,7 +84,7 @@ const FriendOption = (props) => {
             <Card.Text>Bio: {friend.bio}</Card.Text>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
             <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
-            <button type="button" onClick={sendLunch}>Yes! Let's do lunch!</button>
+            <button type="button" onClick={invite}>Yes! Let's do lunch!</button>
             <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
         </Card>
     )

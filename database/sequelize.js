@@ -66,6 +66,7 @@ const Messages = sequelize.define('messages', {
   },
   userId: Sequelize.INTEGER,
   message: Sequelize.INTEGER,
+  zone: Sequelize.INTEGER,
 }, { sequelize, modelName: 'messages' });
 
 Category.belongsTo(Category, { as: 'children', foreignKey: 'parentId', useJunctionTable: false });

@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const {
-  User, Date, UserInterest, Couple, Category, Spot, Op,
+  User, Date, UserInterest, Couple, Category, Spot, Op, Messages,
 } = require('../database/models/index.js');
 const {
   fetchRestaurants, fetchSpot, selectMatch, sanitizeUser, paramSplitter,
@@ -697,7 +697,23 @@ app.patch('/updateUser', async (req, res) => {
       },
     });
     console.log(updatedUser);
-    res.send('oh truck yeah');
+    res.send('User Updated');
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+app.post('/sendMessage', async (req, res) => {
+  const { message, sentFrom, userId } = req.query;
+  console.log(message, sentFrom, userId);
+  try {
+    const savedMessage = await Messages.create({
+      sentFrom,
+      userId,
+      message,
+    });
+    res.send(savedMessage);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
