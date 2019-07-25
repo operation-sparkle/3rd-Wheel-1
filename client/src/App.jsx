@@ -308,7 +308,7 @@ class App extends React.Component {
               <Link className="dropdown-item" to="/interests" >Interests</Link>
             </NavDropdown>
             <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
-            <Link className="nav-link" to="/matches" >Find Matches</Link>
+            {toggleValue ? null : <Link className="nav-link" to="/matches" >Find Matches</Link>}
             <Link className="nav-link" to="/pending" >Mutual Interests</Link>
             <Link className="nav-link" to="/messages">Messages</Link>
             <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
