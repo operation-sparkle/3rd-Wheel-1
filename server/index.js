@@ -107,7 +107,7 @@ app.get('/#/login', (req, res) => {
 
 //  All other get requests to pages should verify login first
 app.get('/#/*', loggedIn, (req, res) => {
-  res.redirect('/');
+  res.redirect('/hotspots');
 });
 
 /* AUTHENTICATION REQUESTS */
