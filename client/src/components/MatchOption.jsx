@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 
 const MatchOption = (props) => {
-    const { match, interests } = props;
+    const { match, interests, onDump } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
     let [dateinfo, dateChange] = useState([{ name: 'yes' }])
@@ -63,7 +63,7 @@ const MatchOption = (props) => {
             <Card.Text>Bio: {match.bio}</Card.Text>
             <div className="row col-12 action-button-div">
                 <button className="btn col-6 action-button">Friendzone</button>
-                <button className="btn col-6 action-button">Dump</button>
+                <button className="btn col-6 action-button" id={match.id} onClick={onDump} >Dump</button>
             </div>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
             <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
