@@ -12,7 +12,7 @@ const Profile = ({ user }) => {
   return (
     <div>
     <Card style={{ width: '300px' }}>
-        <Card.Img variant="top" src="https://previews.123rf.com/images/panyamail/panyamail1809/panyamail180900343/109879063-user-avatar-icon-sign-profile-symbol.jpg" />
+        <Card.Img variant="top" src={`${user.pic}`} />
       <Card.Body>
         <Card.Title>{user.name || "My Name"}</Card.Title>
       </Card.Body>
