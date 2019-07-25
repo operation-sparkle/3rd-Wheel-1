@@ -105,6 +105,7 @@ const restDecider = async (filter, latitude, longitude) => {
   }
 };
 
+
 module.exports = {
   restCategories,
   fetchRestaurant,

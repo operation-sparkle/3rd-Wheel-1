@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 
 const MatchOption = (props) => {
-    const { match, interests, onDump } = props;
+    const { match, interests, onDump, user } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
     let [dateinfo, dateChange] = useState([{ name: 'yes' }])
@@ -51,8 +51,28 @@ const MatchOption = (props) => {
     }
 
     function invite() {
-        count++ % 2 === 0 ? alert(`Lunch date set with ${match.name}. Go get em tiger!`) : setRestaurant()
+        count++ % 2 === 0 ? sendInvite() : setRestaurant()
         setCount(count++)
+    }
+
+    function sendInvite() {
+        const options = {
+            method: 'post',
+            url: '/sendMessage',
+            params: {
+                sentFrom: user.name,
+                userId: match.id,
+                message: 1,
+            }
+        }
+        Axios(options)
+            .then((response) => {
+                console.log('no error', response)
+                alert(`Lunch date set with ${match.name}. Go get em tiger!`)
+            })
+            .catch((error) => {
+                console.log('error'.errror)
+            })
     }
 
     return (
