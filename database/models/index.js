@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const {
-  User, Date, UserInterest, Couple, Category, Spot, Op, Messages,
+  User, Date, UserInterest, Couple, Friends, Category, Spot, Op, Messages,
 } = require('../sequelize');
 const {
   restCategories, fetchRestaurant, haversineDistance, topInterest,
@@ -135,6 +135,7 @@ module.exports = {
   Date,
   UserInterest,
   Couple,
+  Friends,
   Category,
   Spot,
   Op,
