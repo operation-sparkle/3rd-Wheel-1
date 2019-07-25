@@ -137,7 +137,7 @@ module.exports = [
   {
     username: 'QueenCarmelyne',
     name: 'Carmelyne Thompson',
-    pic: 'https://avatars1.githubusercontent.com/u/5858447?s=400&v=4',
+    pic: 'https://pbs.twimg.com/profile_images/1830180250/carmelyne-square.jpg',
     password: 'password',
     age: 26,
     preference: 'Female',

@@ -24,25 +24,23 @@ const FriendOption = (props) => {
     }, []);
 
     useEffect(() => {
-        // Your code here
         async function setRestaurant() {
-            setType(restaurantType = dateSuggestion)
-            const options = {
-                method: 'get',
-                url: '/restDecider',
-                params: {
-                    restaurantFilter: restaurantType,
+            try {
+                setType(restaurantType = dateSuggestion)
+                const options = {
+                    method: 'get',
+                    url: '/restDecider',
+                    params: {
+                        restaurantFilter: restaurantType,
+                    }
                 }
+                let result = await Axios(options)
+                dateChange(dateinfo = result.data)
+            } catch (err) {
+                console.log(err);
             }
-            await Axios(options)
-                .then((response) => {
-                    console.log('no error', response)
-                    dateChange(dateinfo = response.data);
-                })
-                .catch((error) => {
-                    console.log('error', error)
-                })
         }
+        // Your code here
         setRestaurant();
     }, []);
     
