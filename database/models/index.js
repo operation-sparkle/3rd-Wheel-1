@@ -137,4 +137,5 @@ module.exports = {
   Category,
   Spot,
   Op,
+  Messages,
 };

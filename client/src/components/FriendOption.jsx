@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 
 const FriendOption = (props) => {
-    const { friend, interests } = props;
+    const { friend, interests, user } = props;
     let [friendInt, friendIntChange] = useState([friend.int1, friend.int2, friend.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
     let [dateinfo, dateChange] = useState([{name: 'lunch'}])
@@ -51,8 +51,28 @@ const FriendOption = (props) => {
     }
 
     function invite () {
-        count++ % 2 === 0 ? alert(`Lunch date set with ${friend.name}. Go get em tiger!`) : setRestaurant()
+        count++ % 2 === 0 ? sendInvite() : setRestaurant()
         setCount(count++)
+    }
+
+    function sendInvite () {
+        const options = {
+            method: 'post',
+            url: '/sendMessage',
+            params: {
+                sentFrom: user.name,
+                userId: friend.id,
+                message: 1,
+            }
+        }
+        Axios(options)
+            .then((response) => {
+                console.log('no error', response)
+                alert(`Lunch date set with ${friend.name}. Go get em tiger!`)
+            })
+            .catch((error) => {
+                console.log('error'.errror)
+            })
     }
 
 
