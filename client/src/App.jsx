@@ -19,6 +19,7 @@ import Interests from './components/Interests';
 import Datezone from './components/Datezone';
 import Friendzone from './components/Friendzone';
 import Messages from './components/Messages';
+import { match } from 'minimatch';
 
 
 class App extends React.Component {
@@ -47,6 +48,7 @@ class App extends React.Component {
     this.acceptMatch = this.acceptMatch.bind(this);
     this.rejectMatch = this.rejectMatch.bind(this);
     this.skipMatch = this.skipMatch.bind(this);
+    this.getMatches = this.getMatches.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -74,6 +76,7 @@ class App extends React.Component {
             const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
             this.getCustomers();
+            this.getMatches();
           } catch(err) {
             console.warn(err);
           }         
@@ -124,6 +127,19 @@ class App extends React.Component {
     })
   }
 
+  getMatches() {
+    axios.get('/couples')
+    .then((matches) => {
+      console.log('Matches got!', matches);
+      this.setState({
+        interested: matches.data,
+      })
+    })
+    .catch((err) => {
+      console.log('Match get error from front-end:', err);
+    })
+  }
+
 
   logout() {
  
@@ -143,11 +159,11 @@ class App extends React.Component {
     console.log("accept");
     let profile = this.state.datingPool.shift();
     let datingPoolNow = this.state.datingPool;
-    this.state.interested.push(profile);
+    // this.state.interested.push(profile);
     let interestedNow = this.state.interested;
     this.setState({
       // customers: customersNow,
-      interested: interestedNow,
+      // interested: interestedNow,
       // customer: customersNow[0],
       datingPool: datingPoolNow,
       poolOption: datingPoolNow[0],
@@ -157,8 +173,24 @@ class App extends React.Component {
       console.log('couples post result:', result);
       return axios.get('/couples');
     })
-    .then((couples) => {
-      console.log('couples from front-end get:', couples);
+    .then((matchObjects) => {
+      console.log('match objects from front', matchObjects);
+      console.log('interested before setState:', this.state.interested);
+      this.setState({
+        interested: matchObjects.data,
+      });
+
+      console.log('interested after setState:', this.state.interested);
+      // console.log('couples from front-end get:', couples);
+      // let matches = couples.data.map(match => match.user2Id);
+      // console.log('matches:', matches);
+      // let duplicateFreeMatches = [];
+      // matches.forEach((match) => {
+      //   if (duplicateFreeMatches.indexOf(match) === -1) {
+      //     duplicateFreeMatches.push(match);
+      //   }
+      // })
+      // console.log('duplicate free matches:', duplicateFreeMatches);
     })
     .catch((err) => {
       console.log('couples post/get error:', err);
