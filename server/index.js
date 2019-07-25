@@ -343,6 +343,10 @@ app.get('/couples', (req, res) => {
       console.log('duplicate free matches:', duplicateFreeMatches);
       // res.send(couples);
       // return duplicateFreeMatches.forEach(matchID => User.findByPk(matchID));
+      if (duplicateFreeMatches.length === 0) { 
+        res.send(couples);
+        return;
+      }
       return User.findAll({
         where: {
           id: {
