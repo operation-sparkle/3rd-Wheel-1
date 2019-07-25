@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
+
 
 class Messages extends React.Component {
   constructor(props) {
     super(props);
     let {toggleValue} = props;
     this.state = {
+      user: this.props.user,
       message: "",
       intervalOne: null,
       toggleValue,
       messages: {
         0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
-        1: ["Hey There", <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
-        2: [<p></p>],
+        1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
+        2: [<p>Message 2</p>],
         3: [<p className="emoji">&#129340;?</p>],
-        4: [<p></p>],
-        5: [<p></p>],
+        4: [<p>Message 4</p>],
+        5: [<p>Message 5</p>],
         6: [<p>Hey</p>, <p>BTW</p>, <p>&#129314;YOU NASTY&#129314;</p>],
       },
       messagesState: {
@@ -28,15 +31,15 @@ class Messages extends React.Component {
         8: "",
         9: "",  
       },
-      dateMessages: [{sentFrom: "BennyBrosh", message: 1}, {sentFrom: "SessaSessaSessa", message: 2}, {sentFrom: "jone388"}],
+      dateMessages: [{sentFrom: "BennyBrosh", message: 1}, {sentFrom: "SessaSessaSessa", message: 2}, {sentFrom: "jone388", message: 3}],
       friendMessages: [],
       selectedId: null,
       messageId: null,
       read: [],
     }
+    this.retrieveMessages = this.retrieveMessages.bind(this);
     this.clickMessage = this.clickMessage.bind(this);
     this.intervalFunc = this.intervalFunc.bind(this);
-    console.log(this.state.toggleValue);
     this.count = 0;
   }
 
@@ -53,16 +56,17 @@ intervalFunc(){
     this.count++;
     if (this.count > messageArr.length) {
       clearInterval(this.state.intervalOne);
-      this.setState({
-        message: "",
-      })
       this.count = 0;
       this.state.read.push((this.state.dateMessages[this.state.selectedId]));
-      let newArr = this.state.dateMessages.splice(this.state.selectedId - 1, 1);
-      this.setState({
-        dateMessages: newArr,
-      })
-    }
+      // let newArr = this.state.dateMessages.splice(this.state.selectedId - 1, 1);
+      // this.setState({
+      //   dateMessages: newArr,
+      // })
+  }
+}
+
+componentWillMount(){
+  this.retrieveMessages();
 }
 
 clickMessage(event){
@@ -97,24 +101,34 @@ clickMessage(event){
   //   }, 3000)
       this.state.intervalOne = setInterval(this.intervalFunc, 3000);
 }
+
+  retrieveMessages(){
+    const options = {
+      method: 'get',
+      url: '/sendMessage',
+      params: {
+        userId: this.state.user.id,
+      }
+    }
+    Axios(options)
+      .then((response) => {
+        console.log('no error', response)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+    }
+
+
+  
   
   render(){
     let {message} = this.state;
   
     return (
     <div>
-      <div className="message">
-          <div onClick={this.clickMessage} id="6" blah="blah">
-            <h3>New Message From Sessa</h3>
-            <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
-      </div>
-          <h3 className="message-body">{message}</h3>
-        </div>
       {this.state.dateMessages.map((date, i) => {
-       
-        // this.state.messagesState[i] = "";
         let idVal = `${i}${date.message}`
-        console.log(this.state.messagesState);
         return (<div className="message">
           <div onClick={this.clickMessage} id={idVal} key={i} >
             <h3>New Message From {date.sentFrom}</h3>

@@ -49,6 +49,7 @@ class App extends React.Component {
     this.rejectMatch = this.rejectMatch.bind(this);
     this.skipMatch = this.skipMatch.bind(this);
     this.getMatches = this.getMatches.bind(this);
+    this.onDumpMatch = this.onDumpMatch.bind(this);
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -137,6 +138,19 @@ class App extends React.Component {
     })
     .catch((err) => {
       console.log('Match get error from front-end:', err);
+    })
+  }
+
+  onDumpMatch(event) {
+    let dumpedId = parseInt(event.currentTarget.id, 10);
+    console.log('dumpedId!', dumpedId);
+    axios.delete('./couples', { data: { dumpId: dumpedId, userId: this.state.user.id } })
+    .then((results) => {
+      console.log('dumped results from front:', results);
+      this.getMatches();
+    })
+    .catch((err) => {
+      console.log('dumping error from front:', err);
     })
   }
 
@@ -321,8 +335,8 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} /> : <Datezone {...props} user={user} interested={interested} interests={interests}/> }/>
-              <Route path="/messages" render={(props) => <Messages {...props} toggleValue={toggleValue} />} />
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} /> }/>
+              <Route path="/messages" render={(props) => <Messages {...props} user={user} />} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :

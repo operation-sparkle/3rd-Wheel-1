@@ -361,6 +361,25 @@ app.get('/couples', (req, res) => {
     });
 });
 
+app.delete('/couples', (req, res) => {
+  console.log('inside server delete couples');
+  console.log('req.body delete', req.body);
+  const { userId, dumpId } = req.body;
+  Couple.destroy({
+    where: {
+      user1Id: userId,
+      user2Id: dumpId,
+    },
+  })
+    .then((result) => {
+      console.log('server delete result:', result);
+      res.send(200);
+    })
+    .catch((err) => {
+      console.log('error from server delete couple:', err);
+    });
+});
+
 
 //  This finds a matching user and posts to Couple
 //  It finds matching interests within a certain radius
@@ -673,8 +692,8 @@ app.get('/restDecider', async (req, res) => {
 
 app.patch('/updateUser', async (req, res) => {
   const {
- age, bio, gender, int1, int2, int3, preference 
-} = req.query;
+    age, bio, gender, int1, int2, int3, preference,
+  } = req.query;
   const { userId } = req.session;
   const options = {
     age,
@@ -714,6 +733,21 @@ app.post('/sendMessage', async (req, res) => {
       message,
     });
     res.send(savedMessage);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+});
+
+app.get('/sendMessage', async (req, res) => {
+  const { userId } = req.query;
+  try {
+    const storedMessages = await Messages.findAll({
+      where: {
+        userId: 1,
+      },
+    });
+    res.send(storedMessages);
   } catch (err) {
     console.error(err);
     res.status(500).send(err);
