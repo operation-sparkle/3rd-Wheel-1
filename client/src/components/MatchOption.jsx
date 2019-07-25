@@ -61,6 +61,10 @@ const MatchOption = (props) => {
             <Card.Title>{match.name}</Card.Title>
             <Card.Text>Age: {match.age}</Card.Text>
             <Card.Text>Bio: {match.bio}</Card.Text>
+            <div className="row col-12 action-button-div">
+                <button className="btn col-6 action-button">Friendzone</button>
+                <button className="btn col-6 action-button">Dump</button>
+            </div>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
             <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
             <button type="button" onClick={invite}>Yes! Let's do lunch!</button>
