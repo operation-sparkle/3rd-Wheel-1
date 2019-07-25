@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
+import Axios from 'axios';
+
 
 class Messages extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      user: this.props.user,
       message: "",
       intervalOne: null,
       messages: {
@@ -17,7 +20,12 @@ class Messages extends React.Component {
       }
     }
     this.clickMessage = this.clickMessage.bind(this);
+    this.retrieveMessages = this.retrieveMessages.bind(this);
   }
+
+componentWillMount(){
+
+}
 
 clickMessage(event){
     console.log(event.currentTarget)
@@ -40,6 +48,26 @@ clickMessage(event){
     }, 3000)
 
 }
+
+  retrieveMessages(){
+    const options = {
+      method: 'get',
+      url: '/sendMessage',
+      params: {
+        userId: this.state.user.id,
+      }
+    }
+    Axios(options)
+      .then((response) => {
+        console.log('no error', response)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+    }
+
+
+  
   
   render(){
     let {message} = this.state;
