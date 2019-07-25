@@ -8,7 +8,7 @@ const MatchOption = (props) => {
     const { match, interests, onDump, user } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
-    let [dateinfo, dateChange] = useState([{ name: 'yes' }])
+    let [dateinfo, dateChange] = useState([{ name: 'go on a date?' }])
     let [restaurantType, setType] = useState(null);
     let [count, setCount] = useState(1);
 

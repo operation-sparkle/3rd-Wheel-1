@@ -95,12 +95,15 @@ const HotSpots = (props) => {
     <Container>
       <h1>We help you decide!</h1>
       <h4>Select a type of restaurant below</h4>
-        <select onChange={setRestaurant}>
+      <select onChange={setRestaurant} className="select-css">
         {restChoices.map((choice) => {
           return (<option value={choice.value}>{choice.title}</option>)
           })}
         </select>
         <br></br>
+      <button className="hotspot-button" type="button" onClick={reRoute}>Yes! See Website</button>
+      <button className="hotspot-button" type="button" onClick={removeChoice}>YUCK! New Choice Please</button>
+      <br></br>
       <Figure>
         <Figure.Caption>{recommendedRest[0].name}</Figure.Caption>
         <Figure.Caption>{recommendedRest[0].location.display_address[0]}</Figure.Caption>
@@ -113,10 +116,11 @@ const HotSpots = (props) => {
         />
       </Figure>
       <br></br>
-      <button type="button" onClick={reRoute}>Yes! See Website</button>
-      <button type="button" onClick={removeChoice}>YUCK! New Choice Please</button>
         <br></br>
-      <h4> Hot Spots </h4>
+        <br></br>
+      <h3> Hot Spots </h3>
+      <h4>Here are the most popular restaurants in your area</h4>
+
       {
         hotSpots.map(locale => (
           <Figure>
