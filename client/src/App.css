@@ -1,13 +1,15 @@
 .App-date {
   margin: 0 2rem 1rem !important;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: rgb(255, 208, 208)
+  background-color: rgb(255, 208, 208);
+  height: 100vh;
 }
 
 .App-friend {
   margin: 0 2rem 1rem !important;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: rgb(191, 201, 218)
+  background-color: rgb(191, 201, 218);
+  height: 100vh;
 }
 
 .title {
@@ -141,4 +143,20 @@
 	border: 1px solid #aaa;
 	box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
 	border-radius: .5em;
+}
+.emoji {
+  font-size: 4rem;
+  margin-bottom: 75px;
+}
+
+.action-button-div {
+  max-height: 60px !important;
+}
+
+.action-button {
+  font-size: .8rem;
+  background-color: rgb(255, 86, 86);
+  color: white;
+  height: 40px;
+  margin: 0rem;
 }
