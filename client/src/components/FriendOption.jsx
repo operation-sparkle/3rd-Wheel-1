@@ -16,7 +16,7 @@ const FriendOption = (props) => {
         function suggester(){
             friendInt.forEach((interest) => {
                 if(interests.indexOf(interest) !== 1){
-                    suggestionChange(dateSuggestion = (interest[0].toUpperCase() + interest.slice(1)));
+                    suggestionChange(dateSuggestion = interest);
                 }
             })
         }
@@ -24,25 +24,23 @@ const FriendOption = (props) => {
     }, []);
 
     useEffect(() => {
-        // Your code here
-        function setRestaurant() {
-            setType(restaurantType = dateSuggestion)
-            const options = {
-                method: 'get',
-                url: '/restDecider',
-                params: {
-                    restaurantFilter: restaurantType,
+        async function setRestaurant() {
+            try {
+                setType(restaurantType = dateSuggestion)
+                const options = {
+                    method: 'get',
+                    url: '/restDecider',
+                    params: {
+                        restaurantFilter: restaurantType,
+                    }
                 }
+                let result = await Axios(options)
+                dateChange(dateinfo = result.data)
+            } catch (err) {
+                console.log(err);
             }
-            Axios(options)
-                .then((response) => {
-                    console.log('no error', response)
-                    dateChange(dateinfo = response.data);
-                })
-                .catch((error) => {
-                    console.log('error', error)
-                })
         }
+        // Your code here
         setRestaurant();
     }, []);
     
