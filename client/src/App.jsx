@@ -172,9 +172,12 @@ class App extends React.Component {
         this.setState({
           friends: friendObjects.data,
         });
-
         console.log('friends after setState:', this.state.friends);
-        
+        return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
+      })
+      .then((results) => {
+        console.log('friendzoned results from front:', results);
+        this.getMatches();
       })
       .catch((err) => {
         console.log('friends post/get error:', err);
