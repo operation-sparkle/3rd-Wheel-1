@@ -87,8 +87,8 @@ const MatchOption = (props) => {
             </div>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
             <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
-            <button type="button" onClick={invite}>Yes! Let's do lunch!</button>
-            <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
+            <button className="hotspot-button" type="button" onClick={invite}>Yes! Let's do lunch!</button>
+            <button className="hotspot-button" type="button" onClick={newChoice}>YUCK! New Choice Please</button>
         </Card>
     )
 }

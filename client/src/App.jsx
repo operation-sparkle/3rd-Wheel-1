@@ -80,7 +80,7 @@ class App extends React.Component {
           // could send timestamp too!
           try {
             const { longitude, latitude } = position.coords;
-            console.log(longitude, lattitude);
+            console.log(longitude, latitude);
 
             const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
