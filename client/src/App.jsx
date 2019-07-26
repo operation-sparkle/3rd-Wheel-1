@@ -57,7 +57,7 @@ class App extends React.Component {
     this.onGhostFriend = this.onGhostFriend.bind(this);
     this.closeNav = this.closeNav.bind(this);
     this.setNavExpanded = this.setNavExpanded.bind(this);
-
+ 
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -334,7 +334,7 @@ class App extends React.Component {
   setNavExpanded(expanded) {
     this.setState({ navExpanded: expanded });
   }
-
+  
   render() {
     const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
 
@@ -404,7 +404,7 @@ class App extends React.Component {
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
               <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
-              <Route path="/messages" render={(props) => <Messages {...props} user={user} />} />
+              <Route path="/messages" render={(props) => <Messages {...props} user={user} toggleVal={this.state.toggleValue}/>} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
