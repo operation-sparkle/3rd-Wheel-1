@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 
 const MatchOption = (props) => {
-    const { match, interests, onDump, onFriendzone, user } = props;
+    const {messages, messageClicked, match, interests, onDump, onFriendzone, user } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
     let [dateinfo, dateChange] = useState([{ name: 'go on a date?' }])
@@ -74,7 +74,6 @@ const MatchOption = (props) => {
                 console.log('error'.errror)
             })
     }
-
     return (
         <Card className='friend-cards col-12 col-md-4'>
             <CardImg src={match.pic} />
@@ -91,6 +90,7 @@ const MatchOption = (props) => {
             <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
         </Card>
     )
+   
 }
 
 export default MatchOption;
