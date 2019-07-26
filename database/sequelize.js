@@ -49,6 +49,10 @@ const Couple = sequelize.define('couple', {
   status: Sequelize.STRING,
 }, { sequelize, modelName: 'couple' });
 
+const Friends = sequelize.define('friends', {
+  status: Sequelize.STRING,
+}, { sequelize, modelName: 'friends' });
+
 const Category = sequelize.define('category', {
   name: Sequelize.STRING,
   alias: Sequelize.STRING,
@@ -76,6 +80,8 @@ UserInterest.belongsTo(Category);
 UserInterest.belongsTo(User);
 Couple.belongsTo(User, { as: 'user1' });
 Couple.belongsTo(User, { as: 'user2' });
+Friends.belongsTo(User, { as: 'user1' });
+Friends.belongsTo(User, { as: 'user2' });
 Messages.belongsTo(User);
 
 sequelize.sync({ force: false })
@@ -88,6 +94,7 @@ exports.User = User;
 exports.Date = Date;
 exports.UserInterest = UserInterest;
 exports.Couple = Couple;
+exports.Friends = Friends;
 exports.Category = Category;
 exports.Spot = Spot;
 exports.Messages = Messages;

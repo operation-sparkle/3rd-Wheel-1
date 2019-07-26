@@ -36,6 +36,8 @@ class App extends React.Component {
       toggleValue: false,
       customer: null,
       poolOption: null,
+      friends: [],
+      navExpanded: false,
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -50,6 +52,12 @@ class App extends React.Component {
     this.skipMatch = this.skipMatch.bind(this);
     this.getMatches = this.getMatches.bind(this);
     this.onDumpMatch = this.onDumpMatch.bind(this);
+    this.onFriendzoneMatch = this.onFriendzoneMatch.bind(this);
+    this.getFriends = this.getFriends.bind(this);
+    this.onGhostFriend = this.onGhostFriend.bind(this);
+    this.closeNav = this.closeNav.bind(this);
+    this.setNavExpanded = this.setNavExpanded.bind(this);
+ 
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     
@@ -71,10 +79,14 @@ class App extends React.Component {
           // object is guaranteed to be at most 10 minutes old.
           // could send timestamp too!
           try {
-            const data = await axios.patch('/users', { longitude:30,  latitude: -90 })
+            const { longitude, latitude } = position.coords;
+            console.log(longitude, lattitude);
+
+            const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
             this.getCustomers();
             this.getMatches();
+            this.getFriends();
           } catch(err) {
             console.warn(err);
           }         
@@ -85,7 +97,7 @@ class App extends React.Component {
           // Update a div element with error.message.
           return await this.showAuthFail();
         }
-        successCallback()
+        return navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 })
       }
     })
     .catch(err => { 
@@ -148,6 +160,57 @@ class App extends React.Component {
     .catch((err) => {
       console.log('dumping error from front:', err);
     })
+  }
+
+  onFriendzoneMatch(event) {
+    let friendId = parseInt(event.currentTarget.id, 10);
+    axios.post('/friends', { user1Id: this.state.user.id, user2Id: friendId })
+      .then((result) => {
+        console.log('friends post result:', result);
+        return axios.get('/friends');
+      })
+      .then((friendObjects) => {
+        console.log('friend objects from front', friendObjects);
+        console.log('friends before setState:', this.state.friends);
+        this.setState({
+          friends: friendObjects.data,
+        });
+        console.log('friends after setState:', this.state.friends);
+        return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
+      })
+      .then((results) => {
+        console.log('friendzoned results from front:', results);
+        this.getMatches();
+      })
+      .catch((err) => {
+        console.log('friends post/get error:', err);
+      })
+  }
+
+  getFriends() {
+    axios.get('/friends')
+      .then((friends) => {
+        console.log('Friends got!', friends);
+        this.setState({
+          friends: friends.data,
+        })
+      })
+      .catch((err) => {
+        console.log('Friends get error from front-end:', err);
+      })
+  }
+
+  onGhostFriend(event) {
+    let ghostedId = parseInt(event.currentTarget.id, 10);
+    console.log('ghostedId!', ghostedId);
+    axios.delete('./friends', { data: { ghostId: ghostedId, userId: this.state.user.id } })
+      .then((results) => {
+        console.log('ghosted results from front:', results);
+        this.getFriends();
+      })
+      .catch((err) => {
+        console.log('ghosting error from front:', err);
+      })
   }
 
 
@@ -262,9 +325,17 @@ class App extends React.Component {
     })
   }
   
+  closeNav() {
+    console.log("selected");
+    this.setState({ navExpanded: false });
+  }
+
+  setNavExpanded(expanded) {
+    this.setState({ navExpanded: expanded });
+  }
   
   render() {
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption } = this.state;
+    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
 
           let navStyle = "";
           let appStyle = "";
@@ -277,7 +348,7 @@ class App extends React.Component {
           }
     return (
       <div className={appStyle} >
-        <Navbar className={navStyle} collapseOnSelect expand="lg" variant="dark">
+        <Navbar className={navStyle} expand="lg" variant="dark" onToggle={this.setNavExpanded} expanded={this.state.navExpanded}>
           <Navbar.Brand href="/" className="title">3rd-Wheel</Navbar.Brand>
           <div className="toggle-div row col-4">
           <p className="zone-title zone-title-date col-3">Datezone</p>
@@ -298,24 +369,24 @@ class App extends React.Component {
         { 
           isLoggedIn ? 
           // logged in nav
-          <Nav className="top-bar">
+          <Nav className="top-bar" >
             <NavDropdown title="Your Card" id="basic-nav-dropdown">
-              <Link className="dropdown-item" to="/profile" >Profile</Link>
-              <Link className="dropdown-item" to="/interests" >Interests</Link>
+              <Link onClick={this.closeNav} className="dropdown-item" to="/profile" >Profile</Link>
+                    <Link onClick={this.closeNav} className="dropdown-item" to="/interests" >Interests</Link>
             </NavDropdown>
-            <Link className="nav-link" to="/hotspots" >Hot Spots</Link>
-            <Link className="nav-link" to="/matches" >Find Matches</Link>
-            <Link className="nav-link" to="/pending" >Mutual Interests</Link>
-            <Link className="nav-link" to="/messages">Messages</Link>
-            <Link className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/hotspots" >Hot Spots</Link>
+                  {toggleValue ? null : <Link onClick={this.closeNav} className="nav-link" to="/matches" >Find Matches</Link>}
+                  <Link onClick={this.closeNav} className="nav-link" to="/pending" >Mutual Interests</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/messages">Messages</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/signin"onClick={this.logout} >Logout</Link>
             {/*  // Make this sign out user and relocate them to sign in
               <Link className="nav-link" to="/signin" >Sign out</Link> */}
           </Nav>
           : 
           // not logged in nav
           <Nav className="top-bar">
-            <Link className="nav-link" to="/signup" >Sign up</Link>
-            <Link className="nav-link" to="/login" >Log in</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/signup" >Sign up</Link>
+                  <Link onClick={this.closeNav} className="nav-link" to="/login" >Log in</Link>
           </Nav>
         }
           </Navbar.Collapse>
@@ -331,8 +402,8 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} /> }/>
-              <Route path="/messages" render={(props) => <Messages {...props} user={user} customers={customers}/>} />
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
+              <Route path="/messages" render={(props) => <Messages {...props} user={user} customers={customers} toggleVal={this.state.toggleValue}/>} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :

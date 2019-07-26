@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const {
-  User, Date, UserInterest, Couple, Category, Spot, Op, Messages,
+  User, Date, UserInterest, Couple, Friends, Category, Spot, Op, Messages,
 } = require('../sequelize');
 const {
   restCategories, fetchRestaurant, haversineDistance, topInterest,
@@ -40,7 +40,7 @@ const populateCategories = async () => {
 
 //  Feel free to comment this call out after the first run
 populateCategories();
-console.log(customers);
+
 const populateUsers = () => {
   User.bulkCreate(customers);
 };
@@ -55,7 +55,7 @@ populateMessages();
 
 User.prototype.validPassword = async (password) => {
   try {
-    console.log(password, this.password);
+
     return bcrypt.compare(password, this.password);
   } catch (err) {
     return console.error(err);
@@ -135,6 +135,7 @@ module.exports = {
   Date,
   UserInterest,
   Couple,
+  Friends,
   Category,
   Spot,
   Op,
