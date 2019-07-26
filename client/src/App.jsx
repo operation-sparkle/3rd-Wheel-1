@@ -27,6 +27,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       messageClicked: false,
+      friendClicked: false,
       user: {},
       interval: null,
       isLoggedIn: false,
@@ -211,21 +212,17 @@ class App extends React.Component {
 
   onFriendzoneMatch(event) {
     let friendId = parseInt(event.currentTarget.id, 10);
-    this.setState({
-      messageClicked: true,
-    })
     axios.post('/friends', { user1Id: this.state.user.id, user2Id: friendId })
       .then((result) => {
         console.log('friends post result:', result);
         return axios.get('/friends');
       })
       .then((friendObjects) => {
-        console.log('friend objects from front', friendObjects);
-        console.log('friends before setState:', this.state.friends);
         this.setState({
           friends: friendObjects.data,
+          friendClicked: true,
         });
-        console.log('friends after setState:', this.state.friends);
+        debugger;
         return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
       })
       .then((results) => {
@@ -235,7 +232,8 @@ class App extends React.Component {
       .catch((err) => {
         console.log('friends post/get error:', err);
       })
-  }
+    }
+    
 
   onSubmit(){
   
@@ -392,7 +390,7 @@ class App extends React.Component {
   }
   
   render() {
-    const {customer, messages, dumpOption, messageClicked, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
+    const {customer, friendClicked, messages, dumpOption, messageClicked, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
 
           let navStyle = "";
           let appStyle = "";
@@ -459,7 +457,7 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} messages={messages} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} onSubmit={this.onSubmit} dumpOption={dumpOption} user={user} dumpClick={this.dumpClick} messageClicked={messageClicked} messages={messages} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} messages={messages} dumpClick={this.dumpClick} friendClicked={friendClicked} onSubmit={this.onSubmit} user={user} customers={customers} interests={interests} friends={friends} dumpOption={dumpOption} onGhost={this.onGhostFriend} /> : <Datezone {...props} onSubmit={this.onSubmit} dumpOption={dumpOption} user={user} dumpClick={this.dumpClick} messageClicked={messageClicked} messages={messages} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} user={user} toggleVal={this.state.toggleValue}/>} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
