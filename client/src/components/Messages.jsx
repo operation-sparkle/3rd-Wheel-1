@@ -10,6 +10,7 @@ class Messages extends React.Component {
       user: this.props.user,
       message: "",
       intervalOne: null,
+      elementId: null,
       messages: {
         0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
         1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
@@ -61,6 +62,9 @@ intervalFunc(){
       // this.setState({
       //   dateMessages: newArr,
       // })
+      let element = this.state.element + 1;
+      document.getElementById(element).style.display = "none";
+      debugger;
   }
 }
 
@@ -70,6 +74,7 @@ componentWillMount(){
 
 clickMessage(event){
   this.setState({
+    elementId: event.currentTarget.id,
     selectedId: event.currentTarget.id[0],
     messageId: event.currentTarget.id[1],
   })
@@ -128,8 +133,9 @@ clickMessage(event){
         {this.props.toggleVal ?
     <div>
       {this.state.friendMessages.map((date, i) => {
-        let idVal = `${i}${date.message}`
-        return (<div className="message">
+        let idVal = `${i}${date.message}`;
+        let idVal2 = idVal+1;
+        return (<div className="message" id={idVal2}>
           <div onClick={this.clickMessage} id={idVal} key={i} >
             <h3>New Message From {date.sentFrom}</h3>
             <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>

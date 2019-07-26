@@ -82,7 +82,10 @@
 
 .message-pic {
   max-width: 25%;
-  padding-bottom: 3px;
+  margin-left: 3%;
+  margin-bottom: -10%;
+  border: 10px;
+    border-style: double;
 }
 
 .message-body {
