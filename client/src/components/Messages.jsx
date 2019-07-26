@@ -5,12 +5,11 @@ import Axios from 'axios';
 class Messages extends React.Component {
   constructor(props) {
     super(props);
-    let {toggleValue} = props;
+    //let {toggleValue} = props;
     this.state = {
       user: this.props.user,
       message: "",
       intervalOne: null,
-      toggleValue,
       messages: {
         0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
         1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
@@ -32,7 +31,7 @@ class Messages extends React.Component {
         9: "",  
       },
       dateMessages: [{sentFrom: "BennyBrosh", message: 1}, {sentFrom: "SessaSessaSessa", message: 2}, {sentFrom: "jone388", message: 3}],
-      friendMessages: [],
+      friendMessages: [{ sentFrom: "SessaSessaSessa", message: 2 }],
       selectedId: null,
       messageId: null,
       read: [],
@@ -123,12 +122,12 @@ clickMessage(event){
   
   
   render(){
-    let {message} = this.state;
   
     return (
       <div>
+        {this.props.toggleVal ?
     <div>
-      {this.state.dateMessages.map((date, i) => {
+      {this.state.friendMessages.map((date, i) => {
         let idVal = `${i}${date.message}`
         return (<div className="message">
           <div onClick={this.clickMessage} id={idVal} key={i} >
@@ -139,6 +138,18 @@ clickMessage(event){
         </div>)
       })}
     </div>
+          : <div>
+            {this.state.dateMessages.map((date, i) => {
+              let idVal = `${i}${date.message}`
+              return (<div className="message">
+                <div onClick={this.clickMessage} id={idVal} key={i} >
+                  <h3>New Message From {date.sentFrom}</h3>
+                  <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
+                </div>
+                <h3 className="message-body">{this.state.messagesState[i]}</h3>
+              </div>)
+            })}
+          </div>}
     </div>
     )
   }
