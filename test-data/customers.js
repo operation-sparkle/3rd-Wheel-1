@@ -1,5 +1,20 @@
 module.exports = [
   {
+    username: 'Lizzo',
+    name: 'Lizzie McGuire',
+    pic: 'https://data.whicdn.com/images/9800085/superthumb.png?t=1305491534',
+    password: 'password',
+    age: 30,
+    preference: 'Female',
+    gender: 'Male',
+    bio: 'I’d eat carbs if an Italian boy buys them for me.',
+    latitude: 29.9856,
+    longitude: -90.084,
+    int1: 'mexican',
+    int2: 'pizza',
+    int3: 'hotdog',
+  },
+  {
     username: 'TheFranzy',
     name: 'Galen Housego',
     pic: 'https://avatars1.githubusercontent.com/u/46695209?s=460&v=4',
