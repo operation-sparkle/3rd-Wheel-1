@@ -3,7 +3,6 @@ import Card from 'react-bootstrap/Card';
 import CardImg from 'react-bootstrap/CardImg';
 import Axios from 'axios';
 
-
 const MatchOption = (props) => {
     const { match, interests, onDump, onFriendzone, user } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
