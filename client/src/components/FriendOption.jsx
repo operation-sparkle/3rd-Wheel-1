@@ -84,8 +84,8 @@ const FriendOption = (props) => {
             <Card.Text>Bio: {friend.bio}</Card.Text>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
             <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
-            <button type="button" onClick={invite}>Yes! Let's do lunch!</button>
-            <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
+            <button className="btn invite-button" type="button" onClick={invite}>Yes! Let's do lunch!</button>
+            <button className="btn invite-button" type="button" onClick={newChoice}>YUCK! New Choice Please</button>
         </Card>
     )
 }

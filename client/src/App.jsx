@@ -82,12 +82,13 @@ class App extends React.Component {
             const { longitude, latitude } = position.coords;
             console.log(longitude, latitude);
 
-            const data = await axios.patch('/users', { longitude, latitude })
+           const data = await axios.patch('/users', { longitude: -90, latitude: 30 })
             this.setUser(data);
             this.getCustomers();
             this.getMatches();
             this.getFriends();
-          } catch(err) {
+         } 
+          catch(err) {
             console.warn(err);
           }         
         }

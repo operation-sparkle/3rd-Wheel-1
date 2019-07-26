@@ -132,7 +132,7 @@ clickMessage(event){
         let idVal = `${i}${date.message}`
         return (<div className="message">
           <div onClick={this.clickMessage} id={idVal} key={i} >
-            <h3>New Message From {date.sentFrom}</h3>
+            <h4>New Message From {date.sentFrom}</h4>
             <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
           </div>
           <h3 className="message-body">{this.state.messagesState[i]}</h3>
