@@ -5,7 +5,7 @@ import Axios from 'axios';
 class Messages extends React.Component {
   constructor(props) {
     super(props);
-    let {toggleValue} = props;
+    let {toggleValue, customers} = props;
     this.state = {
       user: this.props.user,
       message: "",
@@ -133,7 +133,7 @@ clickMessage(event){
         return (<div className="message">
           <div onClick={this.clickMessage} id={idVal} key={i} >
             <h3>New Message From {date.sentFrom}</h3>
-            <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
+            {this.props.customers.map((customer) => {if(customer.username === date.sentFrom){return <img className="message-pic" src={`${customer.pic}`}></img>}})}
           </div>
           <h3 className="message-body">{this.state.messagesState[i]}</h3>
         </div>)
