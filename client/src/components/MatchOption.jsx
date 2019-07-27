@@ -76,8 +76,8 @@ const MatchOption = (props) => {
     }
     return (
         <Card className='friend-cards col-12 col-md-4'>
-            <CardImg src={match.pic} />
-            <Card.Title>{match.name}</Card.Title>
+            <CardImg className="match-pic" src={match.pic} />
+            <h4>{match.name}</h4>
             <Card.Text>Age: {match.age}</Card.Text>
             <Card.Text>Bio: {match.bio}</Card.Text>
             <div className="row col-12 action-button-div">

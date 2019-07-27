@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link } from 'react-router-dom'
 import axios from 'axios';
 
 import Form from 'react-bootstrap/Form';
@@ -46,7 +46,7 @@ const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin, toggleValue 
         }} />
       </Switch>
       :
-      <Form>
+      <Form style={{ margin: '0 3rem' }}>
         <Form.Group controlId="form-username" className="form">
           <Form.Label>Username</Form.Label>
           <Form.Control type="text" placeholder="Enter Username"  onChange={(e) => handleChange(e, setUsername) } />
@@ -62,9 +62,9 @@ const Login = ({ gateKeeper, isLoggedIn, showAuthFail, failedLogin, toggleValue 
           </Form.Text>
         </Form.Group>
         {/* run on enter button too!!!! */}
-        <Button className={buttonStyle} variant="primary" type="submit" onClick={() => loginUser(username, password)}>
+        <Link to="/matches" ><Button className={buttonStyle} variant="primary" type="submit" onClick={() => loginUser(username, password)}>
           Login
-        </Button>
+        </Button></Link>
         { failedLogin ? <p>Please try again</p> : <div/> }
       </Form>   
   );  

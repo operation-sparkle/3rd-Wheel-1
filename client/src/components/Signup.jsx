@@ -50,7 +50,7 @@ const Signup = ({ gateKeeper, isLoggedIn, showAuthFail, toggleValue }) => {
       </Route>
       :
       // if !!loggedIn === false, redirect to index (swapping to restricted view)
-      <Form>
+      <Form style={{margin: '0 3rem'}}>
         <Form.Group controlId="form-username">
           <Form.Label>Username</Form.Label>
           <Form.Control type="text" placeholder="Enter Username"  onChange={(e) => handleChange(e, setUsername) } />

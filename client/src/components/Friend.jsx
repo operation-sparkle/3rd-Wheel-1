@@ -6,8 +6,8 @@ const Friend = (props) => {
     const { friend, onGhost } = props;
 return (
     <Card className='friend-cards col-12 col-md-4'>
-        <CardImg src={friend.pic} />
-        <Card.Title>{friend.name}</Card.Title>
+        <CardImg className="friend-pic"  src={friend.pic} />
+        <h4>{friend.name}</h4>
         <Card.Text>Age: {friend.age}</Card.Text>
         <Card.Text>Bio: {friend.bio}</Card.Text>
         <div className="row ghost-button-div col-12">

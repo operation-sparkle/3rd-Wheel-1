@@ -82,13 +82,13 @@ const Matches = ({ user, customer, customers, datingPool, poolOption, skipMatch,
 
   return (
     
-    <div>
-      <Carousel className="match-carousel col-12 col-md-4 mx-auto" controls={false} /* activeIndex={index} */ dir="left">
+    <div className="match-div col-md-5 mx-auto">
+      <Carousel className="match-carousel col-12 col-md-12 mx-auto" controls={false} /* activeIndex={index} */ dir="left">
       {datingPool.length > 0 ? 
         <CarouselItem>
-          <Card>
-            <CardImg src={poolOption.pic} />
-            <Card.Title>{poolOption.username}</Card.Title>
+          <Card style={{border: 'none'}}>
+            <CardImg className="match-pic" src={poolOption.pic} />
+            <h4>{poolOption.username}</h4>
             <Card.Text>Age: {poolOption.age}</Card.Text>
             <Card.Text>Bio: {poolOption.bio}</Card.Text>
           </Card>
@@ -96,15 +96,15 @@ const Matches = ({ user, customer, customers, datingPool, poolOption, skipMatch,
         :
         <CarouselItem>
           <Card>
-            <CardImg src="https://media.giphy.com/media/3o6gg3IDiuTKFgGzN6/giphy.gif"/>
+              <CardImg className="match-pic" src="https://media.giphy.com/media/3o6gg3IDiuTKFgGzN6/giphy.gif"/>
             <Card.Text>Sorry, there are no more perspective matches in your area at this time.</Card.Text>
             </Card>
         </CarouselItem>
       }
     </Carousel>
-      <Button className="col-10 col-md-4 mx-auto" onClick={acceptMatch} variant="success" size="md" block>Accept</Button>
-      <Button className="col-10 col-md-4 mx-auto"  onClick={skipMatch} variant="primary" size="md" block>Skip</Button>
-      <Button className="col-10 col-md-4 mx-auto"  onClick={rejectMatch} variant="danger" size="md" block>Reject </Button>
+      <Button className="col-10 col-md-10 mx-auto" onClick={acceptMatch} variant="success" size="md" block>Accept</Button>
+      <Button className="col-10 col-md-10 mx-auto"  onClick={skipMatch} variant="primary" size="md" block>Skip</Button>
+      <Button className="col-10 col-md-10 mx-auto"  onClick={rejectMatch} variant="danger" size="md" block>Reject </Button>
     </div>
 
   );
