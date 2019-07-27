@@ -5,7 +5,7 @@ import Axios from 'axios';
 class Messages extends React.Component {
   constructor(props) {
     super(props);
-    //let {toggleValue} = props;
+    let {toggleValue, customers} = props;
     this.state = {
       user: this.props.user,
       message: "",
@@ -162,7 +162,7 @@ clickFriendMessage(event){
         return (<div className="message" id={idVal2}>
           <div onClick={this.clickFriendMessage} id={idVal} key={idVal} >
             <h3>New Message From {friend.sentFrom}</h3>
-            <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
+            {this.props.customers.map((customer) => { if (customer.username === friend.sentFrom) { return <img className="message-pic" src={`${customer.pic}`}></img> } })}
           </div>
           <h3 className="message-body">{this.state.friendMessagesState[i]}</h3>
         </div>)
@@ -174,7 +174,7 @@ clickFriendMessage(event){
               return (<div className="message">
                 <div onClick={this.clickDateMessage} id={idVal} key={idVal} >
                   <h3>New Message From {date.sentFrom}</h3>
-                  <img className="message-pic" src="https://avatars0.githubusercontent.com/u/24915?s=400&v=4"></img>
+                  {this.props.customers.map((customer) => { if (customer.username === date.sentFrom) { return <img className="message-pic" src={`${customer.pic}`}></img> } })}
                 </div>
                 <h3 className="message-body">{this.state.dateMessagesState[j]}</h3>
               </div>)

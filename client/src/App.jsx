@@ -100,7 +100,7 @@ class App extends React.Component {
           // could send timestamp too!
           try {
             const { longitude, latitude } = position.coords;
-            console.log(longitude, latitude);
+            console.log(longitude, lattitude);
 
             const data = await axios.patch('/users', { longitude, latitude })
             this.setUser(data);
@@ -117,7 +117,6 @@ class App extends React.Component {
           // Update a div element with error.message.
           return await this.showAuthFail();
         }
-
         return navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 })
       }
     })
@@ -462,8 +461,13 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
+<<<<<<< HEAD
               <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} messages={messages}  user={user} customers={customers} interests={interests} friends={friends} dumpOption={dumpOption} onGhost={this.onGhostFriend} /> : <Datezone {...props} onSubmit={this.onSubmit} dumpOption={dumpOption} user={user} dumpClick={this.dumpClick} friendClicked={friendClicked} messageClicked={messageClicked} messages={messages} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} user={user} toggleVal={this.state.toggleValue}/>} />
+=======
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
+              <Route path="/messages" render={(props) => <Messages {...props} user={user} customers={customers} toggleVal={this.state.toggleValue}/>} />
+>>>>>>> 0583ebe792f9152f536b1ba3113bb9452f8704c7
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :
