@@ -245,6 +245,7 @@ class App extends React.Component {
     this.setState({
       friendClicked: false,
       messageClicked: false,
+      dumpOption: "",
     })
   }
 
