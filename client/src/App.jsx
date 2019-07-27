@@ -78,8 +78,11 @@ class App extends React.Component {
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
     this.count = 0;
-    this.gateKeeper();
     
+  }
+  
+  componentDidMount(){
+    this.gateKeeper();
   }
 
   // function to flip bool and get user info when signup succeeds
@@ -183,7 +186,7 @@ class App extends React.Component {
 
   intervalDateFunc(){
   let messageArr = this.state.messages[this.state.selectedDump];
-  
+
   this.setState({
     dumpOption: messageArr[this.count],
   })
@@ -212,6 +215,7 @@ class App extends React.Component {
 
   onFriendzoneMatch(event) {
     let friendId = parseInt(event.currentTarget.id, 10);
+    event.preventDefault();
     axios.post('/friends', { user1Id: this.state.user.id, user2Id: friendId })
       .then((result) => {
         console.log('friends post result:', result);
@@ -219,10 +223,10 @@ class App extends React.Component {
       })
       .then((friendObjects) => {
         this.setState({
-          friends: friendObjects.data,
           friendClicked: true,
+          friends: friendObjects.data,
         });
-        debugger;
+       
         return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
       })
       .then((results) => {
@@ -239,6 +243,7 @@ class App extends React.Component {
   
     clearInterval(this.state.interval);
     this.setState({
+      friendClicked: false,
       messageClicked: false,
     })
   }
@@ -457,7 +462,7 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
-              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} messages={messages} dumpClick={this.dumpClick} friendClicked={friendClicked} onSubmit={this.onSubmit} user={user} customers={customers} interests={interests} friends={friends} dumpOption={dumpOption} onGhost={this.onGhostFriend} /> : <Datezone {...props} onSubmit={this.onSubmit} dumpOption={dumpOption} user={user} dumpClick={this.dumpClick} messageClicked={messageClicked} messages={messages} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} messages={messages}  user={user} customers={customers} interests={interests} friends={friends} dumpOption={dumpOption} onGhost={this.onGhostFriend} /> : <Datezone {...props} onSubmit={this.onSubmit} dumpOption={dumpOption} user={user} dumpClick={this.dumpClick} friendClicked={friendClicked} messageClicked={messageClicked} messages={messages} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
               <Route path="/messages" render={(props) => <Messages {...props} user={user} toggleVal={this.state.toggleValue}/>} />
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
