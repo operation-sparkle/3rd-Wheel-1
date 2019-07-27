@@ -11,6 +11,7 @@ import outbound from '../../../test-data/outbound';
 import Alert from 'react-bootstrap/Alert';
 
 const Pending = (props) => {
+  const {messages} = props;
   const [out, newOuts] = useState([]);
   const [inc, newIns] = useState([]);
 

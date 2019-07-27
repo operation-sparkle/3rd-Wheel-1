@@ -5,7 +5,7 @@ import Axios from 'axios';
 
 
 const MatchOption = (props) => {
-    const { match, interests, onDump, onFriendzone, user } = props;
+    const {messages, messageClicked, match, interests, onDump, onFriendzone, user } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
     let [dateinfo, dateChange] = useState([{ name: 'go on a date?' }])
@@ -68,13 +68,12 @@ const MatchOption = (props) => {
         Axios(options)
             .then((response) => {
                 console.log('no error', response)
-                alert(`Lunch date set with ${match.name}. Go get em tiger!`)
+                confirm(`Lunch date set with ${match.name}. Go get em tiger!`)
             })
             .catch((error) => {
                 console.log('error'.errror)
             })
     }
-
     return (
         <Card className='friend-cards col-12 col-md-4'>
             <CardImg className="match-pic" src={match.pic} />
@@ -91,6 +90,7 @@ const MatchOption = (props) => {
             <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
         </Card>
     )
+   
 }
 
 export default MatchOption;

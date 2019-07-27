@@ -26,7 +26,10 @@ class App extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
+      messageClicked: false,
+      friendClicked: false,
       user: {},
+      interval: null,
       isLoggedIn: false,
       failedLogin: false,
       interests: [null, null, null],
@@ -38,6 +41,17 @@ class App extends React.Component {
       poolOption: null,
       friends: [],
       navExpanded: false,
+      dumpOption: "",
+      selectedDump: null,
+      messages: {
+        0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
+        1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
+        2: [<p className="emoji">	&#128123;	&#128123;	&#128123;	&#128123;	&#128123;	&#128123;</p>],
+        3: [<p className="emoji">&#129340;?</p>],
+        4: [<p>Message 4</p>],
+        5: [<p>Message 5</p>],
+        6: [<p>Hey</p>, <p>BTW</p>, <p>&#129314;YOU NASTY&#129314;</p>],
+      },
     }
     
     this.showAuthFail = this.showAuthFail.bind(this);
@@ -57,12 +71,18 @@ class App extends React.Component {
     this.onGhostFriend = this.onGhostFriend.bind(this);
     this.closeNav = this.closeNav.bind(this);
     this.setNavExpanded = this.setNavExpanded.bind(this);
-
+    this.dumpClick = this.dumpClick.bind(this);
+    this.intervalDateFunc = this.intervalDateFunc.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+ 
     // attempt to get user data initially.
     // if no cookie, middleware redirects.
+    this.count = 0;
     
+  }
+  
+  componentDidMount(){
     this.gateKeeper();
-    
   }
 
   // function to flip bool and get user info when signup succeeds
@@ -80,7 +100,7 @@ class App extends React.Component {
           // could send timestamp too!
           try {
             const { longitude, latitude } = position.coords;
-            console.log(longitude, latitude);
+            console.log(longitude, lattitude);
 
            const data = await axios.patch('/users', { longitude: -90, latitude: 30 })
             this.setUser(data);
@@ -98,7 +118,6 @@ class App extends React.Component {
           // Update a div element with error.message.
           return await this.showAuthFail();
         }
-
         return navigator.geolocation.getCurrentPosition(successCallback, errorCallback, { maximumAge: 600000 })
       }
     })
@@ -151,9 +170,39 @@ class App extends React.Component {
     })
   }
 
+  dumpClick(event) {
+    clearInterval(this.state.interval);
+    this.count = 0;
+    let messageArr = this.state.messages[event.currentTarget.id];
+    this.setState({
+      selectedDump: event.currentTarget.id,
+      dumpOption: messageArr[this.count],
+    })
+    // this.state.interval = setInterval(()=>{this.intervalDateFunc}, 3000);
+    this.state.interval = setInterval(this.intervalDateFunc, 3000);
+  }
+
+
+
+  intervalDateFunc(){
+  let messageArr = this.state.messages[this.state.selectedDump];
+
+  this.setState({
+    dumpOption: messageArr[this.count],
+  })
+  this.count++;
+    
+    if (this.count > messageArr.length) {
+      this.count = 0;
+  }
+}
+
   onDumpMatch(event) {
     let dumpedId = parseInt(event.currentTarget.id, 10);
     console.log('dumpedId!', dumpedId);
+    this.setState({
+      messageClicked: true,
+    })
     axios.delete('./couples', { data: { dumpId: dumpedId, userId: this.state.user.id } })
     .then((results) => {
       console.log('dumped results from front:', results);
@@ -166,18 +215,18 @@ class App extends React.Component {
 
   onFriendzoneMatch(event) {
     let friendId = parseInt(event.currentTarget.id, 10);
+    event.preventDefault();
     axios.post('/friends', { user1Id: this.state.user.id, user2Id: friendId })
       .then((result) => {
         console.log('friends post result:', result);
         return axios.get('/friends');
       })
       .then((friendObjects) => {
-        console.log('friend objects from front', friendObjects);
-        console.log('friends before setState:', this.state.friends);
         this.setState({
+          friendClicked: true,
           friends: friendObjects.data,
         });
-        console.log('friends after setState:', this.state.friends);
+       
         return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
       })
       .then((results) => {
@@ -187,12 +236,21 @@ class App extends React.Component {
       .catch((err) => {
         console.log('friends post/get error:', err);
       })
+    }
+    
+
+  onSubmit(){
+  
+    clearInterval(this.state.interval);
+    this.setState({
+      friendClicked: false,
+      messageClicked: false,
+    })
   }
 
   getFriends() {
     axios.get('/friends')
       .then((friends) => {
-        console.log('Friends got!', friends);
         this.setState({
           friends: friends.data,
         })
@@ -335,9 +393,9 @@ class App extends React.Component {
   setNavExpanded(expanded) {
     this.setState({ navExpanded: expanded });
   }
-
+  
   render() {
-    const {customer, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
+    const {customer, friendClicked, messages, dumpOption, messageClicked, isLoggedIn, failedLogin, user, customers, toggleValue, interested, interests, datingPool, poolOption, friends } = this.state;
 
           let navStyle = "";
           let appStyle = "";
@@ -404,8 +462,13 @@ class App extends React.Component {
               <Route path="/matches" render={(props) => <Matches {...props} user={user} customers={customers} customer={customer} datingPool={datingPool} poolOption={poolOption} rejectMatch={this.rejectMatch} skipMatch={this.skipMatch} acceptMatch={this.acceptMatch} />}  />
               <Route path="/interests" render={(props) => <Interests {...props} user={user}  setInterests={this.setInterests} />} />
               <Route path="/hotspots" render={(props) => <HotSpots {...props} user={user} />} />
+<<<<<<< HEAD
+              <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} messages={messages}  user={user} customers={customers} interests={interests} friends={friends} dumpOption={dumpOption} onGhost={this.onGhostFriend} /> : <Datezone {...props} onSubmit={this.onSubmit} dumpOption={dumpOption} user={user} dumpClick={this.dumpClick} friendClicked={friendClicked} messageClicked={messageClicked} messages={messages} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
+              <Route path="/messages" render={(props) => <Messages {...props} user={user} toggleVal={this.state.toggleValue}/>} />
+=======
               <Route path="/pending" render={(props) => toggleValue ? <Friendzone {...props} user={user} customers={customers} interests={interests} friends={friends} onGhost={this.onGhostFriend} /> : <Datezone {...props} user={user} interested={interested} interests={interests} onDump={this.onDumpMatch} onFriendzone={this.onFriendzoneMatch} /> }/>
-              <Route path="/messages" render={(props) => <Messages {...props} user={user} />} />
+              <Route path="/messages" render={(props) => <Messages {...props} user={user} customers={customers} toggleVal={this.state.toggleValue}/>} />
+>>>>>>> 0583ebe792f9152f536b1ba3113bb9452f8704c7
               <Route path="/profile" render={(props) => <Profile {...props} user={user} failedLogin={failedLogin} />} />
             </Switch>
           :

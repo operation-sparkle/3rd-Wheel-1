@@ -3,7 +3,8 @@ import FriendOption from './FriendOption';
 import Friend from './Friend';
 
 const Friendzone = (props) => {
-    const { customers, interests, user, friends, onGhost } = props;
+    const { customers, interests, messages, user, friends, onGhost } = props;
+   
     return (
         <div className="datezone-div col-12 mx-auto">
             <h2>You are in the Friendzone!</h2>
@@ -13,7 +14,7 @@ const Friendzone = (props) => {
             </div>
             <div className="friend-div col-12 row">
                 <h4 className="section-heading col-12" >Meet someone new:</h4>
-                {customers.map((friend, i) => <FriendOption friend={friend} key={i} interests={interests} user={user}/>)}
+            {customers.map((friend, i) => <FriendOption friend={friend} messages={messages} key={i} interests={interests} user={user}/>)}
             </div>
         </div>
     )

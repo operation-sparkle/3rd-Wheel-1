@@ -68,7 +68,7 @@ const FriendOption = (props) => {
         Axios(options)
             .then((response) => {
                 console.log('no error', response)
-                alert(`Lunch date set with ${friend.name}. Go get em tiger!`)
+                confirm(`Lunch date set with ${friend.name}. Go get em tiger!`)
             })
             .catch((error) => {
                 console.log('error'.errror)
