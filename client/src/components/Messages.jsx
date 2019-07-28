@@ -70,13 +70,11 @@ intervalDateFunc(){
     if (this.count > messageArr.length) {
       clearInterval(this.state.intervalOne);
       this.count = 0;
-      this.state.read.push((this.state.dateMessages[this.state.selectedId]));
-      // let newArr = this.state.dateMessages.splice(this.state.selectedId - 1, 1);
-      // this.setState({
-      //   dateMessages: newArr,
-      // })
-      let element = this.state.element + 1;
-      document.getElementById(element).style.display = "none";
+      this.state.dateMessages.splice(this.state.selectedId, 1);
+      let newArr = this.state.dateMessages;
+      this.setState({
+        dateMessages: newArr,
+      })
   }
 }
 
@@ -84,8 +82,6 @@ intervalDateFunc(){
     let messageArr = this.state.messages[this.state.messageId];
     let stateObj = this.state.friendMessagesState;
     stateObj[this.state.selectedId] = messageArr[this.count];
-    // let messageState = this.state.messagesState;
-
     this.setState({
       friendMessagesState: stateObj,
     })
@@ -94,13 +90,11 @@ intervalDateFunc(){
     if (this.count > messageArr.length) {
       clearInterval(this.state.intervalTwo);
       this.count = 0;
-      this.state.read.push((this.state.dateMessages[this.state.selectedId]));
-      // let newArr = this.state.dateMessages.splice(this.state.selectedId - 1, 1);
-      // this.setState({
-      //   dateMessages: newArr,
-      // })
-      let element = this.state.element + 1;
-      document.getElementById(element).style.display = "none";
+      this.state.friendMessages.splice(this.state.selectedId, 1);
+      let newArr = this.state.friendMessages;
+      this.setState({
+        dateMessages: newArr,
+      })
     }
   }
 
@@ -114,8 +108,8 @@ clickDateMessage(event){
     selectedId: event.currentTarget.id[0],
     messageId: event.currentTarget.id[1],
   })
-    document.getElementById(event.currentTarget.id).style.display = "none";
-    let count = 0;
+      document.getElementById(event.currentTarget.id).style.display = "none";
+      let count = 0;
       this.state.intervalOne = setInterval(this.intervalDateFunc, 3000);
 }
 
@@ -158,8 +152,8 @@ clickFriendMessage(event){
     <div>
       {this.state.friendMessages.map((friend, i) => {
         let idVal = `${i}${friend.message}`;
-        let idVal2 = idVal+1;
-        return (<div className="message" id={idVal2}>
+      
+        return (<div className="message">
           <div onClick={this.clickFriendMessage} id={idVal} key={idVal} >
             <h3>New Message From {friend.sentFrom}</h3>
             {this.props.customers.map((customer) => { if (customer.username === friend.sentFrom) { return <img className="message-pic" src={`${customer.pic}`}></img> } })}
