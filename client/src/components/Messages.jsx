@@ -14,12 +14,12 @@ class Messages extends React.Component {
       elementId: null,
       messages: {
         0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
-        1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
-        2: [<p className="emoji">	&#128123;	&#128123;	&#128123;	&#128123;	&#128123;	&#128123;</p>],
-        3: [<p className="emoji">&#129340;?</p>],
-        4: [<p>Message 4</p>],
-        5: [<p>Message 5</p>],
-        6: [<p>Hey</p>, <p>BTW</p>, <p>&#129314;YOU NASTY&#129314;</p>],
+        1: [<p>Hey, I Think You're Great</p>, <p>&#x231B; But Our Time Together Is Over&#x231B;</p>, <p className="emoji">&#x1F940;</p>, <p>Take Care</p>],
+        2: [<p>Hey</p>, <p>That Food Was Good</p>, <p>But You Were Stale</p>, <p className="emoji">&#x1F634;</p>, <p>Goodbye Forever</p>, <p className="emoji">&#x2620;</p>],
+        3: [<p>&#x1F4E2; Let Me Make It Loud And Clear &#x1F4E2;</p>, <p>I'd Rather Be Stranded On A &#x1F3DD;</p>, <p>Than Go On Another Date With You</p>, <p className="emoji"></p>],
+        4: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
+        5: [<p>Hey</p>, <p>I Like Hanging Out With You</p>, <p>But</p>, <p>Let's Move Things To The Friendzone</p>],
+        6: [<p>Hey!</p>, <p>Let's Hangout Soon</p>, <p>But Just As Friends</p>, <p className="emoji">&#x1F638;</p>],
       },
       dateMessagesState: {
         1: "",
@@ -70,13 +70,11 @@ intervalDateFunc(){
     if (this.count > messageArr.length) {
       clearInterval(this.state.intervalOne);
       this.count = 0;
-      this.state.read.push((this.state.dateMessages[this.state.selectedId]));
-      // let newArr = this.state.dateMessages.splice(this.state.selectedId - 1, 1);
-      // this.setState({
-      //   dateMessages: newArr,
-      // })
-      let element = this.state.element + 1;
-      document.getElementById(element).style.display = "none";
+      this.state.dateMessages.splice(this.state.selectedId, 1);
+      let newArr = this.state.dateMessages;
+      this.setState({
+        dateMessages: newArr,
+      })
   }
 }
 
@@ -84,8 +82,6 @@ intervalDateFunc(){
     let messageArr = this.state.messages[this.state.messageId];
     let stateObj = this.state.friendMessagesState;
     stateObj[this.state.selectedId] = messageArr[this.count];
-    // let messageState = this.state.messagesState;
-
     this.setState({
       friendMessagesState: stateObj,
     })
@@ -94,13 +90,11 @@ intervalDateFunc(){
     if (this.count > messageArr.length) {
       clearInterval(this.state.intervalTwo);
       this.count = 0;
-      this.state.read.push((this.state.dateMessages[this.state.selectedId]));
-      // let newArr = this.state.dateMessages.splice(this.state.selectedId - 1, 1);
-      // this.setState({
-      //   dateMessages: newArr,
-      // })
-      let element = this.state.element + 1;
-      document.getElementById(element).style.display = "none";
+      this.state.friendMessages.splice(this.state.selectedId, 1);
+      let newArr = this.state.friendMessages;
+      this.setState({
+        dateMessages: newArr,
+      })
     }
   }
 
@@ -114,8 +108,8 @@ clickDateMessage(event){
     selectedId: event.currentTarget.id[0],
     messageId: event.currentTarget.id[1],
   })
-    document.getElementById(event.currentTarget.id).style.display = "none";
-    let count = 0;
+      document.getElementById(event.currentTarget.id).style.display = "none";
+      let count = 0;
       this.state.intervalOne = setInterval(this.intervalDateFunc, 3000);
 }
 
@@ -158,8 +152,8 @@ clickFriendMessage(event){
     <div>
       {this.state.friendMessages.map((friend, i) => {
         let idVal = `${i}${friend.message}`;
-        let idVal2 = idVal+1;
-        return (<div className="message" id={idVal2}>
+      
+        return (<div className="message">
           <div onClick={this.clickFriendMessage} id={idVal} key={idVal} >
             <h3>New Message From {friend.sentFrom}</h3>
             {this.props.customers.map((customer) => { if (customer.username === friend.sentFrom) { return <img className="message-pic" src={`${customer.pic}`}></img> } })}
