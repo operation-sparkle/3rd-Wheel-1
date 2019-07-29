@@ -8,7 +8,7 @@ import ListGroupItem from 'react-bootstrap/ListGroupItem';
 
 const Profile = ({ user }) => {
   //  const [user, changeUser] = useState(props.user)
-  console.log(user);
+ 
   return (
     <div>
     <Card style={{ width: '300px' }}>
