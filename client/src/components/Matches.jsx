@@ -102,9 +102,9 @@ const Matches = ({ user, customer, customers, datingPool, poolOption, skipMatch,
         </CarouselItem>
       }
     </Carousel>
-      <Button className="col-10 col-md-10 mx-auto" onClick={acceptMatch} variant="success" size="md" block>Accept</Button>
-      <Button className="col-10 col-md-10 mx-auto"  onClick={skipMatch} variant="primary" size="md" block>Skip</Button>
-      <Button className="col-10 col-md-10 mx-auto"  onClick={rejectMatch} variant="danger" size="md" block>Reject </Button>
+      <Button className="col-10 col-md-10 mx-auto accept" onClick={acceptMatch} variant="danger" size="md" block>&#128525; Accept &#128525;</Button>
+      <Button className="col-10 col-md-10 mx-auto skip" onClick={skipMatch} variant="danger" size="md" block>&#129300; Skip &#129300;</Button>
+      <Button className="col-10 col-md-10 mx-auto reject" onClick={rejectMatch} variant="danger" size="md" block>&#129314; Reject &#129314;</Button>
     </div>
 
   );

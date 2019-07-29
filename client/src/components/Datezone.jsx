@@ -13,7 +13,7 @@ const Datezone = (props) => {
                         <button className="btn col-4 action-button" id="4" onClick={dumpClick}>Tame</button>
                         <button className="btn col-4 action-button" id="5" onClick={dumpClick}>Mild</button>
                         <button className="btn col-4 action-button" id="6" onClick={dumpClick}>Rabid</button>
-                        <button className="btn col-10 action-button" onClick={onSubmit}>Send</button>
+                        <button className="btn col-12 action-button" onClick={onSubmit}>Send</button>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@ const Datezone = (props) => {
                     <button className="btn col-4 action-button" id="0" onClick={dumpClick}>Tame</button>
                     <button className="btn col-4 action-button" id="1" onClick={dumpClick}>Mild</button>
                     <button className="btn col-4 action-button" id="2" onClick={dumpClick}>Harsh</button>
-                    <button className="btn col-10 action-button" onClick={onSubmit}>Send</button>
+                    <button className="btn col-12 action-button" onClick={onSubmit}>Send</button>
                     </div>
                 </div>
             </div>
