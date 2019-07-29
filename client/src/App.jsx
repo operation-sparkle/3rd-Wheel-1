@@ -44,13 +44,12 @@ class App extends React.Component {
       dumpOption: "",
       selectedDump: null,
       messages: {
-        0: [<p>Yoooooo</p>, <p>That Was Fun</p>, <p>Let's Do That Again Soon</p>, <p>&#128516;</p>],
-        1: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
-        2: [<p className="emoji">	&#128123;	&#128123;	&#128123;	&#128123;	&#128123;	&#128123;</p>],
-        3: [<p className="emoji">&#129340;?</p>],
-        4: [<p>Message 4</p>],
-        5: [<p>Message 5</p>],
-        6: [<p>Hey</p>, <p>BTW</p>, <p>&#129314;YOU NASTY&#129314;</p>],
+        1: [<p>Hey, I Think You're Great</p>, <p>&#x231B; But Our Time Together Is Over&#x231B;</p>, <p className="emoji">&#x1F940;</p>, <p>Take Care</p>],
+        2: [<p>Hey</p>, <p>That Food Was Good</p>, <p>But You Were Stale</p>, <p className="emoji">&#x1F634;</p>, <p>Goodbye Forever</p>, <p className="emoji">&#x2620;</p>],
+        3: [<p>&#x1F4E2; Let Me Make It Loud And Clear &#x1F4E2;</p>, <p>I'd Rather Be Stranded On A &#x1F3DD;</p>, <p>Than Go On Another Date With You</p>, <p className="emoji"></p>],
+        4: [<p>Hey There</p>, <p>You Seem Great</p>, <p>But</p>, <p>Let's Just Be Friends</p>, <p className="emoji">&#127752;</p>],
+        5: [<p>Hey</p>, <p>I Like Hanging Out With You</p>, <p>But</p>, <p>Let's Move Things To The Friendzone</p>],
+        6: [<p>Hey!</p>, <p>Let's Hangout Soon</p>, <p>But Just As Friends</p>, <p className="emoji">&#x1F638;</p>],
       },
     }
     

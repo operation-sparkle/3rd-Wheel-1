@@ -218,7 +218,6 @@ app.patch('/signup', async (req, res) => {
 
 //  this is to retrieve a specific user profile
 app.get('/users', loggedIn, async (req, res) => {
-
   try {
     const { userId: id } = req.session;
     const user = await User.findByPk(id);
@@ -244,7 +243,7 @@ app.get('/customers', (req, res) => {
 app.patch('/users', loggedIn, async (req, res) => {
   try {
     const { userId } = req.session;
-  
+
     const options = req.body;
     const user = await User.findByPk(userId);
     const updatedUser = await user.update(options);
@@ -318,8 +317,8 @@ app.get('/categories/:id', (req, res) => {
 let currentUserID = 1;
 
 app.post('/couples', (req, res) => {
-  console.log('inside app post');
-  console.log('couples req.body:', req.body);
+  // console.log('inside app post');
+  // console.log('couples req.body:', req.body);
   currentUserID = req.body.user1Id;
   Couple.create(req.body);
   res.status(201).send(req.body);
@@ -332,19 +331,19 @@ app.get('/couples', (req, res) => {
     },
   })
     .then((couples) => {
-      console.log('couples from server get:', couples);
+      // console.log('couples from server get:', couples);
       const matches = couples.map(match => match.user2Id);
-      console.log('matches:', matches);
+      // console.log('matches:', matches);
       const duplicateFreeMatches = [];
       matches.forEach((match) => {
         if (duplicateFreeMatches.indexOf(match) === -1) {
           duplicateFreeMatches.push(match);
         }
       });
-      console.log('duplicate free matches:', duplicateFreeMatches);
+      // console.log('duplicate free matches:', duplicateFreeMatches);
       // res.send(couples);
       // return duplicateFreeMatches.forEach(matchID => User.findByPk(matchID));
-      if (duplicateFreeMatches.length === 0) { 
+      if (duplicateFreeMatches.length === 0) {
         res.send(couples);
         return;
       }
@@ -357,18 +356,18 @@ app.get('/couples', (req, res) => {
       });
     })
     .then((people) => {
-      console.log('people from server', people);
+      // console.log('people from server', people);
       res.send(people);
     })
     .catch((err) => {
-      console.log('couples get error:', err);
+      // console.log('couples get error:', err);
       res.send(500);
     });
 });
 
 app.delete('/couples', (req, res) => {
-  console.log('inside server delete couples');
-  console.log('req.body delete', req.body);
+  // console.log('inside server delete couples');
+  // console.log('req.body delete', req.body);
   const { userId, dumpId } = req.body;
   Couple.destroy({
     where: {
@@ -377,7 +376,7 @@ app.delete('/couples', (req, res) => {
     },
   })
     .then((result) => {
-      console.log('server delete result:', result);
+      // console.log('server delete result:', result);
       res.send(200);
     })
     .catch((err) => {
@@ -388,8 +387,8 @@ app.delete('/couples', (req, res) => {
 // Functionality for Friends routes to store, get, and delete friends of user
 
 app.post('/friends', (req, res) => {
-  console.log('inside app friends post');
-  console.log('friends req.body:', req.body);
+  // console.log('inside app friends post');
+  // console.log('friends req.body:', req.body);
   currentUserID = req.body.user1Id;
   Friends.create(req.body);
   res.status(201).send(req.body);
@@ -402,16 +401,16 @@ app.get('/friends', (req, res) => {
     },
   })
     .then((friends) => {
-      console.log('friends from server get:', friends);
+      // console.log('friends from server get:', friends);
       const friendIds = friends.map(match => match.user2Id);
-      console.log('friendIds:', friendIds);
+      // console.log('friendIds:', friendIds);
       const duplicateFreeFriendIds = [];
       friendIds.forEach((friendId) => {
         if (duplicateFreeFriendIds.indexOf(friendId) === -1) {
           duplicateFreeFriendIds.push(friendId);
         }
       });
-      console.log('duplicate free friends:', duplicateFreeFriendIds);
+      // console.log('duplicate free friends:', duplicateFreeFriendIds);
       // res.send(couples);
       // return duplicateFreeMatches.forEach(matchID => User.findByPk(matchID));
       return User.findAll({
@@ -423,7 +422,7 @@ app.get('/friends', (req, res) => {
       });
     })
     .then((people) => {
-      console.log('people from server for friends', people);
+      // console.log('people from server for friends', people);
       res.send(people);
     })
     .catch((err) => {
@@ -433,8 +432,8 @@ app.get('/friends', (req, res) => {
 });
 
 app.delete('/friends', (req, res) => {
-  console.log('inside server delete friends');
-  console.log('req.body delete friends', req.body);
+  // console.log('inside server delete friends');
+  // console.log('req.body delete friends', req.body);
   const { userId, ghostId } = req.body;
   Friends.destroy({
     where: {
@@ -443,13 +442,12 @@ app.delete('/friends', (req, res) => {
     },
   })
     .then((result) => {
-      console.log('server friend delete result:', result);
+      // console.log('server friend delete result:', result);
       res.send(200);
     })
     .catch((err) => {
       console.log('error from server delete friends:', err);
     });
-
 });
 
 
@@ -813,7 +811,7 @@ app.post('/sendMessage', async (req, res) => {
 
 app.get('/sendMessage', async (req, res) => {
   const { userId } = req.query;
- 
+
   try {
     const storedMessages = await Messages.findAll({
       where: {

@@ -24,9 +24,9 @@ const Datezone = (props) => {
                 <div className="message">
                     <h3 className="message-body">{dumpOption}</h3>
                     <div className="row col-12 action-button-div">
-                    <button className="btn col-4 action-button" id="0" onClick={dumpClick}>Tame</button>
-                    <button className="btn col-4 action-button" id="1" onClick={dumpClick}>Mild</button>
-                    <button className="btn col-4 action-button" id="2" onClick={dumpClick}>Harsh</button>
+                    <button className="btn col-4 action-button" id="1" onClick={dumpClick}>Tame</button>
+                    <button className="btn col-4 action-button" id="2" onClick={dumpClick}>Mild</button>
+                    <button className="btn col-4 action-button" id="3" onClick={dumpClick}>Savage</button>
                     <button className="btn col-10 action-button" onClick={onSubmit}>Send</button>
                     </div>
                 </div>
