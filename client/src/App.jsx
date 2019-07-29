@@ -225,7 +225,7 @@ class App extends React.Component {
           friendClicked: true,
           friends: friendObjects.data,
         });
-       
+        this.getMatches();
         return axios.delete('./couples', { data: { dumpId: friendId, userId: this.state.user.id } });
       })
       .then((results) => {

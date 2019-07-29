@@ -13,7 +13,7 @@ const Datezone = (props) => {
                         <button className="btn col-4 action-button" id="4" onClick={dumpClick}>Tame</button>
                         <button className="btn col-4 action-button" id="5" onClick={dumpClick}>Mild</button>
                         <button className="btn col-4 action-button" id="6" onClick={dumpClick}>Rabid</button>
-                        <button className="btn col-10 action-button" onClick={onSubmit}>Send</button>
+                        <button className="btn col-12 action-button" onClick={onSubmit}>Send</button>
                     </div>
                 </div>
             </div>
@@ -27,7 +27,7 @@ const Datezone = (props) => {
                     <button className="btn col-4 action-button" id="1" onClick={dumpClick}>Tame</button>
                     <button className="btn col-4 action-button" id="2" onClick={dumpClick}>Mild</button>
                     <button className="btn col-4 action-button" id="3" onClick={dumpClick}>Savage</button>
-                    <button className="btn col-10 action-button" onClick={onSubmit}>Send</button>
+                    <button className="btn col-12 action-button" onClick={onSubmit}>Send</button>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@ const Datezone = (props) => {
             <div className="datezone-div col-12 mx-auto">
                 <h2>You are in the Datezone!</h2>
                 <div className="friend-div col-12 row">
-                    {interested.length > 0 ? interested.map((match, i) => <MatchOption match={match} key={i} messageClicked={messageClicked} interests={interests} messages={messages} onDump={onDump} onFriendzone={onFriendzone} user={user} />) : 'No Matches Found'}
+                    {interested.length > 0 ? interested.map((match, i) => <MatchOption match={match} key={i} messageClicked={messageClicked} interests={interests} messages={messages} onDump={onDump} onFriendzone={onFriendzone} user={user} />) : <p className="mx-auto">No Matches Found. Check out Find Matches to meet someone!</p>}
                 </div>
             </div>
         )

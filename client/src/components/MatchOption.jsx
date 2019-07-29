@@ -8,7 +8,7 @@ const MatchOption = (props) => {
     const {messages, messageClicked, match, interests, onDump, onFriendzone, user } = props;
     let [matchInt, matchIntChange] = useState([match.int1, match.int2, match.int3]);
     let [dateSuggestion, suggestionChange] = useState([]);
-    let [dateinfo, dateChange] = useState([{ name: 'go on a date?' }])
+    let [dateinfo, dateChange] = useState([{ name: 'a date?' }])
     let [restaurantType, setType] = useState(null);
     let [count, setCount] = useState(1);
 
@@ -80,14 +80,16 @@ const MatchOption = (props) => {
             <h4>{match.name}</h4>
             <Card.Text>Age: {match.age}</Card.Text>
             <Card.Text>Bio: {match.bio}</Card.Text>
-            <div className="row col-12 action-button-div">
+            <div className="row col-12 action-button-div mx-auto">
                 <button className="btn col-6 action-button" id={match.id} onClick={onFriendzone}>Friendzone</button>
                 <button className="btn col-6 action-button" id={match.id} onClick={onDump} >Dump</button>
             </div>
             <Card.Text>You both enjoy {dateSuggestion} restaurants</Card.Text>
-            <Card.Text>Ask to go to {`${dateinfo[0].name}?`}</Card.Text>
-            <button type="button" onClick={invite}>Yes! Let's do lunch!</button>
-            <button type="button" onClick={newChoice}>YUCK! New Choice Please</button>
+            <Card.Text>Invite to {`${dateinfo[0].name}?`}</Card.Text>
+            <div className="row col-12 action-button-div mx-auto">
+                <button className="btn col-10 action-button mx-auto" type="button" onClick={invite}>Yes! Let's do lunch!</button>
+                <button className="btn col-10 action-button mx-auto" type="button" onClick={newChoice}>YUCK! New Choice Please</button>
+            </div>
         </Card>
     )
    

@@ -85,7 +85,13 @@
 .friend-cards {
   /*max-width: 400px !important;*/
   padding: 1rem;
+  height: 620px;
+}
 
+.friend-cards-short {
+  /*max-width: 400px !important;*/
+  padding: 1rem;
+  height: 450px;
 }
 
 .form {
@@ -219,6 +225,10 @@
   border-radius: 6px;
 }
 
+.action-button:hover {
+  background-color: rgb(241, 142, 142);
+}
+
 .ghost-button-div {
   max-height: 60px !important;
 }
@@ -229,4 +239,22 @@
   color: white;
   height: 40px;
   margin: 0rem;
+  border: 2px solid white;
+  border-radius: 6px;
+}
+
+.accept {
+  background-color: rgb(255, 86, 86);
+  border: 2px solid rgb(241, 142, 142);
+}
+
+.skip {
+  background-color: rgb(241, 142, 142);
+  border: 2px solid rgb(255, 86, 86);
+}
+
+.reject {
+  background-color: white;
+  color: rgb(255, 86, 86);
+  border: 2px solid rgb(255, 86, 86);
 }
