@@ -37,7 +37,7 @@ const Datezone = (props) => {
             <div className="datezone-div col-12 mx-auto">
                 <h2>You are in the Datezone!</h2>
                 <div className="friend-div col-12 row">
-                    {interested.length > 0 ? interested.map((match, i) => <MatchOption match={match} key={i} messageClicked={messageClicked} interests={interests} messages={messages} onDump={onDump} onFriendzone={onFriendzone} user={user} />) : 'No Matches Found'}
+                    {interested.length > 0 ? interested.map((match, i) => <MatchOption match={match} key={i} messageClicked={messageClicked} interests={interests} messages={messages} onDump={onDump} onFriendzone={onFriendzone} user={user} />) : <p className="mx-auto">No Matches Found. Check out Find Matches to meet someone!</p>}
                 </div>
             </div>
         )
